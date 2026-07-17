@@ -46,4 +46,19 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function profile()
+    {
+        return $this->hasOne(StudentProfile::class);
+    }
+
+    public function cvFiles()
+    {
+        return $this->hasMany(CvFile::class);
+    }
+
+    public function analysisResults()
+    {
+        return $this->hasMany(AnalysisResult::class);
+    }
 }
