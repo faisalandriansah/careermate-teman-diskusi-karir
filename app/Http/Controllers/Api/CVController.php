@@ -10,6 +10,7 @@ use App\Services\PDFExtractorService;
 use Illuminate\Support\Str;
 use App\Services\SkillDetectionService;
 use App\Services\CareerMatchingService;
+use App\Services\RoadmapGeneratorService;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
@@ -115,6 +116,38 @@ class CVController extends Controller
 
         return response()->json([
             'message' => 'Career matching berhasil.',
+            'data' => $analysisResult->fresh('career'),
+        ]);
+    }
+
+    public function generateRoadmap(AnalysisResult $analysisResult, RoadmapGeneratorService $generator)
+    {
+        if (empty($analysisResult->career_id)) {
+            return response()->json([
+                'message' => 'Analysis result ini belum memiliki career. Jalankan proses match-career terlebih dahulu.',
+            ], 422);
+        }
+        $analysisResult->load('career');
+
+        try {
+            $result = $generator->generate(
+                $analysisResult->skills_json ?? [],
+                $analysisResult->skill_gap_json ?? [],
+                $analysisResult->career->title
+            );
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+
+        $analysisResult->update([
+            'ai_summary' => $result['summary'],
+            'roadmap_json' => $result['roadmap'],
+        ]);
+
+        return response()->json([
+            'message' => 'Roadmap berhasil digenerate.',
             'data' => $analysisResult->fresh('career'),
         ]);
     }
