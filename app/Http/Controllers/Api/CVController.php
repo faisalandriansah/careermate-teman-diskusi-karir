@@ -9,6 +9,7 @@ use App\Models\AnalysisResult;
 use App\Services\PDFExtractorService;
 use Illuminate\Support\Str;
 use App\Services\SkillDetectionService;
+use App\Services\CareerMatchingService;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
@@ -88,5 +89,33 @@ class CVController extends Controller
             'message' => 'Skill berhasil dideteksi dari CV.',
             'data' => $analysisResult,
         ], 201);
+    }
+
+    public function matchCareer(AnalysisResult $analysisResult, CareerMatchingService $matcher)
+    {
+        if (empty($analysisResult->skills_json)) {
+            return response()->json([
+                'message' => 'Analysis result ini belum memiliki data skill. Jalankan proses detect-skills terlebih dahulu.',
+            ], 422);
+        }
+
+        $result = $matcher->match($analysisResult->skills_json);
+
+        if (!$result['career']) {
+            return response()->json([
+                'message' => 'Tidak ditemukan career yang cocok. Pastikan data career_skills sudah diisi.',       
+            ], 404);
+        }
+
+        $analysisResult->update([
+            'career_id' => $result['career']->id,
+            'match_score' => $result['match_score'],
+            'skill_gap_json' => $result['skill_gap'],
+        ]);
+
+        return response()->json([
+            'message' => 'Career matching berhasil.',
+            'data' => $analysisResult->fresh('career'),
+        ]);
     }
 }
