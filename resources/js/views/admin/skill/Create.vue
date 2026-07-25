@@ -1,76 +1,74 @@
 <template>
-  <div class="bg-white rounded-lg shadow p-6">
-    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <h2 class="text-title-md2 font-semibold text-gray-800">Add New Skill</h2>
-      <button 
-        @click="$router.go(-1)" 
-        class="flex items-center gap-2.5 rounded bg-gradient-to-r from-gray-500 to-gray-600 px-4 py-2 font-medium text-white hover:from-gray-600 hover:to-gray-700 transition-all duration-300"
+  <div class="space-y-6">
+    <div class="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_8px_30px_rgba(15,23,42,0.04)] sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <p class="text-sm font-medium text-blue-600">Data Management</p>
+        <h2 class="mt-1 text-2xl font-semibold text-slate-900">Add New Skill</h2>
+        <p class="mt-2 text-sm text-slate-500">Tambahkan skill baru dengan tampilan yang lebih rapi dan konsisten.</p>
+      </div>
+      <button
+        @click="router.go(-1)"
+        class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
       >
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
         </svg>
         Back
       </button>
     </div>
 
-    <div class="rounded-lg border border-gray-200 bg-white shadow-lg">
-      <div class="py-6 px-6 bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
-        <h4 class="text-xl font-semibold text-gray-800">Skill Details</h4>
-      </div>
-      
-      <div class="p-6">
-        <form @submit.prevent="handleSubmit">
-          <div class="mb-6">
-            <label class="mb-2.5 block text-gray-700">Skill Name</label>
-            <input
-              type="text"
-              v-model="skill.name"
-              placeholder="Enter skill name"
-              class="w-full rounded-lg border-[1.5px] border-gray-300 bg-transparent py-3 px-4 text-gray-800 outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-            />
-          </div>
-          
-          <div class="mb-6">
-            <label class="mb-2.5 block text-gray-700">Description</label>
-            <textarea
-              v-model="skill.description"
-              placeholder="Enter skill description"
-              rows="4"
-              class="w-full rounded-lg border-[1.5px] border-gray-300 bg-transparent py-3 px-4 text-gray-800 outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-            ></textarea>
-          </div>
-          
-          <div class="mb-6">
-            <label class="mb-2.5 block text-gray-700">Category</label>
-            <select
-              v-model="skill.category"
-              class="w-full rounded-lg border-[1.5px] border-gray-300 bg-transparent py-3 px-4 text-gray-800 outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-            >
-              <option value="">Select category</option>
-              <option value="technical">Technical</option>
-              <option value="soft-skill">Soft Skill</option>
-              <option value="leadership">Leadership</option>
-              <option value="communication">Communication</option>
-            </select>
-          </div>
-          
-          <div class="flex justify-end gap-4">
-            <button
-              type="button"
-              @click="$router.go(-1)"
-              class="flex items-center gap-2.5 rounded bg-gradient-to-r from-gray-500 to-gray-600 px-6 py-3 font-medium text-white hover:from-gray-600 hover:to-gray-700 transition-all duration-300"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              class="flex items-center gap-2.5 rounded bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-3 font-medium text-white hover:from-blue-600 hover:to-indigo-700 transition-all duration-300"
-            >
-              Save
-            </button>
-          </div>
-        </form>
-      </div>
+    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_8px_30px_rgba(15,23,42,0.04)]">
+      <form @submit.prevent="handleSubmit" class="space-y-5">
+        <div>
+          <label class="mb-2 block text-sm font-medium text-slate-700">Skill Name</label>
+          <input
+            type="text"
+            v-model="skill.name"
+            placeholder="Enter skill name"
+            class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+          />
+        </div>
+
+        <div>
+          <label class="mb-2 block text-sm font-medium text-slate-700">Description</label>
+          <textarea
+            v-model="skill.description"
+            placeholder="Enter skill description"
+            rows="4"
+            class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+          ></textarea>
+        </div>
+
+        <div>
+          <label class="mb-2 block text-sm font-medium text-slate-700">Category</label>
+          <select
+            v-model="skill.category"
+            class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+          >
+            <option value="">Select category</option>
+            <option value="technical">Technical</option>
+            <option value="soft-skill">Soft Skill</option>
+            <option value="leadership">Leadership</option>
+            <option value="communication">Communication</option>
+          </select>
+        </div>
+
+        <div class="flex justify-end gap-3 pt-2">
+          <button
+            type="button"
+            @click="router.go(-1)"
+            class="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition hover:from-blue-700 hover:to-cyan-600"
+          >
+            Save
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </template>
