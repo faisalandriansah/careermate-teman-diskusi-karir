@@ -1,116 +1,100 @@
 <template>
-  <div>
-    <h1 class="text-2xl font-bold text-gray-900 mb-6">Add New Skill</h1>
-    
-    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
-      <div class="px-4 py-5 sm:px-6">
-        <h2 class="text-lg leading-6 font-medium text-gray-900">Skill Information</h2>
-        <p class="mt-1 max-w-2xl text-sm text-gray-500">Fill in the details for the new skill</p>
+  <div class="bg-white rounded-lg shadow p-6">
+    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <h2 class="text-title-md2 font-semibold text-gray-800">Add New Skill</h2>
+      <button 
+        @click="$router.go(-1)" 
+        class="flex items-center gap-2.5 rounded bg-gradient-to-r from-gray-500 to-gray-600 px-4 py-2 font-medium text-white hover:from-gray-600 hover:to-gray-700 transition-all duration-300"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        Back
+      </button>
+    </div>
+
+    <div class="rounded-lg border border-gray-200 bg-white shadow-lg">
+      <div class="py-6 px-6 bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
+        <h4 class="text-xl font-semibold text-gray-800">Skill Details</h4>
       </div>
-      <div class="border-t border-gray-200">
-        <form @submit.prevent="createSkill" class="p-6">
-          <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-            <div class="sm:col-span-4">
-              <label for="name" class="block text-sm font-medium text-gray-700">Skill Name</label>
-              <div class="mt-1">
-                <input
-                  type="text"
-                  id="name"
-                  v-model="skillForm.name"
-                  required
-                  class="py-2 px-3 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-                />
-              </div>
-            </div>
-
-            <div class="sm:col-span-6">
-              <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-              <div class="mt-1">
-                <textarea
-                  id="description"
-                  v-model="skillForm.description"
-                  rows="4"
-                  class="py-2 px-3 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-                ></textarea>
-              </div>
-            </div>
+      
+      <div class="p-6">
+        <form @submit.prevent="handleSubmit">
+          <div class="mb-6">
+            <label class="mb-2.5 block text-gray-700">Skill Name</label>
+            <input
+              type="text"
+              v-model="skill.name"
+              placeholder="Enter skill name"
+              class="w-full rounded-lg border-[1.5px] border-gray-300 bg-transparent py-3 px-4 text-gray-800 outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+            />
           </div>
-
-          <div class="mt-8 flex justify-end">
-            <router-link
-              to="/admin/skills"
-              class="mr-3 inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none"
+          
+          <div class="mb-6">
+            <label class="mb-2.5 block text-gray-700">Description</label>
+            <textarea
+              v-model="skill.description"
+              placeholder="Enter skill description"
+              rows="4"
+              class="w-full rounded-lg border-[1.5px] border-gray-300 bg-transparent py-3 px-4 text-gray-800 outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+            ></textarea>
+          </div>
+          
+          <div class="mb-6">
+            <label class="mb-2.5 block text-gray-700">Category</label>
+            <select
+              v-model="skill.category"
+              class="w-full rounded-lg border-[1.5px] border-gray-300 bg-transparent py-3 px-4 text-gray-800 outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+            >
+              <option value="">Select category</option>
+              <option value="technical">Technical</option>
+              <option value="soft-skill">Soft Skill</option>
+              <option value="leadership">Leadership</option>
+              <option value="communication">Communication</option>
+            </select>
+          </div>
+          
+          <div class="flex justify-end gap-4">
+            <button
+              type="button"
+              @click="$router.go(-1)"
+              class="flex items-center gap-2.5 rounded bg-gradient-to-r from-gray-500 to-gray-600 px-6 py-3 font-medium text-white hover:from-gray-600 hover:to-gray-700 transition-all duration-300"
             >
               Cancel
-            </router-link>
+            </button>
             <button
               type="submit"
-              :disabled="loading"
-              class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none disabled:opacity-50"
+              class="flex items-center gap-2.5 rounded bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-3 font-medium text-white hover:from-blue-600 hover:to-indigo-700 transition-all duration-300"
             >
-              <span v-if="loading">
-                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Creating...
-              </span>
-              <span v-else>
-                Create Skill
-              </span>
+              Save
             </button>
           </div>
         </form>
-      </div>
-    </div>
-    
-    <div v-if="error" class="mt-4 bg-red-50 border border-red-200 rounded-md p-4">
-      <div class="flex">
-        <div class="flex-shrink-0">
-          <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-          </svg>
-        </div>
-        <div class="ml-3">
-          <h3 class="text-sm font-medium text-red-800">{{ error }}</h3>
-        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { useCareerStore } from '../../../stores/career';
+import { useSkillStore } from '@/stores/useSkillStore';
 
 const router = useRouter();
-const careerStore = useCareerStore();
+const skillStore = useSkillStore();
 
-const skillForm = reactive({
+const skill = ref({
   name: '',
-  description: ''
+  description: '',
+  category: ''
 });
 
-const loading = ref(false);
-const error = ref('');
-
-const createSkill = async () => {
-  loading.value = true;
-  error.value = '';
-  
+const handleSubmit = async () => {
   try {
-    await careerStore.createSkill(skillForm);
-    router.push('/admin/skills');
-  } catch (err) {
-    console.error('Error creating skill:', err);
-    if (err.response?.data?.message) {
-      error.value = err.response.data.message;
-    } else {
-      error.value = 'An error occurred while creating the skill. Please try again.';
-    }
-  } finally {
-    loading.value = false;
+    await skillStore.createSkill(skill.value);
+    router.push('/admin/skill');
+  } catch (error) {
+    console.error('Error creating skill:', error);
   }
 };
 </script>
