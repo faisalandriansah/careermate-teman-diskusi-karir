@@ -17,7 +17,7 @@
             <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
             </svg>
-            <span class="text-xl font-bold text-slate-800">CareerMate</span>
+            <span class="text-xl font-bold text-slate-800">CareerMateAI</span>
           </router-link>
         </div>
       </div>
@@ -40,21 +40,56 @@
           </li>
           
           <!-- User Profile Dropdown -->
-          <li>
-            <div class="relative">
-              <button class="flex items-center gap-2.5 rounded-full border border-stroke bg-white p-0.5 dark:border-strokedark dark:bg-meta-4">
+          <li class="relative">
+            <div ref="dropdownRef">
+              <button @click="open = !open" class="flex items-center gap-2.5 rounded-full border border-stroke bg-white p-0.5 dark:border-strokedark dark:bg-meta-4">
                 <span class="hidden text-right lg:block">
-                  <span class="block text-sm font-medium text-black dark:text-white">Admin User</span>
-                  <span class="block text-xs font-medium">Administrator</span>
+                  <span class="block text-sm font-medium text-black dark:text-white">{{ displayName }}</span>
+                  <span class="block text-xs font-medium">{{ displayRole }}</span>
                 </span>
                 <span class="h-10 w-10 rounded-full">
-                  <img 
-                    src="https://ui-avatars.com/api/?name=Admin+User&background=0D8ABC&color=fff" 
+                  <img
+                    :src="avatarUrl"
                     alt="User"
                     class="rounded-full"
                   />
                 </span>
               </button>
+
+              <div v-show="open" class="absolute right-0 z-50 mt-2 w-56 rounded-lg border border-slate-100 bg-white py-3 shadow-lg dark:border-strokedark dark:bg-boxdark">
+                <div class="px-4 pb-3">
+                  <div class="text-sm font-semibold text-slate-900 dark:text-white">{{ displayName }}</div>
+                  <div class="text-xs text-slate-500">{{ displayEmail }}</div>
+                </div>
+                <hr class="my-2 border-t border-slate-100" />
+                <ul>
+                  <li>
+                    <button class="flex w-full items-center gap-3 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50" @click="goToProfile">
+                      <svg class="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 15c2.485 0 4.81.62 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                      Edit profile
+                    </button>
+                  </li>
+                  <li>
+                    <button class="flex w-full items-center gap-3 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50" @click="goToAccount">
+                      <svg class="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zM6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+                      Account settings
+                    </button>
+                  </li>
+                  <li>
+                    <button class="flex w-full items-center gap-3 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50" @click="goToSupport">
+                      <svg class="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636A9 9 0 105.636 18.364 9 9 0 0018.364 5.636zM12 8v4l3 3"/></svg>
+                      Support
+                    </button>
+                  </li>
+                </ul>
+                <hr class="my-2 border-t border-slate-100" />
+                <div class="px-3">
+                  <button @click="signOut" class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-danger hover:bg-red-50">
+                    <svg class="h-4 w-4 text-danger" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7"/></svg>
+                    Sign out
+                  </button>
+                </div>
+              </div>
             </div>
           </li>
         </ul>
@@ -64,6 +99,67 @@
 </template>
 
 <script setup>
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { useRouter } from 'vue-router';
+import useAuthStore from '@/stores/useAuthStore';
+
 // Definisikan emit untuk komunikasi ke parent component
 defineEmits(['toggle-sidebar']);
+
+const open = ref(false);
+const dropdownRef = ref(null);
+let unregisterAfter = null;
+const router = useRouter();
+const auth = useAuthStore();
+
+const displayName = computed(() => (auth.user && auth.user.name) ? auth.user.name : 'User');
+const displayEmail = computed(() => (auth.user && auth.user.email) ? auth.user.email : 'randomuser@pimjo.com');
+const displayRole = computed(() => (auth.user && auth.user.role) ? auth.user.role : 'Member');
+const avatarUrl = computed(() => {
+  if (auth.user && auth.user.avatar) return auth.user.avatar;
+  const name = encodeURIComponent(displayName.value);
+  return `https://ui-avatars.com/api/?name=${name}&background=0D8ABC&color=fff`;
+});
+
+function signOut() {
+  auth.logout();
+  router.push('/login');
+}
+
+function goToProfile() {
+  open.value = false;
+  router.push('/profile');
+}
+
+function goToAccount() {
+  open.value = false;
+  router.push('/account');
+}
+
+function goToSupport() {
+  open.value = false;
+  window.location.href = '/support';
+}
+
+function onClickOutside(e) {
+  const el = dropdownRef.value;
+  if (!el) return;
+  if (!el.contains(e.target)) open.value = false;
+}
+
+onMounted(() => {
+  document.addEventListener('click', onClickOutside);
+  if (router && router.afterEach) {
+    unregisterAfter = router.afterEach(() => {
+      open.value = false;
+    });
+  }
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', onClickOutside);
+  if (typeof unregisterAfter === 'function') {
+    try { unregisterAfter(); } catch (e) {}
+  }
+});
 </script>

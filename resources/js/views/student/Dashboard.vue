@@ -1,14 +1,14 @@
 <template>
   <div class="container mx-auto px-4 py-6">
     <!-- Welcome Banner -->
-    <div class="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg shadow-lg p-6 text-white mb-6">
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-6 border">
       <div class="flex flex-col md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 class="text-2xl font-bold">Welcome back, Alex Johnson!</h1>
-          <p class="mt-2 opacity-90">Here's what's happening with your career journey today.</p>
+          <h1 class="text-2xl font-semibold text-slate-800">Welcome back, Student!</h1>
+          <p class="mt-1 text-sm text-slate-600">Quick summary of your skills and recommendations.</p>
         </div>
         <div class="mt-4 md:mt-0">
-          <button class="bg-white text-blue-600 hover:bg-gray-100 font-medium py-2 px-4 rounded-lg transition duration-200">
+          <button class="bg-blue-600 text-white hover:bg-blue-700 font-medium py-2 px-4 rounded-lg transition duration-150">
             Update Profile
           </button>
         </div>
@@ -18,7 +18,7 @@
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       <!-- Card 1 -->
-      <div class="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
+      <div class="bg-white rounded-md shadow-sm p-6 border">
         <div class="flex items-center">
           <div class="rounded-full bg-blue-100 p-3">
             <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -33,7 +33,7 @@
       </div>
 
       <!-- Card 2 -->
-      <div class="bg-white rounded-lg shadow p-6 border-l-4 border-green-500">
+      <div class="bg-white rounded-md shadow-sm p-6 border">
         <div class="flex items-center">
           <div class="rounded-full bg-green-100 p-3">
             <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -48,7 +48,7 @@
       </div>
 
       <!-- Card 3 -->
-      <div class="bg-white rounded-lg shadow p-6 border-l-4 border-purple-500">
+      <div class="bg-white rounded-md shadow-sm p-6 border">
         <div class="flex items-center">
           <div class="rounded-full bg-purple-100 p-3">
             <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -63,7 +63,7 @@
       </div>
 
       <!-- Card 4 -->
-      <div class="bg-white rounded-lg shadow p-6 border-l-4 border-yellow-500">
+      <div class="bg-white rounded-md shadow-sm p-6 border">
         <div class="flex items-center">
           <div class="rounded-full bg-yellow-100 p-3">
             <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
