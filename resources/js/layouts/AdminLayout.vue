@@ -15,19 +15,13 @@
                         class="flex items-center gap-2"
                     >
                         <div
-                            class="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 text-white shadow-md"
+                            class="flex h-10 w-10 items-center justify-center rounded-lg bg-white shadow-md overflow-hidden flex-shrink-0"
                         >
-                            <svg
-                                class="h-6 w-6"
-                                fill="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path d="M9 3h6v6H9V3z"></path>
-                                <path d="M3 9h6v6H3V9z"></path>
-                                <path d="M15 9h6v6h-6V9z"></path>
-                                <path d="M3 15h6v6H3v-6z"></path>
-                                <path d="M15 15h6v6h-6v-6z"></path>
-                            </svg>
+                            <img
+                                :src="logo"
+                                alt="CareerMateAI logo"
+                                class="h-9 w-9 object-contain"
+                            />
                         </div>
                         <span
                             v-if="sidebarOpen"
@@ -519,7 +513,6 @@
                         >
                             <div class="relative h-5 w-5">
                                 <svg
-                                    v-if="!sidebarOpen"
                                     class="absolute inset-0 h-5 w-5 transition-transform duration-200"
                                     fill="none"
                                     stroke="currentColor"
@@ -532,21 +525,8 @@
                                         d="M4 6h16M4 12h16M4 18h16"
                                     ></path>
                                 </svg>
-                                <svg
-                                    v-else
-                                    class="absolute inset-0 h-5 w-5 transition-transform duration-200"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    ></path>
-                                </svg>
                             </div>
+
                             <span
                                 class="absolute inset-0 rounded-lg transition-all duration-200 group-hover:bg-slate-100/50"
                             ></span>
@@ -679,8 +659,9 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
-import { useAuthStore } from '@/stores/auth'
+import { useAuthStore } from "@/stores/auth";
 import apiClient from "@/services/api";
+import logo from "@/assets/logo.png";
 
 const sidebarOpen = ref(true);
 const toggleSidebar = () => {
