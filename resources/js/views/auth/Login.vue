@@ -190,8 +190,12 @@
         <div
             class="hidden lg:flex w-1/2 relative items-center justify-center overflow-hidden bg-indigo-600"
         >
+            <!-- Animated gradient mesh -->
+            <div class="absolute inset-0 gradient-mesh"></div>
+
+            <!-- Grid pattern (slow pan) -->
             <div
-                class="absolute inset-0 opacity-10"
+                class="absolute inset-0 opacity-10 grid-pan"
                 style="
                     background-image:
                         linear-gradient(
@@ -207,38 +211,50 @@
                     background-size: 60px 60px;
                 "
             ></div>
+
+            <!-- Floating blurred orbs -->
             <div
-                class="absolute top-24 right-40 w-16 h-16 bg-white/10 rounded"
+                class="absolute -top-10 -right-10 w-72 h-72 bg-white/10 rounded-full blur-3xl orb-float-1"
             ></div>
             <div
-                class="absolute bottom-32 left-24 w-16 h-16 bg-white/10 rounded"
+                class="absolute bottom-0 -left-16 w-80 h-80 bg-indigo-400/20 rounded-full blur-3xl orb-float-2"
+            ></div>
+            <div
+                class="absolute top-1/3 left-1/4 w-40 h-40 bg-white/5 rounded-full blur-2xl orb-float-3"
+            ></div>
+
+            <!-- Subtle floating squares (from original, now animated) -->
+            <div
+                class="absolute top-24 right-40 w-16 h-16 bg-white/10 rounded square-float"
+                style="animation-delay: 0s"
+            ></div>
+            <div
+                class="absolute bottom-32 left-24 w-16 h-16 bg-white/10 rounded square-float"
+                style="animation-delay: -3s"
             ></div>
 
             <div class="relative z-10 text-center px-10">
-                <div class="flex items-center justify-center gap-3 mb-6">
+                <div
+                    class="flex items-center justify-center gap-3 mb-6 content-fade-in"
+                >
                     <div
-                        class="w-12 h-12 rounded-xl bg-white flex items-center justify-center"
+                        class="w-16 h-16 rounded-xl bg-white flex items-center justify-center icon-float overflow-hidden"
                     >
-                        <svg
-                            class="w-6 h-6 text-indigo-600"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M11 3v18m6-13v13M5 13v8"
-                            />
-                        </svg>
+                        <img
+                            :src="logo"
+                            alt="CareerMateAI logo"
+                            class="w-14 h-14 object-contain"
+                        />
                     </div>
                     <span class="text-4xl font-bold text-white"
                         >CareerMateAI</span
                     >
                 </div>
-                <p class="text-indigo-100 max-w-sm mx-auto">
-                    Free and Open-Source Career Recommendation Platform
+                <p
+                    class="text-indigo-100 max-w-sm mx-auto content-fade-in"
+                    style="animation-delay: 0.15s"
+                >
+                   Analisis Skill, Rekomendasi Karier, dan Roadmap Belajar dalam Satu Platform.
                 </p>
             </div>
         </div>
@@ -249,7 +265,8 @@
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import apiClient from "@/services/api";
-import { useAuthStore } from '@/stores/auth'
+import { useAuthStore } from "@/stores/auth";
+import logo from "@/assets/logo.png";
 
 const router = useRouter();
 
@@ -302,3 +319,117 @@ async function handleSubmit() {
     }
 }
 </script>
+<style scoped>
+/* Animated gradient mesh background */
+.gradient-mesh {
+    background: linear-gradient(
+        130deg,
+        #4f46e5 0%,
+        #6366f1 25%,
+        #4338ca 50%,
+        #6366f1 75%,
+        #4f46e5 100%
+    );
+    background-size: 300% 300%;
+    animation: meshMove 18s ease-in-out infinite;
+}
+
+@keyframes meshMove {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Grid slow pan */
+.grid-pan {
+    animation: gridPan 25s linear infinite;
+}
+
+@keyframes gridPan {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 60px 60px;
+    }
+}
+
+/* Floating orbs, staggered speeds */
+.orb-float-1 {
+    animation: floatSlow 12s ease-in-out infinite;
+}
+.orb-float-2 {
+    animation: floatSlow 16s ease-in-out infinite reverse;
+}
+.orb-float-3 {
+    animation: floatSlow 9s ease-in-out infinite;
+    animation-delay: -4s;
+}
+
+@keyframes floatSlow {
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+    50% {
+        transform: translate(20px, -30px) scale(1.08);
+    }
+}
+
+/* Small decorative squares */
+.square-float {
+    animation: squareFloat 8s ease-in-out infinite;
+}
+
+@keyframes squareFloat {
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.6;
+    }
+    50% {
+        transform: translateY(-14px) rotate(8deg);
+        opacity: 1;
+    }
+}
+
+/* Icon gentle float + glow */
+.icon-float {
+    animation: iconFloat 4s ease-in-out infinite;
+    box-shadow: 0 0 0 rgba(255, 255, 255, 0.4);
+}
+
+@keyframes iconFloat {
+    0%,
+    100% {
+        transform: translateY(0);
+        box-shadow: 0 0 0 rgba(255, 255, 255, 0);
+    }
+    50% {
+        transform: translateY(-6px);
+        box-shadow: 0 8px 20px rgba(255, 255, 255, 0.25);
+    }
+}
+
+/* Content fade in on mount */
+.content-fade-in {
+    animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
