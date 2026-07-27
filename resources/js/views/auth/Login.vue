@@ -133,6 +133,7 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from 'axios'
 
 const router = useRouter()
 
@@ -158,12 +159,25 @@ async function handleSubmit() {
   loading.value = true
   errorMessage.value = ''
   try {
-    // TODO: sesuaikan dengan API auth lo, contoh:
-    // const res = await axios.post('/api/login', form)
-    // localStorage.setItem('token', res.data.token)
+    const res = await axios.post('auth/login', {
+      email: form.email,
+      password: form.password,
+      remember: form.remember,
+    })
+
+    const token = res.data.token
+    if (token) {
+      localStorage.setItem('api_token', token)
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    }
+
     router.push('/dashboard')
   } catch (err) {
-    errorMessage.value = 'Email atau password salah.'
+    if (err.response && err.response.data && err.response.data.message) {
+      errorMessage.value = err.response.data.message
+    } else {
+      errorMessage.value = 'Email atau password salah.'
+    }
   } finally {
     loading.value = false
   }

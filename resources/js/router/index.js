@@ -7,6 +7,7 @@ import StudentLayout from "@/layouts/StudentLayout.vue";
 
 // Import views
 import Login from "@/views/auth/Login.vue";
+import Register from "@/views/auth/Register.vue";
 import AdminDashboard from "@/views/admin/Dashboard.vue";
 import StudentDashboard from "@/views/student/Dashboard.vue";
 import StudentProfile from "@/views/student/Profile.vue";
@@ -43,6 +44,12 @@ const routes = [
         path: "/login",
         name: "Login",
         component: Login,
+        meta: { layout: "auth" },
+    },
+    {
+        path: "/register",
+        name: "Register",
+        component: Register,
         meta: { layout: "auth" },
     },
     {

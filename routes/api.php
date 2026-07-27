@@ -1,7 +1,13 @@
 <?php
 
 use App\Http\Controllers\Api\CVController;
+use App\Http\Controllers\Api\AuthController;
 
+// Auth API
+Route::post('/auth/register', [AuthController::class, 'register']);
+Route::post('/auth/login', [AuthController::class, 'login']);
+
+// CV / analysis API
 Route::post('/cv/upload', [CVController::class, 'upload']);
 Route::post('/cv/{cvFile}/extract', [CVController::class, 'extract']);
 Route::post('/cv/{cvFile}/detect-skills', [CVController::class, 'detectSkills']);
