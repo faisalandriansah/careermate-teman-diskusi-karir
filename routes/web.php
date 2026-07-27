@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 //     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 // });
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth:sanctum','role:admin'])->group(function () {
     Route::resource('skills', SkillController::class)->except(['create', 'edit']);
     Route::resource('careers', CareerController::class)->except(['create', 'edit']);
     Route::resource('internship', InternshipController::class)->except(['create', 'edit']);
