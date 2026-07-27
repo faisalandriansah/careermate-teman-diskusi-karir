@@ -22,15 +22,19 @@ use Illuminate\Support\Facades\Route;
 //     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 // });
 
-Route::middleware(['auth:sanctum','role:admin'])->group(function () {
-    Route::resource('skills', SkillController::class)->except(['create', 'edit']);
-    Route::resource('careers', CareerController::class)->except(['create', 'edit']);
-    Route::resource('internship', InternshipController::class)->except(['create', 'edit']);
+Route::prefix('admin')
+    ->middleware(['auth:sanctum', 'role:admin'])
+    ->group(function () {
 
-    Route::get('careers/{career}/skills', [CareerSkillController::class, 'index']);
-    Route::post('careers/{career}/skills', [CareerSkillController::class, 'update']);
-    Route::delete('careers/{career}/skills/{skillId}', [CareerSkillController::class, 'destroy']);
-});
+        Route::resource('skills', SkillController::class)
+            ->except(['create', 'edit']);
+
+        Route::resource('careers', CareerController::class)
+            ->except(['create', 'edit']);
+
+        Route::resource('internships', InternshipController::class)
+            ->except(['create', 'edit']);
+    });
 
 Route::view('/{any?}', 'app')
     ->where('any', '.*');

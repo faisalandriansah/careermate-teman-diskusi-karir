@@ -2,6 +2,11 @@
 
 use App\Http\Controllers\Api\CVController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Admin\SkillController;
+use App\Http\Controllers\Admin\CareerController;
+use App\Http\Controllers\Admin\InternshipController;
+use App\Http\Controllers\Admin\CareerSkillController;
+use Illuminate\Support\Facades\Route;
 
 // Auth API
 Route::post('/auth/register', [AuthController::class, 'register']);
@@ -20,3 +25,17 @@ Route::middleware(['auth:sanctum','role:mahasiswa'])->group(function () {
     Route::post('/analysis/{analysisResult}/match-career', [CVController::class, 'matchCareer']);
     Route::post('/analysis/{analysisResult}/generate-roadmap', [CVController::class, 'generateRoadmap']);
 });
+
+Route::middleware(['auth:sanctum', 'role:admin'])
+    ->prefix('admin')
+    ->group(function () {
+
+        Route::resource('skills', SkillController::class)
+            ->except(['create', 'edit']);
+
+        Route::resource('careers', CareerController::class)
+            ->except(['create', 'edit']);
+
+        Route::resource('internships', InternshipController::class)
+            ->except(['create', 'edit']);
+    });
