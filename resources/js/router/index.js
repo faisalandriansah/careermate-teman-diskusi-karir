@@ -63,6 +63,7 @@ const routes = [
                 name: "AdminDashboard",
                 component: AdminDashboard,
                 meta: { requiresAuth: true },
+                role: "admin",
             },
             // Skill routes
             {
@@ -70,18 +71,21 @@ const routes = [
                 name: "SkillList",
                 component: SkillList,
                 meta: { requiresAuth: true },
+                role: "admin",
             },
             {
                 path: "skill/create",
                 name: "SkillCreate",
                 component: SkillCreate,
                 meta: { requiresAuth: true },
+                role: "admin",
             },
             {
                 path: "skill/:id/edit",
                 name: "SkillEdit",
                 component: SkillEdit,
                 meta: { requiresAuth: true },
+                role: "admin",
                 props: true,
             },
             // Career routes
@@ -90,18 +94,21 @@ const routes = [
                 name: "CareerList",
                 component: CareerList,
                 meta: { requiresAuth: true },
+                role: "admin",
             },
             {
                 path: "career/create",
                 name: "CareerCreate",
                 component: CareerCreate,
                 meta: { requiresAuth: true },
+                role: "admin",
             },
             {
                 path: "career/:id/edit",
                 name: "CareerEdit",
                 component: CareerEdit,
                 meta: { requiresAuth: true },
+                role: "admin",
                 props: true,
             },
             // Internship routes
@@ -110,12 +117,14 @@ const routes = [
                 name: "InternshipList",
                 component: InternshipList,
                 meta: { requiresAuth: true },
+                role: "admin",
             },
             {
                 path: "internship/create",
                 name: "InternshipCreate",
                 component: InternshipCreate,
                 meta: { requiresAuth: true },
+                role: "admin",
             },
             {
                 path: "internship/:id/edit",
@@ -123,6 +132,7 @@ const routes = [
                 component: InternshipEdit,
                 meta: { requiresAuth: true },
                 props: true,
+                role: "admin",
             },
             // Mapping routes
             {
@@ -130,6 +140,7 @@ const routes = [
                 name: "CareerSkillMapping",
                 component: CareerSkillMapping,
                 meta: { requiresAuth: true },
+                role: "admin",
             },
         ],
     },
@@ -144,42 +155,50 @@ const routes = [
                 name: "StudentDashboard",
                 component: StudentDashboard,
                 meta: { requiresAuth: true },
+                role: "mahasiswa",
             },
             {
                 path: "profile",
                 name: "StudentProfile",
                 component: StudentProfile,
                 meta: { requiresAuth: true },
+                role: "mahasiswa",
+                
             },
             {
                 path: "skills",
                 name: "StudentSkills",
                 component: StudentSkills,
                 meta: { requiresAuth: true },
+                role: "mahasiswa",
             },
             {
                 path: "cv",
                 name: "StudentCV",
                 component: StudentCV,
                 meta: { requiresAuth: true },
+                role: "mahasiswa",
             },
             {
                 path: "internships",
                 name: "StudentInternships",
                 component: StudentInternships,
                 meta: { requiresAuth: true },
+                role: "mahasiswa",
             },
             {
                 path: "roadmap",
                 name: "StudentRoadmap",
                 component: StudentRoadmap,
                 meta: { requiresAuth: true },
+                role: "mahasiswa",
             },
             {
                 path: "support",
                 name: "StudentSupport",
                 component: StudentSupport,
                 meta: { requiresAuth: true },
+                role: "mahasiswa",
             },
         ],
     },
@@ -188,6 +207,34 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL || "/"),
     routes,
+});
+
+router.beforeEach((to, from, next) => {
+    const token = localStorage.getItem("token");
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    // harus login
+    if (to.meta.requiresAuth && !token) {
+        return next("/login");
+    }
+
+    // sudah login tidak boleh kembali ke login/register
+    if ((to.path === "/login" || to.path === "/register") && token) {
+        if (user?.role === "admin") {
+            return next("/admin/dashboard");
+        }
+        return next("/student/dashboard");
+    }
+
+    // cek role
+    if (to.meta.role && user?.role !== to.meta.role) {
+        if (user?.role === "admin") {
+            return next("/admin/dashboard");
+        }
+        return next("/student/dashboard");
+    }
+
+    next();
 });
 
 export default router;

@@ -101,7 +101,7 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
-import useAuthStore from '@/stores/useAuthStore';
+import { useAuthStore } from '@/stores/auth'
 
 // Definisikan emit untuk komunikasi ke parent component
 defineEmits(['toggle-sidebar']);
