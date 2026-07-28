@@ -62,7 +62,7 @@
                         type="submit"
                         class="rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition hover:from-blue-700 hover:to-cyan-600"
                     >
-                        Update
+                        Update Skill
                     </button>
                 </div>
             </form>

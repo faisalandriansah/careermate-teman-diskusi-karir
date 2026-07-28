@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import axios from "axios";
+import apiClient from "@/services/api";
 
 export const useCareerStore = defineStore("career", {
     state: () => ({
@@ -18,8 +18,8 @@ export const useCareerStore = defineStore("career", {
         async fetchCareers() {
             try {
                 this.loading = true;
-                const response = await axios.get("/api/careers");
-                this.careers = response.data;
+                const response = await apiClient.get("admin/careers");
+                this.careers = response.data ?? response.data;
                 this.loading = false;
             } catch (error) {
                 this.error = error.message;
@@ -31,8 +31,12 @@ export const useCareerStore = defineStore("career", {
         async createCareer(careerData) {
             try {
                 this.loading = true;
-                const response = await axios.post("/api/careers", careerData);
-                this.careers.push(response.data);
+                const response = await apiClient.post(
+                    "admin/careers",
+                    careerData,
+                );
+
+                this.careers.push(response.data.data);
                 this.loading = false;
                 return response.data;
             } catch (error) {
@@ -45,8 +49,8 @@ export const useCareerStore = defineStore("career", {
         async updateCareer(id, careerData) {
             try {
                 this.loading = true;
-                const response = await axios.put(
-                    `/api/careers/${id}`,
+                const response = await apiClient.put(
+                    `admin/careers/${id}`,
                     careerData,
                 );
 
@@ -54,7 +58,7 @@ export const useCareerStore = defineStore("career", {
                     (career) => career.id === id,
                 );
                 if (index !== -1) {
-                    this.careers[index] = response.data;
+                    this.careers[index] = response.data.data;
                 }
 
                 this.loading = false;
@@ -69,7 +73,7 @@ export const useCareerStore = defineStore("career", {
         async deleteCareer(id) {
             try {
                 this.loading = true;
-                await axios.delete(`/api/careers/${id}`);
+                await apiClient.delete(`admin/careers/${id}`);
 
                 this.careers = this.careers.filter(
                     (career) => career.id !== id,
@@ -84,4 +88,4 @@ export const useCareerStore = defineStore("career", {
     },
 });
 
-export default useCareerStore;
+
