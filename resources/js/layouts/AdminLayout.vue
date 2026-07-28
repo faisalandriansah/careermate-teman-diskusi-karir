@@ -1,14 +1,23 @@
 <template>
     <div class="min-h-screen bg-[#f8fafc] text-slate-800">
         <div class="flex min-h-screen">
+            <div
+                v-if="sidebarOpen"
+                @click="toggleSidebar"
+                class="fixed inset-0 z-20 bg-slate-900/50 lg:hidden"
+            ></div>
             <aside
                 :class="[
-                    'fixed inset-y-0 left-0 z-30 border-r border-slate-200 bg-white text-slate-700 shadow-[0_0_30px_rgba(15,23,42,0.06)] transition-all duration-200 ease-in-out flex flex-col lg:static',
-                    sidebarOpen ? 'w-72' : 'w-20',
+                    'fixed inset-y-0 left-0 z-30 border-r border-slate-200 bg-white text-slate-700 shadow-[0_0_30px_rgba(15,23,42,0.06)] transition-all duration-200 ease-in-out flex flex-col',
+                    sidebarOpen
+                        ? 'translate-x-0 w-72'
+                        : '-translate-x-full w-72',
+                    'lg:translate-x-0 lg:static',
+                    sidebarOpen ? 'lg:w-72' : 'lg:w-20',
                 ]"
             >
                 <div
-                    class="border-b border-slate-200 px-4 py-5 flex items-center"
+                    class="border-b border-slate-200 px-4 py-5 flex items-center justify-between"
                 >
                     <router-link
                         to="/admin/dashboard"
@@ -24,15 +33,33 @@
                             />
                         </div>
                         <span
-                            v-if="sidebarOpen"
+                            v-if="!isMiniSidebar"
                             class="text-lg font-bold tracking-tight text-slate-900 transition-opacity duration-200"
                             >CareerMateAI</span
                         >
                     </router-link>
+                    <button
+                        @click="toggleSidebar"
+                        class="lg:hidden rounded-lg p-2 text-slate-500 transition hover:bg-slate-100"
+                    >
+                        <svg
+                            class="h-5 w-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"
+                            />
+                        </svg>
+                    </button>
                 </div>
 
                 <div
-                    v-if="sidebarOpen"
+                    v-if="!isMiniSidebar"
                     class="flex-1 overflow-y-auto px-4 py-6"
                 >
                     <div class="mb-8">
@@ -470,7 +497,7 @@
 
                 <!-- Footer hanya muncul saat sidebar terbuka -->
                 <div
-                    v-if="sidebarOpen"
+                    v-if="!isMiniSidebar"
                     class="border-t border-slate-200 px-4 py-4"
                 >
                     <a
@@ -733,8 +760,14 @@ function onClickOutside(e) {
 let unregisterAfter = null;
 onMounted(() => {
     document.addEventListener("click", onClickOutside);
+    window.addEventListener("resize", onResize);
+    sidebarOpen.value = isDesktop.value;
+
     if (router && router.afterEach)
-        unregisterAfter = router.afterEach(() => (acctOpen.value = false));
+        unregisterAfter = router.afterEach(() => {
+            acctOpen.value = false;
+            if (!isDesktop.value) sidebarOpen.value = false; // auto close di mobile/tablet
+        });
 });
 onBeforeUnmount(() => {
     document.removeEventListener("click", onClickOutside);
@@ -744,4 +777,16 @@ onBeforeUnmount(() => {
         } catch (e) {}
     }
 });
+
+const isDesktop = ref(window.innerWidth >= 1024);
+function onResize() {
+    isDesktop.value = window.innerWidth >= 1024;
+}
+onMounted(() => {
+    window.addEventListener("resize", onResize);
+    sidebarOpen.value = isDesktop.value;
+});
+onBeforeUnmount(() => window.removeEventListener("resize", onResize));
+
+const isMiniSidebar = computed(() => isDesktop.value && !sidebarOpen.value);
 </script>
