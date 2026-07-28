@@ -18,8 +18,8 @@ export const useCareerStore = defineStore("career", {
         async fetchCareers() {
             try {
                 this.loading = true;
-                const response = await apiClient.get("admin/careers");
-                this.careers = response.data ?? response.data;
+                const response = await apiClient.get("/admin/careers");
+                this.careers = response.data.data ?? response.data;
                 this.loading = false;
             } catch (error) {
                 this.error = error.message;
@@ -32,7 +32,7 @@ export const useCareerStore = defineStore("career", {
             try {
                 this.loading = true;
                 const response = await apiClient.post(
-                    "admin/careers",
+                    "/admin/careers",
                     careerData,
                 );
 
@@ -50,7 +50,7 @@ export const useCareerStore = defineStore("career", {
             try {
                 this.loading = true;
                 const response = await apiClient.put(
-                    `admin/careers/${id}`,
+                    `/admin/careers/${id}`,
                     careerData,
                 );
 
@@ -73,7 +73,7 @@ export const useCareerStore = defineStore("career", {
         async deleteCareer(id) {
             try {
                 this.loading = true;
-                await apiClient.delete(`admin/careers/${id}`);
+                await apiClient.delete(`/admin/careers/${id}`);
 
                 this.careers = this.careers.filter(
                     (career) => career.id !== id,
@@ -87,5 +87,3 @@ export const useCareerStore = defineStore("career", {
         },
     },
 });
-
-

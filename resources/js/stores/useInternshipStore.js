@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import axios from "axios";
+import apiClient from "@/services/api";
 
 export const useInternshipStore = defineStore("internship", {
     state: () => ({
@@ -18,8 +18,8 @@ export const useInternshipStore = defineStore("internship", {
         async fetchInternships() {
             try {
                 this.loading = true;
-                const response = await axios.get("/api/internships");
-                this.internships = response.data;
+                const response = await apiClient.get("/admin/internships");
+                this.internships = response.data.data ?? response.data;
                 this.loading = false;
             } catch (error) {
                 this.error = error.message;
@@ -31,11 +31,11 @@ export const useInternshipStore = defineStore("internship", {
         async createInternship(internshipData) {
             try {
                 this.loading = true;
-                const response = await axios.post(
-                    "/api/internships",
+                const response = await apiClient.post(
+                    "/admin/internships",
                     internshipData,
                 );
-                this.internships.push(response.data);
+                this.internships.push(response.data.data);
                 this.loading = false;
                 return response.data;
             } catch (error) {
@@ -48,8 +48,8 @@ export const useInternshipStore = defineStore("internship", {
         async updateInternship(id, internshipData) {
             try {
                 this.loading = true;
-                const response = await axios.put(
-                    `/api/internships/${id}`,
+                const response = await apiClient.put(
+                    `/admin/internships/${id}`,
                     internshipData,
                 );
 
@@ -72,7 +72,7 @@ export const useInternshipStore = defineStore("internship", {
         async deleteInternship(id) {
             try {
                 this.loading = true;
-                await axios.delete(`/api/internships/${id}`);
+                await apiClient.delete(`/admin/internships/${id}`);
 
                 this.internships = this.internships.filter(
                     (internship) => internship.id !== id,
@@ -86,5 +86,3 @@ export const useInternshipStore = defineStore("internship", {
         },
     },
 });
-
-export default useInternshipStore;
