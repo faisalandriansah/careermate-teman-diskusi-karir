@@ -58,10 +58,10 @@
                     <div class="flex items-start justify-between gap-3">
                         <div>
                             <h4 class="font-semibold text-slate-900">
-                                {{ internship.position }}
+                                {{ internship.company_name }}
                             </h4>
                             <p class="mt-1 text-sm text-slate-500">
-                                {{ internship.company }}
+                                {{ internship.position }}
                             </p>
                         </div>
                         <div class="flex gap-2">
