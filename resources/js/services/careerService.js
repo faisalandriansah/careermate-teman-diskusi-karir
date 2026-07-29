@@ -19,3 +19,9 @@ export const updateCareer = (id, data) => {
 export const deleteCareer = (id) => {
     return apiClient.delete(`/admin/careers/${id}`);    
 };
+
+export default {
+    getAll() {
+        return apiClient.get('/admin/careers');
+    },
+};
