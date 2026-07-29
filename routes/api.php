@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\SkillController;
 use App\Http\Controllers\Admin\CareerController;
 use App\Http\Controllers\Admin\InternshipController;
 use App\Http\Controllers\Admin\CareerSkillController;
+use App\Http\Controllers\Admin\StudentController;
 use Illuminate\Support\Facades\Route;
 
 // Auth API
@@ -39,6 +40,11 @@ Route::middleware(['auth:sanctum', 'role:admin'])
         Route::resource('internships', InternshipController::class)
             ->except(['create', 'edit']);
 
+        Route::apiResource('students', StudentController::class)
+            ->only(['index', 'show', 'destroy']);
+
+
+        //mapping skill
         Route::get('careers/{career}/skills', [CareerSkillController::class, 'index']);
         Route::put('careers/{career}/skills', [CareerSkillController::class, 'update']);
     });
