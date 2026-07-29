@@ -124,6 +124,43 @@
                         <ul class="space-y-1">
                             <li>
                                 <router-link
+                                    to="/admin/student"
+                                    class="group relative flex items-center justify-between rounded-lg px-4 py-3 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
+                                    active-class="bg-blue-50 text-blue-700"
+                                >
+                                    <div class="flex items-center gap-3">
+                                        <svg
+                                            class="h-5 w-5"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
+                                            ></path>
+                                        </svg>
+                                        Students
+                                    </div>
+                                    <svg
+                                        class="h-4 w-4 text-slate-400 transition group-hover:text-slate-600"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M9 5l7 7-7 7"
+                                        ></path>
+                                    </svg>
+                                </router-link>
+                            </li>
+                            <li>
+                                <router-link
                                     to="/admin/skill"
                                     class="group relative flex items-center justify-between rounded-lg px-4 py-3 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
                                     active-class="bg-blue-50 text-blue-700"
@@ -380,6 +417,26 @@
                                         stroke-linejoin="round"
                                         stroke-width="2"
                                         d="M9 13h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6a2 2 0 012-2z"
+                                    ></path>
+                                </svg>
+                            </router-link>
+
+                            <router-link
+                                to="/admin/student"
+                                class="group flex items-center justify-center rounded-lg px-2 py-3 text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
+                                active-class="bg-blue-50 text-blue-700"
+                            >
+                                <svg
+                                    class="h-5 w-5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
                                     ></path>
                                 </svg>
                             </router-link>

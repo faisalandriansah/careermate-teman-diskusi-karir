@@ -40,6 +40,18 @@
           <ul class="space-y-1">
             <li>
               <router-link 
+                to="/admin/student" 
+                class="flex items-center gap-2.5 rounded-lg px-4 py-2 text-bodymedium text-slate-700 hover:bg-primary hover:text-white transition-colors duration-200"
+                active-class="bg-primary text-white"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                </svg>
+                Students
+              </router-link>
+            </li>
+            <li>
+              <router-link 
                 to="/admin/skill" 
                 class="flex items-center gap-2.5 rounded-lg px-4 py-2 text-bodymedium text-slate-700 hover:bg-primary hover:text-white transition-colors duration-200"
                 active-class="bg-primary text-white"

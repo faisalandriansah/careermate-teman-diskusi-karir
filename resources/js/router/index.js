@@ -35,6 +35,9 @@ import InternshipEdit from "@/views/admin/internship/Edit.vue";
 // Import mapping components
 import CareerSkillMapping from "@/views/admin/mapping/CareerSkillMapping.vue";
 
+// Import student components
+import StudentManagement from "@/views/admin/student/StudentManagement.vue";
+
 const routes = [
     {
         path: "/",
@@ -62,6 +65,16 @@ const routes = [
                 path: "dashboard",
                 name: "AdminDashboard",
                 component: AdminDashboard,
+                meta: {
+                    requiresAuth: true,
+                    role: "admin",
+                },
+            },
+            // Student routes
+            {
+                path: "student",
+                name: "StudentManagement",
+                component: StudentManagement,
                 meta: {
                     requiresAuth: true,
                     role: "admin",
