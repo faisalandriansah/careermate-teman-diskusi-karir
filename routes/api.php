@@ -13,7 +13,7 @@ Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
 
 // 
-Route::middleware(['auth:sanctum','role:mahasiswa'])->group(function () {
+Route::middleware(['auth:sanctum', 'role:mahasiswa'])->group(function () {
 
     Route::get('/auth/me', [AuthController::class, 'me']);
 
@@ -38,4 +38,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])
 
         Route::resource('internships', InternshipController::class)
             ->except(['create', 'edit']);
+
+        Route::get('careers/{career}/skills', [CareerSkillController::class, 'index']);
+        Route::put('careers/{career}/skills', [CareerSkillController::class, 'update']);
     });

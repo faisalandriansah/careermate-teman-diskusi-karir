@@ -35,7 +35,7 @@ class CareerSkillController extends Controller
                 'title' => $career->title,
                 'description' => $career->description,
             ],
-            'skills' => $skill,
+            'skills' => $skills,
         ]);
     }
 
