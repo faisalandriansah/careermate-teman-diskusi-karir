@@ -12,7 +12,7 @@
                     sidebarOpen
                         ? 'translate-x-0 w-72'
                         : '-translate-x-full w-72',
-                    'lg:translate-x-0 lg:static',
+                    'lg:translate-x-0',
                     sidebarOpen ? 'lg:w-72' : 'lg:w-20',
                 ]"
             >
@@ -522,7 +522,12 @@
                 </div>
             </aside>
 
-            <div class="flex flex-col flex-1 w-full">
+            <div
+                :class="[
+                    'flex flex-col flex-1 w-full transition-all duration-200 ease-in-out',
+                    isMiniSidebar ? 'lg:ml-20' : 'lg:ml-72',
+                ]"
+            >
                 <header
                     class="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur"
                 >

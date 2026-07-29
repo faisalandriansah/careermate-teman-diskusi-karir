@@ -23,8 +23,18 @@ class UpdateCareerSkillRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'skill_id' => 'required|exists:skills,id',
-            'weight' => 'required|integer|min:0|max:10'
+            'skills' => ['required', 'array'],
+
+            'skills.*.skill_id' => [
+                'required',
+                'exists:skills,id'
+            ],
+
+            'skills.*.weight' => [
+                'required',
+                'integer',
+                'between:1,10'
+            ],
         ];
     }
 }

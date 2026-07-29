@@ -5,32 +5,55 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateCareerSkillRequest;
 use App\Models\Career;
+use App\Models\Skill;
 
 class CareerSkillController extends Controller
 {
     // Tampilkan semua skill milik career tertentu beserta weight-nya
     public function index(Career $career)
     {
-        $skills = $career->skills()->get();
+        // skill yang sudah mapping
+        $mappedSkills = $career->skills()
+            ->pluck('career_skills.weight', 'skills.id');
+
+        //semua skill
+        $skills = skill::all()->map(function ($skill) use ($mappedSkills) {
+            return [
+                'id' => $skill->id,
+                'name' => $skill->name,
+                'checked' => $mappedSkills->has($skill->id),
+                'weight' => $mappedSkills[$skill->id] ?? 0,
+            ];
+        });
+
+        // $career = Career::with('skills')->findOrFail($career->id);
+        // $skills = $career->skills()->get();
 
         return response()->json([
-            'career' => $career->only('id', 'title'),
-            'skills' => $skills,
+            'career' => [
+                'id' => $career->id,
+                'title' => $career->title,
+                'description' => $career->description,
+            ],
+            'skills' => $skill,
         ]);
     }
 
-    // Tambah / update mapping skill ke career (attach kalau belum ada, update weight kalau udah ada)
+    // Simpan semua mapping skill sekaligus
     public function update(UpdateCareerSkillRequest $request, Career $career)
     {
-        $validated = $request->validated();
+        $syncData = [];
 
-        $career->skills()->syncWithoutDetaching([
-            $validated['skill_id'] => ['weight' => $validated['weight']],
-        ]);
+        foreach ($request->skills as $skill) {
+            $syncData[$skill['skill_id']] = [
+                'weight' => $skill['weight']
+            ];
+        }
+
+        $career->skills()->sync($syncData);
 
         return response()->json([
-            'message' => 'Career-Skill mapping berhasil diupdate.',
-            'data' => $career->skills()->get(),
+            'message' => 'Career Skill Mapping berhasil diperbarui.',
         ]);
     }
 
