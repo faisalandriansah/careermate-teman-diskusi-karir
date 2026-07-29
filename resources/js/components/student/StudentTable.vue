@@ -194,11 +194,11 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import StudentSearch from "./StudentSearch.vue";
-import StudentStatusFilter from "./StudentStatusFilter.vue";
-import StudentStatusBadge from "./StudentStatusBadge.vue";
-import StudentSkeleton from "./StudentSkeleton.vue";
-import StudentDetailModal from "./StudentDetailModal.vue";
+import StudentSearch from "@/components/student/StudentSearch.vue";
+import StudentStatusFilter from "@/components/student/StudentStatusFilter.vue";
+import StudentStatusBadge from "@/components/student/StudentStatusBadge.vue";
+import StudentSkeleton from "@/components/student/StudentSkeleton.vue";
+import StudentDetailModal from "@/components/student/StudentDetailModal.vue";
 
 // Dummy data
 const students = ref([
