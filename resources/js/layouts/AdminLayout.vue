@@ -352,7 +352,7 @@
                         </ul>
                     </div>
 
-                    <div>
+                    <!-- <div>
                         <p
                             class="mb-4 text-xs font-bold uppercase tracking-widest text-slate-400"
                         >
@@ -432,7 +432,7 @@
                                 </a>
                             </li>
                         </ul>
-                    </div>
+                    </div> -->
                 </div>
 
                 <!-- Tampilan sidebar mini saat tertutup - hanya menampilkan ikon menu -->
@@ -598,7 +598,7 @@
                 </div>
 
                 <!-- Footer hanya muncul saat sidebar terbuka -->
-                <div
+                <!-- <div
                     v-if="!isMiniSidebar"
                     class="border-t border-slate-200 px-4 py-4"
                 >
@@ -621,7 +621,7 @@
                         </svg>
                         Documentation
                     </a>
-                </div>
+                </div> -->
             </aside>
 
             <div
