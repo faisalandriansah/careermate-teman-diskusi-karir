@@ -74,6 +74,7 @@
                                     to="/admin/dashboard"
                                     class="group relative flex items-center justify-between rounded-lg px-4 py-3 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
                                     active-class="bg-blue-50 text-blue-700"
+                                    v-slot="{ isActive }"
                                 >
                                     <div class="flex items-center gap-3">
                                         <svg
@@ -98,7 +99,12 @@
                                         Dashboard
                                     </div>
                                     <svg
-                                        class="h-4 w-4 text-slate-400 transition group-hover:text-slate-600"
+                                        :class="[
+                                            'h-4 w-4 text-slate-400 transition-transform duration-200 group-hover:text-slate-600',
+                                            isActive
+                                                ? 'rotate-90 text-blue-600'
+                                                : '',
+                                        ]"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -127,6 +133,7 @@
                                     to="/admin/student"
                                     class="group relative flex items-center justify-between rounded-lg px-4 py-3 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
                                     active-class="bg-blue-50 text-blue-700"
+                                    v-slot="{ isActive }"
                                 >
                                     <div class="flex items-center gap-3">
                                         <svg
@@ -145,7 +152,12 @@
                                         Students
                                     </div>
                                     <svg
-                                        class="h-4 w-4 text-slate-400 transition group-hover:text-slate-600"
+                                        :class="[
+                                            'h-4 w-4 text-slate-400 transition-transform duration-200 group-hover:text-slate-600',
+                                            isActive
+                                                ? 'rotate-90 text-blue-600'
+                                                : '',
+                                        ]"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -164,6 +176,7 @@
                                     to="/admin/skill"
                                     class="group relative flex items-center justify-between rounded-lg px-4 py-3 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
                                     active-class="bg-blue-50 text-blue-700"
+                                    v-slot="{ isActive }"
                                 >
                                     <div class="flex items-center gap-3">
                                         <svg
@@ -188,7 +201,12 @@
                                         Skills
                                     </div>
                                     <svg
-                                        class="h-4 w-4 text-slate-400 transition group-hover:text-slate-600"
+                                        :class="[
+                                            'h-4 w-4 text-slate-400 transition-transform duration-200 group-hover:text-slate-600',
+                                            isActive
+                                                ? 'rotate-90 text-blue-600'
+                                                : '',
+                                        ]"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -207,6 +225,7 @@
                                     to="/admin/career"
                                     class="group relative flex items-center justify-between rounded-lg px-4 py-3 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
                                     active-class="bg-blue-50 text-blue-700"
+                                    v-slot="{ isActive }"
                                 >
                                     <div class="flex items-center gap-3">
                                         <svg
@@ -225,7 +244,12 @@
                                         Careers
                                     </div>
                                     <svg
-                                        class="h-4 w-4 text-slate-400 transition group-hover:text-slate-600"
+                                        :class="[
+                                            'h-4 w-4 text-slate-400 transition-transform duration-200 group-hover:text-slate-600',
+                                            isActive
+                                                ? 'rotate-90 text-blue-600'
+                                                : '',
+                                        ]"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -244,6 +268,7 @@
                                     to="/admin/internship"
                                     class="group relative flex items-center justify-between rounded-lg px-4 py-3 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
                                     active-class="bg-blue-50 text-blue-700"
+                                    v-slot="{ isActive }"
                                 >
                                     <div class="flex items-center gap-3">
                                         <svg
@@ -262,7 +287,12 @@
                                         Internships
                                     </div>
                                     <svg
-                                        class="h-4 w-4 text-slate-400 transition group-hover:text-slate-600"
+                                        :class="[
+                                            'h-4 w-4 text-slate-400 transition-transform duration-200 group-hover:text-slate-600',
+                                            isActive
+                                                ? 'rotate-90 text-blue-600'
+                                                : '',
+                                        ]"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -281,6 +311,7 @@
                                     to="/admin/mapping"
                                     class="group relative flex items-center justify-between rounded-lg px-4 py-3 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
                                     active-class="bg-blue-50 text-blue-700"
+                                    v-slot="{ isActive }"
                                 >
                                     <div class="flex items-center gap-3">
                                         <svg
@@ -298,10 +329,24 @@
                                         </svg>
                                         Skill Mapping
                                     </div>
-                                    <span
-                                        class="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-700"
-                                        >NEW</span
+                                    <svg
+                                        :class="[
+                                            'h-4 w-4 text-slate-400 transition-transform duration-200 group-hover:text-slate-600',
+                                            isActive
+                                                ? 'rotate-90 text-blue-600'
+                                                : '',
+                                        ]"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
                                     >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M9 5l7 7-7 7"
+                                        ></path>
+                                    </svg>
                                 </router-link>
                             </li>
                         </ul>

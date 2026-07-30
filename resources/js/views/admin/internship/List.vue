@@ -3,13 +3,32 @@
         <div
             class="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_8px_30px_rgba(15,23,42,0.04)] sm:flex-row sm:items-center sm:justify-between"
         >
-            <div>
-                <h2 class="text-xl font-semibold text-slate-900">
-                    Internships Management
-                </h2>
-                <p class="mt-1 text-sm text-slate-500">
-                    Kelola lowongan magang yang tersedia.
-                </p>
+            <div class="flex items-center gap-4">
+                <div
+                    class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-600/10 text-blue-600"
+                >
+                    <svg
+                        class="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"
+                        />
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="text-xl font-semibold text-slate-900">
+                        Internships Management
+                    </h2>
+                    <p class="mt-1 text-sm text-slate-500">
+                        Kelola lowongan magang yang tersedia.
+                    </p>
+                </div>
             </div>
             <button
                 @click="$router.push('/admin/internship/create')"

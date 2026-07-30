@@ -8,17 +8,27 @@
                 <div class="w-full md:w-auto md:flex-1">
                     <StudentSearch @search-changed="handleSearchChange" />
                 </div>
-                <div class="w-full md:w-auto">
-                    <StudentStatusFilter
-                        @status-filter-changed="handleStatusFilterChange"
-                    />
-                </div>
             </div>
         </div>
 
         <!-- Loading Skeleton -->
         <div v-if="loading" class="p-4">
             <StudentSkeleton :rows="5" />
+        </div>
+
+        <!-- error State -->
+        <div
+            v-else-if="errorMessage"
+            class="flex flex-col items-center justify-center px-6 py-12 text-center"
+        >
+            <p class="text-sm font-semibold text-red-600">Gagal memuat data</p>
+            <p class="mt-1 text-xs text-slate-500">{{ errorMessage }}</p>
+            <button
+                @click="fetchStudents"
+                class="mt-3 rounded-x1 border border-slate-300 bg-white px-3 py-1.5 text-sm fony-semibold text-slate-600 hover:bg-slate-50"
+            >
+                coba lagi
+            </button>
         </div>
 
         <!-- Empty State -->
@@ -81,7 +91,34 @@
                                     </p>
                                 </div>
                             </div>
-                            <StudentStatusBadge :status="student.status" />
+                        </div>
+
+                        <div class="mt-3 text-xs text-slate-500">
+                            <p v-if="student.university">
+                                {{ student.university }}
+                            </p>
+                            <p v-if="student.major">
+                                {{ student.major }}
+                                <span v-if="student.semester">
+                                    · Semester {{ student.semester }}</span
+                                >
+                            </p>
+                        </div>
+
+                        <div
+                            v-if="student.last_analysis"
+                            class="mt-3 rounded-lg bg-white px-3 py-2 text-xs"
+                        >
+                            <p class="font-semibold text-slate-700">
+                                {{
+                                    student.last_analysis.recommended_career ??
+                                    "-"
+                                }}
+                            </p>
+                            <p class="text-slate-500">
+                                Match:
+                                {{ student.last_analysis.match_percentage }}%
+                            </p>
                         </div>
                     </div>
 
@@ -115,7 +152,7 @@
 
         <!-- Pagination -->
         <div
-            v-if="!loading && filteredStudents.length > 0"
+            v-if="!loading && !errorMessage && filteredStudents.length > 0"
             class="flex flex-col items-center justify-between gap-3 border-t border-slate-100 px-4 py-3 sm:flex-row"
         >
             <div class="text-sm text-slate-600">
@@ -194,135 +231,73 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
+import { studentService } from "@/services/studentService";
 import StudentSearch from "@/components/student/StudentSearch.vue";
-import StudentStatusFilter from "@/components/student/StudentStatusFilter.vue";
-import StudentStatusBadge from "@/components/student/StudentStatusBadge.vue";
 import StudentSkeleton from "@/components/student/StudentSkeleton.vue";
 import StudentDetailModal from "@/components/student/StudentDetailModal.vue";
 
-// Dummy data
-const students = ref([
-    {
-        id: 1,
-        name: "Ahmad Fauzi",
-        email: "ahmad.fauzi@student.ac.id",
-        university: "Universitas Indonesia",
-        major: "Teknik Informatika",
-        semester: "7",
-        phone: "+62 812 3456 7890",
-        status: "active",
-        github: "https://github.com/ahmadfauzi",
-        linkedin: "https://linkedin.com/in/ahmadfauzi",
-        portfolio: "https://ahmadfauzi.dev",
-        registration_date: "2024-01-15",
-        cv_file: "CV_Ahmad_Fauzi.pdf",
-        detected_skills: ["JavaScript", "Vue.js", "Node.js", "Python"],
-        last_analysis: {
-            recommended_career: "Frontend Developer",
-            match_percentage: 85,
-            analysis_date: "2024-07-20",
-        },
-    },
-    {
-        id: 2,
-        name: "Siti Nurhaliza",
-        email: "siti.nurhaliza@student.ac.id",
-        university: "Institut Teknologi Bandung",
-        major: "Sistem Informasi",
-        semester: "6",
-        phone: "+62 821 3456 7891",
-        status: "pending",
-        github: "https://github.com/sitinurhaliza",
-        linkedin: "https://linkedin.com/in/sitinurhaliza",
-        portfolio: "https://sitinurhaliza.com",
-        registration_date: "2024-02-20",
-        cv_file: "CV_Siti_Nurhaliza.pdf",
-        detected_skills: ["React", "TypeScript", "MongoDB", "UI/UX Design"],
-        last_analysis: {
-            recommended_career: "Full Stack Developer",
-            match_percentage: 78,
-            analysis_date: "2024-07-18",
-        },
-    },
-    {
-        id: 3,
-        name: "Budi Santoso",
-        email: "budi.santoso@student.ac.id",
-        university: "Universitas Gadjah Mada",
-        major: "Teknik Elektro",
-        semester: "8",
-        phone: "+62 813 3456 7892",
-        status: "active",
-        github: "https://github.com/budisantoso",
-        linkedin: "https://linkedin.com/in/budisantoso",
-        portfolio: "https://budisantoso.net",
-        registration_date: "2024-01-10",
-        cv_file: "CV_Budi_Santoso.pdf",
-        detected_skills: ["Embedded Systems", "C++", "Python", "IoT"],
-        last_analysis: {
-            recommended_career: "Hardware Engineer",
-            match_percentage: 92,
-            analysis_date: "2024-07-22",
-        },
-    },
-    {
-        id: 4,
-        name: "Dewi Anggraini",
-        email: "dewi.anggraini@student.ac.id",
-        university: "Universitas Pendidikan Indonesia",
-        major: "Pendidikan Teknologi Informasi",
-        semester: "5",
-        phone: "+62 822 3456 7893",
-        status: "inactive",
-        github: "https://github.com/dewianggraini",
-        linkedin: "https://linkedin.com/in/dewianggraini",
-        portfolio: "https://dewianggraini.edu",
-        registration_date: "2024-03-05",
-        cv_file: "CV_Dewi_Anggraini.pdf",
-        detected_skills: [
-            "Java",
-            "Android Development",
-            "SQL",
-            "Educational Technology",
-        ],
-        last_analysis: {
-            recommended_career: "Mobile Developer",
-            match_percentage: 70,
-            analysis_date: "2024-07-15",
-        },
-    },
-    {
-        id: 5,
-        name: "Rizki Pratama",
-        email: "rizki.pratama@student.ac.id",
-        university: "Universitas Airlangga",
-        major: "Teknik Industri",
-        semester: "4",
-        phone: "+62 811 3456 7894",
-        status: "active",
-        github: "https://github.com/rizkipratama",
-        linkedin: "https://linkedin.com/in/rizkipratama",
-        portfolio: "https://rizkipratama.io",
-        registration_date: "2024-04-12",
-        cv_file: "CV_Rizki_Pratama.pdf",
-        detected_skills: ["Data Analysis", "Python", "Excel", "Lean Six Sigma"],
-        last_analysis: {
-            recommended_career: "Data Analyst",
-            match_percentage: 80,
-            analysis_date: "2024-07-25",
-        },
-    },
-]);
-
+const students = ref([]);
 const searchTerm = ref("");
-const statusFilter = ref("all");
 const loading = ref(false);
+const errorMessage = ref("");
 const showDetailModal = ref(false);
 const selectedStudent = ref(null);
 
 // Pagination
 const currentPage = ref(1);
 const itemsPerPage = 6; // digenepin biar pas grid 3 kolom (2 baris) di desktop
+
+// Mapping response API Laravel -> shape yang dipakai UI
+const mapStudent = (raw) => {
+    const latestCv = raw.cv_files?.[0] ?? null;
+    const latestAnalysis = raw.analysis_results?.[0] ?? null;
+
+    return {
+        id: raw.id,
+        name: raw.name,
+        email: raw.email,
+        university: raw.profile?.university ?? null,
+        major: raw.profile?.major ?? null,
+        semester: raw.profile?.semester ?? null,
+        phone: raw.profile?.phone ?? null,
+        github: raw.profile?.github_url ?? null,
+        linkedin: raw.profile?.linkedin_url ?? null,
+        portfolio: raw.profile?.portfolio_url ?? null,
+        registration_date: raw.created_at,
+        cv_file: latestCv?.file_name ?? null,
+        cv_file_url: latestCv?.file_path ?? null,
+        detected_skills: latestAnalysis?.skills_json
+            ? typeof latestAnalysis.skills_json === "string"
+                ? JSON.parse(latestAnalysis.skills_json)
+                : latestAnalysis.skills_json
+            : [],
+        last_analysis: latestAnalysis
+            ? {
+                  recommended_career: latestAnalysis.career?.title ?? null,
+                  match_percentage: latestAnalysis.match_score,
+                  analysis_date: latestAnalysis.created_at,
+              }
+            : null,
+    };
+};
+
+const fetchStudents = async () => {
+    loading.value = true;
+    errorMessage.value = "";
+    try {
+        const { data } = await studentService.getAll({ per_Page: 1000 });
+        // laravel paginate() bungkus data asli di field "data"
+        const rows = data.data ?? data;
+        students.value = rows.map(mapStudent);
+    } catch (err) {
+        errorMessage.value =
+            err.response?.data?.message ?? "Terjadi kesalahan pada server";
+    } finally {
+        loading.value = false;
+    }
+};
+
+onMounted(fetchStudents);
 
 // Computed properties
 const filteredStudents = computed(() => {
@@ -339,18 +314,11 @@ const filteredStudents = computed(() => {
                 (student.major && student.major.toLowerCase().includes(term)),
         );
     }
-
-    if (statusFilter.value !== "all") {
-        result = result.filter(
-            (student) => student.status === statusFilter.value,
-        );
-    }
-
     return result;
 });
 
 const totalPages = computed(() => {
-    return Math.ceil(filteredStudents.value.length / itemsPerPage);
+    return Math.ceil(filteredStudents.value.length / itemsPerPage) || 1;
 });
 
 const paginatedStudents = computed(() => {
@@ -362,11 +330,6 @@ const paginatedStudents = computed(() => {
 // Methods
 const handleSearchChange = (searchValue) => {
     searchTerm.value = searchValue;
-    currentPage.value = 1;
-};
-
-const handleStatusFilterChange = (statusValue) => {
-    statusFilter.value = statusValue;
     currentPage.value = 1;
 };
 

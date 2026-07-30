@@ -14,7 +14,7 @@ class StudentController extends Controller
     public function index(Request $request)
     {
         $query = User::query()
-            ->where('role', 'student')
+            ->where('role', 'mahasiswa')
             ->with([
                 'profile',
                 'cvFiles' => function ($q) {
@@ -34,10 +34,10 @@ class StudentController extends Controller
             });
         }
 
-        $students = $query->orderBy('created_at', 'desc')
+        $mahasiswa = $query->orderBy('created_at', 'desc')
             ->paginate($request->get('per_page', 1000));
 
-        return response()->json($students);
+        return response()->json($mahasiswa);
     }
 
     /**
@@ -62,7 +62,7 @@ class StudentController extends Controller
      */
     public function show($id)
     {
-        $student = User::where('role', 'student')
+        $mahasiswa = User::where('role', 'mahasiswa')
             ->with([
                 'profile',
                 'cvFiles' => function ($q) {
@@ -74,7 +74,7 @@ class StudentController extends Controller
             ])
             ->findOrFail($id);
 
-        return response()->json($student);
+        return response()->json($mahasiswa);
     }
 
     /**
@@ -98,11 +98,11 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-        $student = User::where('role', 'student')->findOrFail($id);
-        $student->delete();
+        $mahasiswa = User::where('role', 'mahasiswa')->findOrFail($id);
+        $mahasiswa->delete();
 
         return response()->json([
-            'message' => 'Student berhasil dihapus'
+            'message' => 'mahasiswa berhasil dihapus'
         ]);
     }
 }
