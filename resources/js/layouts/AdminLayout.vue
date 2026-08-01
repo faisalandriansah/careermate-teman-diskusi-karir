@@ -87,13 +87,7 @@
                                                 stroke-linecap="round"
                                                 stroke-linejoin="round"
                                                 stroke-width="2"
-                                                d="M9 3h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V5a2 2 0 012-2z"
-                                            ></path>
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M9 13h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6a2 2 0 012-2z"
+                                                d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
                                             ></path>
                                         </svg>
                                         Dashboard
@@ -121,56 +115,14 @@
                         </ul>
                     </div>
 
+                    <!-- DATA MASTER -->
                     <div class="mb-8">
                         <p
                             class="mb-4 text-xs font-bold uppercase tracking-widest text-slate-400"
                         >
-                            DATA MANAGEMENT
+                            DATA MASTER
                         </p>
                         <ul class="space-y-1">
-                            <li>
-                                <router-link
-                                    to="/admin/student"
-                                    class="group relative flex items-center justify-between rounded-lg px-4 py-3 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
-                                    active-class="bg-blue-50 text-blue-700"
-                                    v-slot="{ isActive }"
-                                >
-                                    <div class="flex items-center gap-3">
-                                        <svg
-                                            class="h-5 w-5"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
-                                            ></path>
-                                        </svg>
-                                        Students
-                                    </div>
-                                    <svg
-                                        :class="[
-                                            'h-4 w-4 text-slate-400 transition-transform duration-200 group-hover:text-slate-600',
-                                            isActive
-                                                ? 'rotate-90 text-blue-600'
-                                                : '',
-                                        ]"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M9 5l7 7-7 7"
-                                        ></path>
-                                    </svg>
-                                </router-link>
-                            </li>
                             <li>
                                 <router-link
                                     to="/admin/skill"
@@ -306,6 +258,17 @@
                                     </svg>
                                 </router-link>
                             </li>
+                        </ul>
+                    </div>
+
+                    <!-- CAREER ENGINE -->
+                    <div class="mb-8">
+                        <p
+                            class="mb-4 text-xs font-bold uppercase tracking-widest text-slate-400"
+                        >
+                            CAREER ENGINE
+                        </p>
+                        <ul class="space-y-1">
                             <li>
                                 <router-link
                                     to="/admin/mapping"
@@ -327,7 +290,61 @@
                                                 d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
                                             ></path>
                                         </svg>
-                                        Skill Mapping
+                                        Career Skill Mapping
+                                    </div>
+                                    <svg
+                                        :class="[
+                                            'h-4 w-4 text-slate-400 transition-transform duration-200 group-hover:text-slate-600',
+                                            isActive
+                                                ? 'rotate-90 text-blue-600'
+                                                : '',
+                                        ]"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M9 5l7 7-7 7"
+                                        ></path>
+                                    </svg>
+                                </router-link>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- PENGGUNA -->
+                    <div class="mb-8">
+                        <p
+                            class="mb-4 text-xs font-bold uppercase tracking-widest text-slate-400"
+                        >
+                            PENGGUNA
+                        </p>
+                        <ul class="space-y-1">
+                            <li>
+                                <router-link
+                                    to="/admin/student"
+                                    class="group relative flex items-center justify-between rounded-lg px-4 py-3 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
+                                    active-class="bg-blue-50 text-blue-700"
+                                    v-slot="{ isActive }"
+                                >
+                                    <div class="flex items-center gap-3">
+                                        <svg
+                                            class="h-5 w-5"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4zm6 0a4 4 0 10-4-4"
+                                            />
+                                        </svg>
+                                        Students
                                     </div>
                                     <svg
                                         :class="[
@@ -455,37 +472,12 @@
                                         stroke-linecap="round"
                                         stroke-linejoin="round"
                                         stroke-width="2"
-                                        d="M9 3h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V5a2 2 0 012-2z"
-                                    ></path>
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M9 13h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6a2 2 0 012-2z"
+                                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
                                     ></path>
                                 </svg>
                             </router-link>
 
-                            <router-link
-                                to="/admin/student"
-                                class="group flex items-center justify-center rounded-lg px-2 py-3 text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
-                                active-class="bg-blue-50 text-blue-700"
-                            >
-                                <svg
-                                    class="h-5 w-5"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
-                                    ></path>
-                                </svg>
-                            </router-link>
-
+                            <!-- DATA MASTER -->
                             <router-link
                                 to="/admin/skill"
                                 class="group flex items-center justify-center rounded-lg px-2 py-3 text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
@@ -552,6 +544,7 @@
                                 </svg>
                             </router-link>
 
+                            <!-- CAREER ENGINE -->
                             <router-link
                                 to="/admin/mapping"
                                 class="group flex items-center justify-center rounded-lg px-2 py-3 text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
@@ -571,10 +564,31 @@
                                     ></path>
                                 </svg>
                             </router-link>
+
+                            <!-- PENGGUNA -->
+                            <router-link
+                                to="/admin/student"
+                                class="group flex items-center justify-center rounded-lg px-2 py-3 text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
+                                active-class="bg-blue-50 text-blue-700"
+                            >
+                                <svg
+                                    class="h-5 w-5"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4zm6 0a4 4 0 10-4-4"
+                                    />
+                                </svg>
+                            </router-link>
                         </div>
 
                         <!-- Bagian bawah sidebar mini -->
-                        <div class="pt-4 mt-auto border-t border-slate-200">
+                        <!-- <div class="pt-4 mt-auto border-t border-slate-200">
                             <a
                                 href="#"
                                 class="flex justify-center rounded-lg px-2 py-3 text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
@@ -593,7 +607,7 @@
                                     ></path>
                                 </svg>
                             </a>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
 
