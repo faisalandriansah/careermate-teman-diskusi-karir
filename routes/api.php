@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\CareerController;
 use App\Http\Controllers\Admin\InternshipController;
 use App\Http\Controllers\Admin\CareerSkillController;
 use App\Http\Controllers\Admin\StudentController;
+use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 // Auth API
@@ -30,6 +31,8 @@ Route::middleware(['auth:sanctum', 'role:mahasiswa'])->group(function () {
 Route::middleware(['auth:sanctum', 'role:admin'])
     ->prefix('admin')
     ->group(function () {
+
+        Route::get('dashboard', [DashboardController::class, 'index']);
 
         Route::resource('skills', SkillController::class)
             ->except(['create', 'edit']);
