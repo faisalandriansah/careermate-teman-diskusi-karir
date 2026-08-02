@@ -166,14 +166,24 @@
             Next
         </button>
     </div>
+    <ConfirmModal
+        v-model="showConfirm"
+        title="Hapus Internship Ini?"
+        description="Internship yang sudah dihapus tidak bisa dikembalikan lagi."
+        @cancel="showConfirm = false"
+        @confirm="confirmDelete"
+    />
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
 import { getInternships, deleteInternship } from "@/services/internshipService";
+import ConfirmModal from "@/components/ConfirmModal.vue";
 
 const internships = ref([]);
 const loading = ref(false);
+const showConfirm = ref(false);
+const selectedId = ref(null);
 
 const pagination = ref({
     current_page: 1,
@@ -201,13 +211,13 @@ onMounted(() => {
     loadInternships();
 });
 
-async function removeInternship(id) {
-    if (!confirm("yakin ingin menghapus internship ini?")) return;
-    try {
-        await deleteInternship(id);
-        loadInternships();
-    } catch (error) {
-        console.log(error);
-    }
+function removeInternship(id) {
+    selectedId.value = id;
+    showConfirm.value = true; // munculin modal
+}
+async function confirmDelete() {
+    await deleteInternship(selectedId.value);
+    showConfirm.value = false;
+    loadInternships(); // refresh list
 }
 </script>
