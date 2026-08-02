@@ -172,14 +172,24 @@
             Next
         </button>
     </div>
+    <ConfirmModal
+        v-model="showConfirm"
+        title="Hapus Skill Ini?"
+        description="Skill yang sudah dihapus tidak bisa dikembalikan lagi."
+        @cancel="showConfirm = false"
+        @confirm="confirmDelete"
+    />
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
 import { getSkills, deleteSkill } from "@/services/skillService";
+import ConfirmModal from "@/components/ConfirmModal.vue";
 
 const skills = ref([]);
 const loading = ref(false);
+const showConfirm = ref(false);
+const selectedId = ref(null);
 
 const pagination = ref({
     current_page: 1,
@@ -209,14 +219,14 @@ onMounted(() => {
     loadSkills();
 });
 
-async function removeSkill(id) {
-    if (!confirm("Yakin ingin menghapus skill ini?")) return;
+function removeSkill(id) {
+    selectedId.value = id;
+    showConfirm.value = true; // munculin modal
+}
 
-    try {
-        await deleteSkill(id);
-        loadSkills();
-    } catch (error) {
-        console.error(error);
-    }
+async function confirmDelete() {
+    await deleteSkill(selectedId.value);
+    showConfirm.value = false;
+    loadSkills(); // refresh list
 }
 </script>
