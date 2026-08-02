@@ -139,12 +139,12 @@
                             class="h-2.5 overflow-hidden rounded-full bg-slate-200"
                         >
                             <div
-                                class="h-2.5 rounded-full transition-all duration-1000 ease-out"
+                                class="h-2.5 w-full origin-left rounded-full bar-fill"
                                 :class="item.color"
                                 :style="{
-                                    width: barsReady
-                                        ? `${item.percent}%`
-                                        : '0%',
+                                    transform: barsReady
+                                        ? `scaleX(${item.percent / 100})`
+                                        : 'scaleX(0)',
                                 }"
                             ></div>
                         </div>
@@ -244,11 +244,11 @@
                             class="h-2.5 overflow-hidden rounded-full bg-slate-200"
                         >
                             <div
-                                class="h-2.5 rounded-full bg-blue-500 transition-all duration-1000 ease-out"
+                                class="h-2.5 w-full origin-left rounded-full bg-blue-500 bar-fill"
                                 :style="{
-                                    width: barsReady
-                                        ? `${skill.percent}%`
-                                        : '0%',
+                                    transform: barsReady
+                                        ? `scaleX(${skill.percent / 100})`
+                                        : 'scaleX(0)',
                                 }"
                             ></div>
                         </div>
@@ -343,6 +343,7 @@
 
 <script setup>
 import { computed, ref, onMounted } from "vue";
+import dashboardService from "@/services/dashboardService";
 
 // ---- Greeting dinamis ----
 const greeting = computed(() => {
@@ -353,135 +354,64 @@ const greeting = computed(() => {
     return "Selamat Malam";
 });
 
-// ---- Trigger untuk progress bar animasi (mulai dari 0 lalu jalan ke target) ----
+// state
+const loading = ref(true);
+const error = ref(null);
 const barsReady = ref(false);
-onMounted(() => {
-    requestAnimationFrame(() => {
-        setTimeout(() => (barsReady.value = true), 100);
-    });
-});
+const donutProgress = ref(0);
 
-// ---- Count-up composable untuk angka ringkasan ----
-function useCountUp(target, duration = 900) {
-    const value = ref(0);
-    onMounted(() => {
-        const start = performance.now();
-        const step = (now) => {
-            const progress = Math.min((now - start) / duration, 1);
-            // easeOutQuad biar smooth di akhir
-            const eased = 1 - (1 - progress) * (1 - progress);
-            value.value = Math.floor(eased * target);
-            if (progress < 1) requestAnimationFrame(step);
-            else value.value = target;
-        };
-        requestAnimationFrame(step);
-    });
-    return value;
-}
+const summaryRaw = ref([]);
+const usageStats = ref([]);
+const careerDistribution = ref([]);
+const popularSkills = ref([]);
+const recentActivities = ref([]);
 
-const summaryRaw = [
-    {
+// ---- Icon map (dipisah dari data API, biar backend cuma kirim angka) ----
+const iconMap = {
+    mahasiswa: {
         title: "Mahasiswa",
-        value: 412,
-        trend: 6,
         iconBg: "bg-blue-50",
         iconColor: "text-blue-600",
         paths: [
             "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z",
         ],
     },
-    {
+    skill: {
         title: "Skill",
-        value: 58,
-        trend: 3,
         iconBg: "bg-emerald-50",
         iconColor: "text-emerald-600",
         paths: ["M13 10V3L4 14h7v7l9-11h-7z"],
     },
-    {
+    career: {
         title: "Karier",
-        value: 76,
-        trend: 4,
         iconBg: "bg-violet-50",
         iconColor: "text-violet-600",
         paths: [
             "M20 7h-3V5a2 2 0 00-2-2H9a2 2 0 00-2 2v2H4a1 1 0 00-1 1v3a2 2 0 002 2h14a2 2 0 002-2V8a1 1 0 00-1-1zM9 5h6v2H9V5zM3 13v6a2 2 0 002 2h14a2 2 0 002-2v-6H3z",
         ],
     },
-    {
+    magang: {
         title: "Magang",
-        value: 134,
-        trend: -2,
         iconBg: "bg-amber-50",
         iconColor: "text-amber-600",
         paths: [
             "M12 14l9-5-9-5-9 5 9 5zM12 14l6.16-3.42A12.083 12.083 0 0112 21a12.083 12.083 0 01-6.16-10.42L12 14z",
         ],
     },
-];
+};
 
-// bikin displayValue tiap item pakai count-up sendiri-sendiri
-const summary = summaryRaw.map((item) => ({
-    ...item,
-    displayValue: useCountUp(item.value),
-}));
+const usageColorMap = {
+    sudah_upload: { label: "Sudah Upload CV", color: "bg-emerald-500" },
+    belum_upload: { label: "Belum Upload", color: "bg-amber-500" },
+    total_analisis: { label: "Total Analisis", color: "bg-blue-500" },
+};
 
-const usageStats = [
-    {
-        label: "Sudah Upload CV",
-        value: "287",
-        percent: 84,
-        color: "bg-emerald-500",
-    },
-    { label: "Belum Upload", value: "125", percent: 37, color: "bg-amber-500" },
-    {
-        label: "Total Analisis",
-        value: "341",
-        percent: 100,
-        color: "bg-blue-500",
-    },
-];
-
-const careerDistribution = [
-    { label: "Frontend Developer", value: 42, color: "#3b82f6" },
-    { label: "Data Analyst", value: 28, color: "#10b981" },
-    { label: "UI/UX Designer", value: 30, color: "#8b5cf6" },
-];
-
-const totalRecommendation = "341";
-
-const donutGradient = computed(() => {
-    let cumulative = 0;
-    const stops = careerDistribution.map((slice) => {
-        const start = cumulative;
-        cumulative += slice.value;
-        return `${slice.color} ${start}% ${cumulative}%`;
-    });
-    return `conic-gradient(${stops.join(", ")})`;
-});
-
-const popularSkills = [
-    { name: "Laravel", count: 186, percent: 90 },
-    { name: "PHP", count: 164, percent: 78 },
-    { name: "MySQL", count: 141, percent: 68 },
-];
-
-const recentActivities = [
-    {
-        title: "Upload CV",
-        detail: "Ahmad Fauzi mengunggah CV baru",
-        time: "12 menit lalu",
-    },
-    {
-        title: "Registrasi",
-        detail: "Mahasiswa baru mendaftar",
-        time: "45 menit lalu",
-    },
-    {
-        title: "Analisis selesai",
-        detail: "Hasil rekomendasi karier telah dibuat",
-        time: "1 jam lalu",
-    },
+const distributionColors = [
+    "#3b82f6",
+    "#10b981",
+    "#8b5cf6",
+    "#f59e0b",
+    "#ef4444",
 ];
 
 const quickActions = [
@@ -514,36 +444,167 @@ const quickActions = [
         ],
     },
 ];
+
+// count up composable
+function useCountUp(target, duration = 900) {
+    const value = ref(0);
+    const start = performance.now();
+    const step = (now) => {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - (1 - progress) * (1 - progress);
+        value.value = Math.floor(eased * target);
+        if (progress < 1) requestAnimationFrame(step);
+        else value.value = target;
+    };
+    requestAnimationFrame(step);
+    return value;
+}
+
+function animateDonut(duration = 900) {
+    const start = performance.now();
+    const step = (now) => {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        donutProgress.value = eased;
+        if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+}
+
+const summary = computed(() =>
+    summaryRaw.value.map((item) => ({
+        ...iconMap[item.key],
+        trend: item.trend ?? 0,
+        displayValue: item.animated,
+    })),
+);
+
+const totalRecommendation = computed(() =>
+    careerDistribution.value.reduce((sum, s) => sum + s.rawValue, 0),
+);
+
+const donutGradient = computed(() => {
+    const progress = donutProgress.value;
+    let cumulative = 0;
+    const stops = careerDistribution.value.map((slice) => {
+        const start = cumulative * progress;
+        cumulative += slice.value;
+        const end = cumulative * progress;
+        return `${slice.color} ${start}% ${end}%`;
+    });
+    stops.push(`#e2e8f0 ${cumulative * progress}% 100%`);
+    return `conic-gradient(${stops.join(", ")})`;
+});
+
+async function fetchDashboard() {
+    loading.value = true;
+    error.value = null;
+    try {
+        const { data } = await dashboardService.getDashboardData();
+
+        summaryRaw.value = Object.entries(data.summary).map(([key, value]) => ({
+            key,
+            animated: useCountUp(value),
+        }));
+
+        const usageTotal = data.usage_stats.total_analisis || 1;
+        usageStats.value = Object.entries(data.usage_stats).map(
+            ([key, value]) => ({
+                label: usageColorMap[key].label,
+                value,
+                percent: Math.round((value / usageTotal) * 100),
+                color: usageColorMap[key].color,
+            }),
+        );
+
+        const distTotal =
+            data.career_distribution.reduce((s, d) => s + d.value, 0) || 1;
+        careerDistribution.value = data.career_distribution.map((item, i) => ({
+            label: item.label,
+            rawValue: item.value,
+            value: Math.round((item.value / distTotal) * 100),
+            color: distributionColors[i % distributionColors.length],
+        }));
+
+        const maxSkillCount = Math.max(
+            ...data.popular_skills.map((s) => s.count),
+            1,
+        );
+        popularSkills.value = data.popular_skills.map((s) => ({
+            name: s.name,
+            count: s.count,
+            percent: Math.round((s.count / maxSkillCount) * 100),
+        }));
+
+        recentActivities.value = data.recent_activities;
+
+        requestAnimationFrame(() => {
+            barsReady.value = true;
+            animateDonut();
+        });
+    } catch (err) {
+        error.value = "Gagal memuat data dashboard.";
+        console.error(err);
+    } finally {
+        loading.value = false;
+    }
+}
+
+onMounted(fetchDashboard);
 </script>
-
 <style scoped>
-@keyframes fade-in-up {
-    0% {
-        opacity: 0;
-        transform: translateY(12px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* Isolasi elemen blur ke GPU layer sendiri biar gak numpuk kerja render bareng animasi lain */
+.absolute.blur-2xl,
+.absolute.blur-xl {
+    transform: translateZ(0);
+    will-change: transform;
 }
 
-@keyframes scale-in {
-    0% {
-        opacity: 0;
-        transform: scale(0.85) rotate(-90deg);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1) rotate(0deg);
-    }
-}
-
+/* Fade-in-up yang lebih mengalir, override animasi default Tailwind */
 .animate-fade-in-up {
-    animation: fade-in-up 0.5s ease-out both;
+    animation: fadeInUpSmooth 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
 }
 
+@keyframes fadeInUpSmooth {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 14px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+/* Donut chart masuk lebih halus, gak nyentak pas scale */
 .animate-scale-in {
-    animation: scale-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    animation: scaleInSmooth 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+    will-change: transform, opacity;
+}
+
+@keyframes scaleInSmooth {
+    from {
+        opacity: 0;
+        transform: scale3d(0.92, 0.92, 1);
+    }
+    to {
+        opacity: 1;
+        transform: scale3d(1, 1, 1);
+    }
+}
+
+/* Progress bar pakai transform, bukan width, biar gak reflow tiap frame */
+.bar-fill {
+    transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+    backface-visibility: hidden;
+}
+
+/* Hover card gak numpuk transition properti beda-beda, disatuin biar konsisten */
+.hover\:-translate-y-0\.5,
+.hover\:scale-105 {
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 }
 </style>
