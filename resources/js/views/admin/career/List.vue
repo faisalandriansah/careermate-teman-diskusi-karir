@@ -166,14 +166,24 @@
             Next
         </button>
     </div>
+    <ConfirmModal
+        v-model="showConfirm"
+        title="Hapus Career Ini?"
+        description="Career yang sudah dihapus tidak bisa dikembalikan lagi."
+        @cancel="showConfirm = false"
+        @confirm="confirmDelete"
+    />
 </template>
 
 <script setup>
 import { onMounted, ref } from "vue";
 import { getCareers, deleteCareer } from "@/services/careerService";
+import ConfirmModal from "@/components/ConfirmModal.vue";
 
 const careers = ref([]);
 const loading = ref(false);
+const showConfirm = ref(false);
+const selectedId = ref(null);
 
 const pagination = ref({
     current_page: 1,
@@ -201,14 +211,13 @@ onMounted(() => {
     loadCareers();
 });
 
-async function removeCareer(id) {
-    if (!confirm("Yakin ingin menghapus career ini?")) return;
-
-    try {
-        await deleteCareer(id);
-        loadCareers();
-    } catch (error) {
-        console.error(error);
-    }
+function removeCareer(id) {
+    selectedId.value = id;
+    showConfirm.value = true; // munculin modal
+}
+async function confirmDelete() {
+    await deleteCareer(selectedId.value);
+    showConfirm.value = false;
+    loadCareers(); // refresh list
 }
 </script>
