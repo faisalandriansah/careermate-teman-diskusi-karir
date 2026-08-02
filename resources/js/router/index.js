@@ -96,7 +96,7 @@ const routes = [
                 component: SkillCreate,
                 meta: {
                     requiresAuth: true,
-                    role: "admin",
+                    role: "admin",  
                 },
             },
             {

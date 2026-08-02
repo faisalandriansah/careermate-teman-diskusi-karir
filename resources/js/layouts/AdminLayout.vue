@@ -150,7 +150,7 @@
                                                 d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
                                             ></path>
                                         </svg>
-                                        Skills
+                                        Skill
                                     </div>
                                     <svg
                                         :class="[
@@ -193,7 +193,7 @@
                                                 d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                                             ></path>
                                         </svg>
-                                        Careers
+                                        Karier
                                     </div>
                                     <svg
                                         :class="[
@@ -236,7 +236,7 @@
                                                 d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"
                                             ></path>
                                         </svg>
-                                        Internships
+                                        Magang
                                     </div>
                                     <svg
                                         :class="[
@@ -290,7 +290,7 @@
                                                 d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
                                             ></path>
                                         </svg>
-                                        Career Skill Mapping
+                                        Pemetaan Skill Karier
                                     </div>
                                     <svg
                                         :class="[
@@ -344,7 +344,7 @@
                                                 d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4zm6 0a4 4 0 10-4-4"
                                             />
                                         </svg>
-                                        Students
+                                        Mahasiswa
                                     </div>
                                     <svg
                                         :class="[
@@ -584,7 +584,7 @@
                                     ref="searchInputRef"
                                     v-model="searchQuery"
                                     type="text"
-                                    placeholder="Cari mahasiswa, career, skill..."
+                                    placeholder="Cari mahasiswa, karier, skill..."
                                     class="w-full border-0 bg-transparent text-sm text-slate-600 outline-none placeholder:text-slate-400"
                                     @focus="searchFocused = true"
                                     @keydown.down.prevent="moveActiveResult(1)"
@@ -1173,24 +1173,18 @@ const auth = useAuthStore();
 /* ================== Judul halaman / breadcrumb ================== */
 const routeTitleMap = {
     "/admin/dashboard": "Dashboard",
-    "/admin/skill": "Skills",
-    "/admin/career": "Careers",
-    "/admin/internship": "Internships",
-    "/admin/mapping": "Career Skill Mapping",
-    "/admin/student": "Students",
+    "/admin/skill": "Skill",
+    "/admin/career": "Karier",
+    "/admin/internship": "Magang",
+    "/admin/mapping": "Pemetaan Skill Karier",
+    "/admin/student": "Mahasiswa",
 };
 const pageTitle = computed(() => {
     if (route.meta && route.meta.title) return route.meta.title;
     return routeTitleMap[route.path] || route.name || "Dashboard";
 });
 
-/* ================== Search (fungsional) ==================
-   Catatan penting: AdminLayout ini adalah layout pembungkus <router-view />.
-   Meng-emit event dari sini TIDAK akan sampai ke halaman anak (StudentTable,
-   dsb) karena emit Vue hanya naik ke parent, bukan turun ke router-view.
-   Jadi search di header ini dibuat berfungsi sendiri sebagai "quick
-   navigation" ke menu terkait, sekaligus tetap emit + sync ke URL query
-   supaya halaman anak yang MAU bisa ikut membaca route.query.q kalau perlu. */
+/* ================== Search (fungsional) ==================. */
 const searchQuery = ref("");
 const mobileSearchOpen = ref(false);
 const searchInputRef = ref(null);
@@ -1210,27 +1204,27 @@ const searchIndex = [
         keywords: ["dashboard", "beranda", "home"],
     },
     {
-        label: "Skills",
+        label: "Skill",
         path: "/admin/skill",
         keywords: ["skill", "skills", "keahlian"],
     },
     {
-        label: "Careers",
+        label: "Karier",
         path: "/admin/career",
-        keywords: ["career", "careers", "karir", "pekerjaan"],
+        keywords: ["career", "careers", "karier", "pekerjaan", "karir"],
     },
     {
-        label: "Internships",
+        label: "Magang",
         path: "/admin/internship",
         keywords: ["internship", "internships", "magang", "pkl"],
     },
     {
-        label: "Career Skill Mapping",
+        label: "Pemetaan Skill Karier",
         path: "/admin/mapping",
         keywords: ["mapping", "pemetaan", "career skill"],
     },
     {
-        label: "Students",
+        label: "Mahasiswa",
         path: "/admin/student",
         keywords: ["student", "students", "mahasiswa", "siswa"],
     },
