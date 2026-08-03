@@ -309,6 +309,7 @@
                 <button
                     v-for="action in quickActions"
                     :key="action.title"
+                    @click="$router.push(action.to)"
                     class="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-4 text-left transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-[0_8px_30px_rgba(15,23,42,0.06)] active:scale-[0.98]"
                 >
                     <div
@@ -417,12 +418,14 @@ const distributionColors = [
 const quickActions = [
     {
         title: "Tambah Skill",
+        to: "/admin/skill/create",
         iconBg: "bg-blue-50",
         iconColor: "text-blue-600",
         paths: ["M12 4v16m8-8H4"],
     },
     {
         title: "Tambah Career",
+        to: "/admin/career/create",
         iconBg: "bg-emerald-50",
         iconColor: "text-emerald-600",
         paths: [
@@ -431,12 +434,14 @@ const quickActions = [
     },
     {
         title: "Tambah Magang",
+        to: "/admin/internship/create",
         iconBg: "bg-amber-50",
         iconColor: "text-amber-600",
         paths: ["M12 14l9-5-9-5-9 5 9 5z"],
     },
     {
         title: "Career Mapping",
+        to: "/admin/mapping",
         iconBg: "bg-violet-50",
         iconColor: "text-violet-600",
         paths: [
