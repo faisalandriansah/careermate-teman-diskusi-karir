@@ -38,27 +38,150 @@
             class="rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_8px_30px_rgba(15,23,42,0.04)]"
         >
             <form @submit.prevent="handleSubmit" class="space-y-5">
+                <!-- Career (custom dropdown) -->
                 <div>
-                    <label class="mb-2 block text-sm font-medium">
+                    <label
+                        class="mb-2 block text-sm font-medium text-slate-700"
+                    >
                         Career
                     </label>
 
-                    <select
-                        v-model="internship.career_id"
-                        class="w-full rounded-xl border p-3"
-                    >
-                        <option value="">Select Career</option>
-
-                        <option
-                            v-for="career in careers"
-                            :key="career.id"
-                            :value="career.id"
+                    <div ref="careerDropdownRef" class="relative">
+                        <button
+                            type="button"
+                            @click="toggleCareerOpen"
+                            class="flex w-full items-center justify-between rounded-xl border bg-white px-4 py-2.5 text-left text-sm transition focus:outline-none focus:ring-4 focus:ring-blue-500/10"
+                            :class="
+                                careerOpen
+                                    ? 'border-blue-500 ring-4 ring-blue-500/10'
+                                    : 'border-slate-200 hover:border-slate-400'
+                            "
                         >
-                            {{ career.title }}
-                        </option>
-                    </select>
-                    <p v-if="errors.name" class="mt-1 text-sm text-red-500">
-                        {{ errors.name[0] }}
+                            <span
+                                :class="
+                                    selectedCareerTitle
+                                        ? 'text-slate-700'
+                                        : 'text-slate-400'
+                                "
+                            >
+                                {{ selectedCareerTitle || "Select Career" }}
+                            </span>
+                            <svg
+                                class="h-4 w-4 shrink-0 text-slate-400 transition-transform duration-150"
+                                :class="careerOpen ? 'rotate-180' : ''"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M19 9l-7 7-7-7"
+                                />
+                            </svg>
+                        </button>
+
+                        <Transition
+                            enter-active-class="transition duration-100 ease-out"
+                            enter-from-class="opacity-0 scale-95"
+                            enter-to-class="opacity-100 scale-100"
+                            leave-active-class="transition duration-75 ease-in"
+                            leave-from-class="opacity-100 scale-100"
+                            leave-to-class="opacity-0 scale-95"
+                        >
+                            <div
+                                v-if="careerOpen"
+                                class="absolute z-30 mt-2 w-full origin-top rounded-xl border border-slate-200 bg-white shadow-lg shadow-slate-900/10"
+                            >
+                                <!-- Search -->
+                                <div
+                                    v-if="careers.length > 6"
+                                    class="border-b border-slate-100 p-2"
+                                >
+                                    <div
+                                        class="flex items-center gap-2 rounded-lg bg-slate-50 px-3 py-2"
+                                    >
+                                        <svg
+                                            class="h-4 w-4 shrink-0 text-slate-400"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z"
+                                            />
+                                        </svg>
+                                        <input
+                                            ref="careerSearchInput"
+                                            v-model="careerQuery"
+                                            type="text"
+                                            placeholder="Cari career..."
+                                            class="w-full bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400"
+                                            @keydown.esc="closeCareerDropdown"
+                                        />
+                                    </div>
+                                </div>
+
+                                <!-- Options -->
+                                <ul
+                                    class="max-h-64 overflow-y-auto p-1.5"
+                                    role="listbox"
+                                >
+                                    <li
+                                        v-for="career in filteredCareers"
+                                        :key="career.id"
+                                    >
+                                        <button
+                                            type="button"
+                                            @click="chooseCareer(career.id)"
+                                            class="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm transition"
+                                            :class="
+                                                internship.career_id ===
+                                                career.id
+                                                    ? 'bg-blue-50 font-medium text-blue-700'
+                                                    : 'text-slate-700 hover:bg-slate-50'
+                                            "
+                                        >
+                                            {{ career.title }}
+                                            <svg
+                                                v-if="
+                                                    internship.career_id ===
+                                                    career.id
+                                                "
+                                                class="h-4 w-4 shrink-0 text-blue-600"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                            >
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    d="M5 13l4 4L19 7"
+                                                />
+                                            </svg>
+                                        </button>
+                                    </li>
+                                    <li
+                                        v-if="filteredCareers.length === 0"
+                                        class="px-3 py-6 text-center text-sm text-slate-400"
+                                    >
+                                        Career tidak ditemukan
+                                    </li>
+                                </ul>
+                            </div>
+                        </Transition>
+                    </div>
+
+                    <p
+                        v-if="errors.career_id"
+                        class="mt-1 text-sm text-red-500"
+                    >
+                        {{ errors.career_id[0] }}
                     </p>
                 </div>
 
@@ -72,8 +195,11 @@
                         placeholder="Enter Company Name"
                         class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                     />
-                    <p v-if="errors.name" class="mt-1 text-sm text-red-500">
-                        {{ errors.name[0] }}
+                    <p
+                        v-if="errors.company_name"
+                        class="mt-1 text-sm text-red-500"
+                    >
+                        {{ errors.company_name[0] }}
                     </p>
                 </div>
 
@@ -87,8 +213,8 @@
                         placeholder="Enter Position title"
                         class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                     />
-                    <p v-if="errors.name" class="mt-1 text-sm text-red-500">
-                        {{ errors.name[0] }}
+                    <p v-if="errors.position" class="mt-1 text-sm text-red-500">
+                        {{ errors.position[0] }}
                     </p>
                 </div>
 
@@ -102,8 +228,8 @@
                         placeholder="Enter location"
                         class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                     />
-                    <p v-if="errors.name" class="mt-1 text-sm text-red-500">
-                        {{ errors.name[0] }}
+                    <p v-if="errors.location" class="mt-1 text-sm text-red-500">
+                        {{ errors.location[0] }}
                     </p>
                 </div>
 
@@ -146,7 +272,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, computed, nextTick, onMounted, onBeforeUnmount } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { getInternship, updateInternship } from "@/services/internshipService";
 import { getCareers } from "@/services/careerService";
@@ -167,6 +293,53 @@ const internship = ref({
 const loading = ref(false);
 const errors = ref({});
 
+/* ---------- Career dropdown state ---------- */
+const careerOpen = ref(false);
+const careerQuery = ref("");
+const careerDropdownRef = ref(null);
+const careerSearchInput = ref(null);
+
+const filteredCareers = computed(() => {
+    if (!careerQuery.value.trim()) return careers.value;
+    const q = careerQuery.value.toLowerCase();
+    return careers.value.filter((c) => c.title.toLowerCase().includes(q));
+});
+
+const selectedCareerTitle = computed(() => {
+    const found = careers.value.find(
+        (c) => c.id === internship.value.career_id,
+    );
+    return found ? found.title : "";
+});
+
+async function toggleCareerOpen() {
+    careerOpen.value = !careerOpen.value;
+    if (careerOpen.value) {
+        careerQuery.value = "";
+        await nextTick();
+        careerSearchInput.value?.focus();
+    }
+}
+
+function chooseCareer(id) {
+    internship.value.career_id = id;
+    closeCareerDropdown();
+}
+
+function closeCareerDropdown() {
+    careerOpen.value = false;
+}
+
+function handleClickOutsideCareer(e) {
+    if (
+        careerDropdownRef.value &&
+        !careerDropdownRef.value.contains(e.target)
+    ) {
+        closeCareerDropdown();
+    }
+}
+/* ---------- end dropdown state ---------- */
+
 onMounted(async () => {
     try {
         const internshipId = route.params.id;
@@ -182,13 +355,20 @@ onMounted(async () => {
     } catch (error) {
         console.error(error);
     }
+
+    document.addEventListener("click", handleClickOutsideCareer);
+});
+
+onBeforeUnmount(() => {
+    document.removeEventListener("click", handleClickOutsideCareer);
 });
 
 const handleSubmit = async () => {
-    await notify.run(updateInternship(route.params.id, internship.value), {
-        success: "Magang berhasil diperbarui.",
-        error: "Gagal memperbarui magang.",
-    })
+    await notify
+        .run(updateInternship(route.params.id, internship.value), {
+            success: "Magang berhasil diperbarui.",
+            error: "Gagal memperbarui magang.",
+        })
         .then(() => {
             router.push("/admin/internship");
         })
