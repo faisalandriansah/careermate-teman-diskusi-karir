@@ -11,10 +11,9 @@ import Register from "@/views/auth/Register.vue";
 import AdminDashboard from "@/views/admin/Dashboard.vue";
 import StudentDashboard from "@/views/student/Dashboard.vue";
 import StudentProfile from "@/views/student/Profile.vue";
-import StudentSkills from "@/views/student/Skills.vue";
+import StudentHasilAnalisis from "@/views/student/HasilAnalisis.vue";
 import StudentCV from "@/views/student/CV.vue";
-import StudentInternships from "@/views/student/Internships.vue";
-import StudentRoadmap from "@/views/student/Roadmap.vue";
+import StudentRiwayatAnalisis from "@/views/student/RiwayatAnalisis.vue";
 import StudentSupport from "@/views/student/Support.vue";
 
 // Import skill components
@@ -96,7 +95,7 @@ const routes = [
                 component: SkillCreate,
                 meta: {
                     requiresAuth: true,
-                    role: "admin",  
+                    role: "admin",
                 },
             },
             {
@@ -204,9 +203,9 @@ const routes = [
                 },
             },
             {
-                path: "skills",
-                name: "StudentSkills",
-                component: StudentSkills,
+                path: "hasilAnalisis",
+                name: "StudentHasilAnalisis",
+                component: StudentHasilAnalisis,
                 meta: {
                     requiresAuth: true,
                     role: "mahasiswa",
@@ -222,18 +221,9 @@ const routes = [
                 },
             },
             {
-                path: "internships",
-                name: "StudentInternships",
-                component: StudentInternships,
-                meta: {
-                    requiresAuth: true,
-                    role: "mahasiswa",
-                },
-            },
-            {
-                path: "roadmap",
-                name: "StudentRoadmap",
-                component: StudentRoadmap,
+                path: "riwayatAnalisis",
+                name: "StudentRiwayatAnalisis",
+                component: StudentRiwayatAnalisis,
                 meta: {
                     requiresAuth: true,
                     role: "mahasiswa",

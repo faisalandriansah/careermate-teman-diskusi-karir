@@ -37,25 +37,19 @@
                                 to="/student/cv"
                                 class="px-3 py-2 text-sm text-slate-600 rounded-md hover:bg-slate-50"
                                 active-class="bg-slate-100 font-semibold"
-                                >My CV</router-link
+                                >Upload CV</router-link
                             >
                             <router-link
-                                to="/student/skills"
+                                to="/student/HasilAnalisis"
                                 class="px-3 py-2 text-sm text-slate-600 rounded-md hover:bg-slate-50"
                                 active-class="bg-slate-100 font-semibold"
-                                >Skills</router-link
+                                >Hasil Analisis</router-link
                             >
                             <router-link
-                                to="/student/internships"
+                                to="/student/RiwayatAnalisis"
                                 class="px-3 py-2 text-sm text-slate-600 rounded-md hover:bg-slate-50"
                                 active-class="bg-slate-100 font-semibold"
-                                >Internships</router-link
-                            >
-                            <router-link
-                                to="/student/roadmap"
-                                class="px-3 py-2 text-sm text-slate-600 rounded-md hover:bg-slate-50"
-                                active-class="bg-slate-100 font-semibold"
-                                >Roadmap</router-link
+                                >Riwayat Analisis</router-link
                             >
                             <router-link
                                 to="/student/support"
