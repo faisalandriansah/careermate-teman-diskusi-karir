@@ -63,13 +63,13 @@
         </div>
     </div>
 </template>
-
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import SelectCareerCard from "./SelectCareerCard.vue";
 import SelectSkillsCard from "./SelectSkillsCard.vue";
 import careerService from "@/services/careerService";
 import careerSkillService from "@/services/careerSkillService";
+import { notify } from "@/utils/toast";
 
 const careers = ref([]);
 const selectedCareer = ref("");
@@ -83,10 +83,10 @@ const loadCareers = async () => {
     loadingCareers.value = true;
     try {
         const res = await careerService.getAll();
-        console.log("careers response:", res.data);
         careers.value = res.data.data;
     } catch (err) {
-        console.log(err);
+        notify.error("Gagal memuat daftar karier.");
+        console.error(err);
     } finally {
         loadingCareers.value = false;
     }
@@ -102,10 +102,10 @@ const loadSkills = async () => {
         const res = await careerSkillService.getCareerSkills(
             selectedCareer.value,
         );
-        console.log("skills response:", res.data);
         skills.value = res.data.skills;
     } catch (err) {
-        console.log(err);
+        notify.error("Gagal memuat daftar skill untuk karier ini.");
+        console.error(err);
         skills.value = [];
     } finally {
         loadingSkills.value = false;
@@ -143,10 +143,10 @@ const handleSave = async () => {
             selectedCareer.value,
             payload,
         );
-        alert("Mapping berhasil disimpan");
+        notify.success("Mapping berhasil disimpan.");
     } catch (err) {
+        notify.error("Gagal menyimpan mapping.");
         console.error(err);
-        alert("Gagal menyimpan mapping");
     } finally {
         saving.value = false;
     }
