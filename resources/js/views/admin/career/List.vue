@@ -179,6 +179,7 @@
 import { onMounted, ref } from "vue";
 import { getCareers, deleteCareer } from "@/services/careerService";
 import ConfirmModal from "@/components/ConfirmModal.vue";
+import { notify } from "@/utils/toast";
 
 const careers = ref([]);
 const loading = ref(false);
@@ -216,8 +217,14 @@ function removeCareer(id) {
     showConfirm.value = true; // munculin modal
 }
 async function confirmDelete() {
-    await deleteCareer(selectedId.value);
-    showConfirm.value = false;
-    loadCareers(); // refresh list
+    try {
+        await notify.run(deleteCareer(selectedId.value), {
+            success: "Karir berhasil dihapus.",
+            error: "Gagal menghapus karir.",
+        });
+        loadCareers();
+    } finally {
+        showConfirm.value = false;
+    }
 }
 </script>

@@ -86,6 +86,7 @@
 import { onMounted, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { getCareer, updateCareer } from "@/services/careerService";
+import { notify } from "@/utils/toast";
 
 const router = useRouter();
 const route = useRoute();
@@ -108,11 +109,16 @@ onMounted(async () => {
 });
 
 const handleSubmit = async () => {
-    try {
-        await updateCareer(route.params.id, career.value);
-        router.push("/admin/career");
-    } catch (error) {
-        console.error(error);
-    }
+    await notify
+        .run(updateCareer(route.params.id, career.value), {
+            success: "Karir berhasil diperbarui.",
+            error: "Gagal memperbarui karir.",
+        })
+        .then(() => {
+            router.push("/admin/career");
+        })
+        .catch((error) => {
+            console.error(error);
+        });
 };
 </script>

@@ -96,6 +96,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useCareerStore } from "@/stores/useCareerStore";
+import { notify } from "@/utils/toast";
 
 const router = useRouter();
 const careerStore = useCareerStore();
@@ -114,10 +115,14 @@ const handleSubmit = async () => {
 
     try {
         await careerStore.createCareer(career.value);
+        notify.success("Karir berhasil ditambahkan.");
         router.push("/admin/career");
     } catch (error) {
         if (error.response?.status === 422) {
             errors.value = error.response.data.errors;
+            notify.warning("Periksa kembali data yang kamu isi.");
+        } else {
+            notify.error("Gagal menambahkan Karir, coba lagi.");
         }
         console.error(error);
     } finally {
