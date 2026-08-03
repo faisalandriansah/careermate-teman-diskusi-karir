@@ -150,6 +150,7 @@ import { ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { getInternship, updateInternship } from "@/services/internshipService";
 import { getCareers } from "@/services/careerService";
+import { notify } from "@/utils/toast";
 
 const router = useRouter();
 const route = useRoute();
@@ -184,19 +185,15 @@ onMounted(async () => {
 });
 
 const handleSubmit = async () => {
-    loading.value = true;
-    errors.value = {};
-
-    try {
-        await updateInternship(route.params.id, internship.value);
-
-        router.push("/admin/internship");
-    } catch (error) {
-        if (error.response?.status === 422) {
-            errors.value = error.response.data.errors;
-        }
-    } finally {
-        loading.value = false;
-    }
+    await notify.run(updateInternship(route.params.id, internship.value), {
+        success: "Magang berhasil diperbarui.",
+        error: "Gagal memperbarui magang.",
+    })
+        .then(() => {
+            router.push("/admin/internship");
+        })
+        .catch((error) => {
+            console.error(error);
+        });
 };
 </script>

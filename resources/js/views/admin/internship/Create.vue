@@ -147,6 +147,7 @@ import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useInternshipStore } from "@/stores/useInternshipStore";
 import { getCareers } from "@/services/careerService";
+import { notify } from "@/utils/toast";
 
 const router = useRouter();
 const internshipStore = useInternshipStore();
@@ -174,12 +175,16 @@ const handleSubmit = async () => {
 
     try {
         await internshipStore.createInternship(internship.value);
+        notify.success("Magang berhasil ditambahkan.");
         router.push("/admin/internship");
     } catch (error) {
         if (error.response?.status === 422) {
             errors.value = error.response.data.errors;
+            notify.warning("Periksa kembali data yang kamu isi.");
+        } else {
+            notify.error("Gagal menambahkan magang, coba lagi.");
         }
-        console.log(error);
+        console.error(error);
     } finally {
         loading.value = false;
     }

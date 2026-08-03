@@ -179,6 +179,7 @@
 import { ref, onMounted } from "vue";
 import { getInternships, deleteInternship } from "@/services/internshipService";
 import ConfirmModal from "@/components/ConfirmModal.vue";
+import { notify } from "@/utils/toast";
 
 const internships = ref([]);
 const loading = ref(false);
@@ -216,8 +217,14 @@ function removeInternship(id) {
     showConfirm.value = true; // munculin modal
 }
 async function confirmDelete() {
-    await deleteInternship(selectedId.value);
-    showConfirm.value = false;
-    loadInternships(); // refresh list
+    try {
+        await notify.run(deleteInternship(selectedId.value), {
+            success: "Magang berhasil dihapus.",
+            error: "Gagal menghapus Magang.",
+        });
+        loadInternships();
+    } finally {
+        showConfirm.value = false;
+    }
 }
 </script>
