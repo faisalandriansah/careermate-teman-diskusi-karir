@@ -185,6 +185,7 @@
 import { ref, onMounted } from "vue";
 import { getSkills, deleteSkill } from "@/services/skillService";
 import ConfirmModal from "@/components/ConfirmModal.vue";
+import { notify } from "@/utils/toast";
 
 const skills = ref([]);
 const loading = ref(false);
@@ -210,6 +211,9 @@ async function loadSkills(page = 1) {
             last_page: response.data.last_page,
             total: response.data.total,
         };
+    } catch (err) {
+        notify.error("Gagal memuat daftar skill.");
+        console.error(err);
     } finally {
         loading.value = false;
     }
@@ -225,8 +229,14 @@ function removeSkill(id) {
 }
 
 async function confirmDelete() {
-    await deleteSkill(selectedId.value);
-    showConfirm.value = false;
-    loadSkills(); // refresh list
+    try {
+        await notify.run(deleteSkill(selectedId.value), {
+            success: "Skill berhasil dihapus.",
+            error: "Gagal menghapus skill.",
+        });
+        loadSkills();
+    } finally {
+        showConfirm.value = false;
+    }
 }
 </script>

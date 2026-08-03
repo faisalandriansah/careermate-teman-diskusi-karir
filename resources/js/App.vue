@@ -1,10 +1,23 @@
 <template>
-  <div id="app">
-    <router-view />
-  </div>
+    <div id="app">
+        <router-view />
+
+        <Notivue v-slot="item">
+            <NotivueSwipe :item="item">
+                <Notification :item="item">
+                    <NotificationProgress :item="item" />
+                </Notification>
+            </NotivueSwipe>
+        </Notivue>
+    </div>
 </template>
 
 <script setup>
-// Karena kita menggunakan sistem layout di dalam router dengan child routes,
-// maka cukup gunakan router-view langsung di sini
+import {
+    Notivue,
+    NotivueSwipe,
+    Notification,
+    NotificationProgress,
+} from "notivue";
+import "notivue/notification-progress.css";
 </script>

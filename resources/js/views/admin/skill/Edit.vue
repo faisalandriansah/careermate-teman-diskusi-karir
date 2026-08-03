@@ -74,10 +74,10 @@
 import { ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { getSkill, updateSkill } from "@/services/skillService";
+import { notify } from "@/utils/toast";
 
 const router = useRouter();
 const route = useRoute();
-
 
 const skill = ref({
     name: "",
@@ -91,17 +91,22 @@ onMounted(async () => {
             name: response.data.name,
         };
     } catch (error) {
+        notify.error("Gagal memuat data skill.");
         console.error(error);
     }
 });
 
 const handleSubmit = async () => {
-    try {
-        await updateSkill(route.params.id, skill.value);
-
-        router.push("/admin/skill");
-    } catch (error) {
-        console.error(error);
-    }
+    await notify
+        .run(updateSkill(route.params.id, skill.value), {
+            success: "Skill berhasil diperbarui.",
+            error: "Gagal memperbarui skill.",
+        })
+        .then(() => {
+            router.push("/admin/skill");
+        })
+        .catch((error) => {
+            console.error(error);
+        });
 };
 </script>

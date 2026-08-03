@@ -78,6 +78,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useSkillStore } from "@/stores/useSkillStore";
+import { notify } from "@/utils/toast";
 
 const skillStore = useSkillStore();
 const router = useRouter();
@@ -94,10 +95,14 @@ const handleSubmit = async () => {
 
     try {
         await skillStore.createSkill(skill.value);
+        notify.success("Skill berhasil ditambahkan.");
         router.push("/admin/skill");
     } catch (error) {
         if (error.response?.status === 422) {
             errors.value = error.response.data.errors;
+            notify.warning("Periksa kembali data yang kamu isi.");
+        } else {
+            notify.error("Gagal menambahkan skill, coba lagi.");
         }
         console.error(error);
     } finally {
