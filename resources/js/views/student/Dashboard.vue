@@ -1,17 +1,52 @@
 <template>
     <div class="container mx-auto px-4 py-8 max-w-5xl">
-        <!-- Hero -->
+        <!-- Hero Banner -->
         <div
-            class="hero relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 p-8 md:p-10 mb-8 fade-up"
+            class="hero relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 p-6 md:p-10 mb-8 fade-up"
         >
-            <!-- glow orbs -->
-            <div class="orb orb-blue"></div>
-            <div class="orb orb-amber"></div>
-            <!-- route line -->
+            <!-- Alert Profil Belum Lengkap -->
+            <div
+                v-if="!isProfileComplete"
+                class="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-xl border border-amber-200/40 bg-amber-500/10 backdrop-blur-sm px-5 py-4 fade-up"
+                role="alert"
+            >
+                <div class="flex items-center gap-3">
+                    <svg
+                        class="h-5 w-5 text-amber-400 shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M12 9v3.75m0 3.75h.008v.008H12v-.008zM21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                    </svg>
+                    <p class="text-sm text-amber-200">
+                        Profil Anda belum lengkap. Lengkapi profil terlebih
+                        dahulu sebelum mengunggah CV.
+                    </p>
+                </div>
+                <router-link
+                    :to="{ name: 'StudentProfile' }"
+                    class="shrink-0 text-sm font-medium text-amber-300 hover:text-amber-100 underline"
+                >
+                    Lengkapi Profil
+                </router-link>
+            </div>
+
+            <!-- Glow Orbs -->
+            <div class="orb orb-blue" />
+            <div class="orb orb-amber" />
+
+            <!-- Route Line Background -->
             <svg
-                class="absolute right-0 top-0 h-full w-1/2 opacity-[0.08]"
+                class="absolute right-0 top-0 h-full w-1/2 opacity-[0.08] pointer-events-none"
                 viewBox="0 0 200 200"
                 fill="none"
+                aria-hidden="true"
             >
                 <path
                     d="M0 150 Q 60 20 120 100 T 200 40"
@@ -21,7 +56,7 @@
                 />
             </svg>
 
-            <div class="relative">
+            <div class="relative z-10">
                 <p
                     class="text-xs font-medium text-indigo-300 uppercase tracking-widest mb-1"
                 >
@@ -31,8 +66,11 @@
                     Halo, {{ studentName }} 👋
                 </h1>
                 <p class="mt-2 text-sm text-indigo-200/80 max-w-md">
-                    Kamu sudah {{ roadmapProgress }}% menuju target karier
-                    sebagai
+                    Kamu sudah
+                    <span class="font-semibold text-white"
+                        >{{ roadmapProgress }}%</span
+                    >
+                    menuju target karier sebagai
                     <span class="text-white font-medium">{{
                         lastAnalysis.role
                     }}</span
@@ -41,11 +79,11 @@
             </div>
         </div>
 
-        <!-- Analisis + Upload -->
+        <!-- Metrics Section -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
             <!-- Analisis Terakhir -->
             <div
-                class="lg:col-span-2 bg-white rounded-2xl shadow-sm border p-6 md:p-7 fade-up flex flex-col sm:flex-row sm:items-center gap-6"
+                class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 p-6 md:p-7 fade-up flex flex-col sm:flex-row sm:items-center gap-6"
                 style="animation-delay: 0.05s"
             >
                 <div class="relative shrink-0 h-24 w-24 mx-auto sm:mx-0">
@@ -53,7 +91,7 @@
                         <circle
                             cx="40"
                             cy="40"
-                            r="34"
+                            :r="circleRadius"
                             fill="none"
                             stroke="#EEF2FF"
                             stroke-width="7"
@@ -61,17 +99,14 @@
                         <circle
                             cx="40"
                             cy="40"
-                            r="34"
+                            :r="circleRadius"
                             fill="none"
                             stroke="#2563EB"
                             stroke-width="7"
                             stroke-linecap="round"
-                            :stroke-dasharray="214"
+                            :stroke-dasharray="circleCircumference"
+                            :stroke-dashoffset="scoreDashOffset"
                             class="score-ring"
-                            :style="{
-                                strokeDashoffset:
-                                    214 - (214 * lastAnalysis.score) / 100,
-                            }"
                         />
                     </svg>
                     <span
@@ -81,13 +116,13 @@
                     </span>
                 </div>
 
-                <div class="min-w-0 text-center sm:text-left">
-                    <h3
-                        class="text-xs font-medium text-gray-400 uppercase tracking-wide"
+                <div class="min-w-0 text-center sm:text-left flex-1">
+                    <h2
+                        class="text-xs font-medium text-slate-400 uppercase tracking-wide"
                     >
                         Analisis Terakhir
-                    </h3>
-                    <p class="mt-1 text-lg font-semibold text-gray-800">
+                    </h2>
+                    <p class="mt-1 text-lg font-semibold text-slate-800">
                         {{ lastAnalysis.role }}
                     </p>
                     <span
@@ -107,16 +142,18 @@
                         Match sangat tinggi
                     </span>
                     <button
-                        class="block mt-3 text-sm font-medium text-blue-600 hover:text-blue-700"
+                        type="button"
+                        @click="navigateToAnalysis"
+                        class="block mt-3 text-sm font-medium text-blue-600 hover:text-blue-700 mx-auto sm:mx-0"
                     >
-                        Lihat detail analisis →
+                        Lihat detail analisis &rarr;
                     </button>
                 </div>
             </div>
 
             <!-- Upload Terakhir -->
             <div
-                class="bg-white rounded-2xl shadow-sm border p-6 md:p-7 fade-up flex flex-col justify-center"
+                class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 md:p-7 fade-up flex flex-col justify-center"
                 style="animation-delay: 0.1s"
             >
                 <div
@@ -136,25 +173,27 @@
                         />
                     </svg>
                 </div>
-                <h3
-                    class="text-xs font-medium text-gray-400 uppercase tracking-wide"
+                <h2
+                    class="text-xs font-medium text-slate-400 uppercase tracking-wide"
                 >
                     Upload Terakhir
-                </h3>
-                <p class="mt-1 text-lg font-semibold text-gray-800">
+                </h2>
+                <p class="mt-1 text-lg font-semibold text-slate-800">
                     {{ lastUploadDate }}
                 </p>
-                <p class="text-xs text-gray-400 mt-1">CV berhasil dianalisis</p>
+                <p class="text-xs text-slate-400 mt-1">
+                    CV berhasil dianalisis
+                </p>
             </div>
         </div>
 
-        <!-- Progress Roadmap: stepper -->
+        <!-- Progress Roadmap -->
         <div
-            class="bg-white rounded-2xl shadow-sm border p-6 md:p-8 mb-8 fade-up"
+            class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 md:p-8 mb-8 fade-up"
             style="animation-delay: 0.15s"
         >
             <div class="flex items-center justify-between mb-8">
-                <h2 class="text-base font-semibold text-gray-800">
+                <h2 class="text-base font-semibold text-slate-800">
                     Progress Roadmap
                 </h2>
                 <span
@@ -164,35 +203,33 @@
                 </span>
             </div>
 
-            <div class="relative px-2">
-                <!-- track -->
+            <div class="relative px-3">
+                <!-- Progress Track -->
                 <div
-                    class="absolute top-3 left-2 right-2 h-1 bg-gray-100 rounded-full"
-                ></div>
+                    class="absolute top-3 left-3 right-3 h-1 bg-slate-100 rounded-full"
+                />
                 <div
-                    class="absolute top-3 left-2 h-1 bg-emerald-500 rounded-full transition-all duration-700"
-                    :style="{
-                        width: `calc((100% - 16px) * ${roadmapProgress / 100})`,
-                    }"
-                ></div>
+                    class="absolute top-3 left-3 h-1 bg-emerald-500 rounded-full transition-all duration-700"
+                    :style="{ width: `${roadmapProgress}%` }"
+                />
 
-                <!-- milestones -->
+                <!-- Milestones -->
                 <div class="relative flex justify-between">
                     <div
-                        v-for="(m, i) in milestones"
-                        :key="m.label"
-                        class="flex flex-col items-center w-1/4"
+                        v-for="(milestone, index) in milestones"
+                        :key="milestone.label"
+                        class="flex flex-col items-center"
                     >
                         <div
-                            class="h-6 w-6 rounded-full border-2 flex items-center justify-center text-[10px] font-bold transition-colors duration-500"
+                            class="h-6 w-6 rounded-full border-2 flex items-center justify-center text-[10px] font-bold transition-colors duration-500 z-10"
                             :class="
-                                roadmapProgress >= m.threshold
+                                roadmapProgress >= milestone.threshold
                                     ? 'bg-emerald-500 border-emerald-500 text-white'
-                                    : 'bg-white border-gray-300 text-gray-400'
+                                    : 'bg-white border-slate-300 text-slate-400'
                             "
                         >
                             <svg
-                                v-if="roadmapProgress >= m.threshold"
+                                v-if="roadmapProgress >= milestone.threshold"
                                 class="h-3 w-3"
                                 fill="currentColor"
                                 viewBox="0 0 20 20"
@@ -203,17 +240,17 @@
                                     clip-rule="evenodd"
                                 />
                             </svg>
-                            <span v-else>{{ i + 1 }}</span>
+                            <span v-else>{{ index + 1 }}</span>
                         </div>
                         <span
                             class="mt-2 text-xs text-center"
                             :class="
-                                roadmapProgress >= m.threshold
-                                    ? 'text-gray-700 font-medium'
-                                    : 'text-gray-400'
+                                roadmapProgress >= milestone.threshold
+                                    ? 'text-slate-700 font-medium'
+                                    : 'text-slate-400'
                             "
                         >
-                            {{ m.label }}
+                            {{ milestone.label }}
                         </span>
                     </div>
                 </div>
@@ -223,17 +260,32 @@
         <!-- Quick Actions -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             <button
-                class="group bg-blue-600 hover:bg-blue-700 text-white rounded-2xl p-6 text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg fade-up flex items-center justify-between"
+                type="button"
+                @click="handleUploadClick"
+                :disabled="!isProfileComplete"
+                :class="[
+                    'group rounded-2xl p-6 text-left transition-all duration-200 flex items-center justify-between fade-up',
+                    isProfileComplete
+                        ? 'bg-blue-600 hover:bg-blue-700 text-white hover:-translate-y-0.5 hover:shadow-lg'
+                        : 'bg-slate-100 text-slate-400 cursor-not-allowed',
+                ]"
                 style="animation-delay: 0.2s"
             >
                 <div>
                     <p class="font-semibold">Upload CV Baru</p>
-                    <p class="text-sm text-blue-100 mt-0.5">
+                    <p
+                        class="text-sm mt-0.5"
+                        :class="
+                            isProfileComplete
+                                ? 'text-blue-100'
+                                : 'text-slate-400'
+                        "
+                    >
                         Dapatkan analisis skill terbaru
                     </p>
                 </div>
                 <svg
-                    class="h-5 w-5 transition-transform group-hover:translate-x-1"
+                    class="h-5 w-5 transition-transform group-hover:translate-x-1 shrink-0"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -248,17 +300,19 @@
             </button>
 
             <button
-                class="group bg-white border hover:bg-gray-50 text-gray-800 rounded-2xl p-6 text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg fade-up flex items-center justify-between"
+                type="button"
+                @click="navigateToAnalysis"
+                class="group bg-white border border-slate-200 hover:bg-slate-50 text-slate-800 rounded-2xl p-6 text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg fade-up flex items-center justify-between"
                 style="animation-delay: 0.25s"
             >
                 <div>
                     <p class="font-semibold">Lihat Hasil Analisis</p>
-                    <p class="text-sm text-gray-400 mt-0.5">
+                    <p class="text-sm text-slate-400 mt-0.5">
                         Cek riwayat & detail skor kamu
                     </p>
                 </div>
                 <svg
-                    class="h-5 w-5 text-blue-600 transition-transform group-hover:translate-x-1"
+                    class="h-5 w-5 text-blue-600 transition-transform group-hover:translate-x-1 shrink-0"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -276,16 +330,22 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
 
-// Ganti dengan data asli dari API/store nanti
-const studentName = ref("Achmad Faisal");
+const authStore = useAuthStore();
+const router = useRouter();
 
+// User State
+const studentName = computed(() => authStore.user?.name ?? "Mahasiswa");
+const isProfileComplete = computed(() => authStore.isProfileComplete ?? false);
+
+// Data Mock / State
 const lastAnalysis = ref({
     role: "Backend Developer",
     score: 95,
 });
-
 const lastUploadDate = ref("03 Agustus 2026");
 const roadmapProgress = ref(40);
 
@@ -296,6 +356,17 @@ const milestones = [
     { label: "Siap Kerja", threshold: 100 },
 ];
 
+// Computed SVG Math
+const circleRadius = 34;
+const circleCircumference = computed(() => 2 * Math.PI * circleRadius);
+const scoreDashOffset = computed(() => {
+    return (
+        circleCircumference.value -
+        (circleCircumference.value * lastAnalysis.value.score) / 100
+    );
+});
+
+// Dynamic Greeting
 const greetingTime = computed(() => {
     const hour = new Date().getHours();
     if (hour < 11) return "Selamat pagi";
@@ -303,12 +374,33 @@ const greetingTime = computed(() => {
     if (hour < 18) return "Selamat sore";
     return "Selamat malam";
 });
+
+// Actions
+function handleUploadClick() {
+    if (!isProfileComplete.value) {
+        alert("Silakan lengkapi profil terlebih dahulu.");
+        router.push({ name: "StudentProfile" });
+        return;
+    }
+    router.push({ name: "StudentCV" });
+}
+
+function navigateToAnalysis() {
+    router.push({ name: "StudentCV" });
+}
+
+onMounted(async () => {
+    if (!authStore.user) {
+        await authStore.fetchMe();
+    }
+});
 </script>
 
 <style scoped>
 .fade-up {
-    animation: fadeUp 0.6s ease-out both;
+    animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
+
 @keyframes fadeUp {
     from {
         opacity: 0;
@@ -331,6 +423,7 @@ const greetingTime = computed(() => {
     opacity: 0.25;
     pointer-events: none;
 }
+
 .orb-blue {
     width: 180px;
     height: 180px;
@@ -338,6 +431,7 @@ const greetingTime = computed(() => {
     top: -60px;
     right: 40px;
 }
+
 .orb-amber {
     width: 140px;
     height: 140px;

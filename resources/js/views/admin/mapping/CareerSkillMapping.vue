@@ -67,8 +67,8 @@
 import { ref, onMounted, watch } from "vue";
 import SelectCareerCard from "./SelectCareerCard.vue";
 import SelectSkillsCard from "./SelectSkillsCard.vue";
-import careerService from "@/services/careerService";
-import careerSkillService from "@/services/careerSkillService";
+import careerService from "@/services/admin/careerService";
+import careerSkillService from "@/services/admin/careerSkillService";
 import { notify } from "@/utils/toast";
 
 const careers = ref([]);

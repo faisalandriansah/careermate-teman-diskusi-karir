@@ -1,4 +1,4 @@
-import apiClient from "./api";
+import apiClient from "@/services/api";
 
 export const getInternships = (page = 1) => {
     return apiClient.get(`/admin/internships?page=${page}`);

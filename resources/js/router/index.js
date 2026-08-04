@@ -249,14 +249,25 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const token = localStorage.getItem("token");
-    const user = JSON.parse(localStorage.getItem("user"));
+    const rawUser = localStorage.getItem("user");
 
-    // harus login
+    // Pengecekan aman untuk JSON parsing
+    let user = null;
+    if (rawUser && rawUser !== "undefined") {
+        try {
+            user = JSON.parse(rawUser);
+        } catch (error) {
+            console.error("Data user di localStorage tidak valid:", error);
+            localStorage.removeItem("user"); // Hapus data korup
+        }
+    }
+
+    // Jika membutuhkan autentikasi tapi token tidak ada
     if (to.meta.requiresAuth && !token) {
         return next("/login");
     }
 
-    // sudah login tidak boleh kembali ke login/register
+    // Jika sudah login tetapi mencoba akses halaman login/register
     if ((to.path === "/login" || to.path === "/register") && token) {
         if (user?.role === "admin") {
             return next("/admin/dashboard");
@@ -264,7 +275,7 @@ router.beforeEach((to, from, next) => {
         return next("/student/dashboard");
     }
 
-    // cek role
+    // Cek role user
     if (to.meta.role && user?.role !== to.meta.role) {
         if (user?.role === "admin") {
             return next("/admin/dashboard");

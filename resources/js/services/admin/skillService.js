@@ -1,4 +1,4 @@
-import apiClient from "./api";
+import apiClient from "@/services/api";
 
 export const getSkills = (page = 1) => {
     return apiClient.get(`/admin/skills?page=${page}`);

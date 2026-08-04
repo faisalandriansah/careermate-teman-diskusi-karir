@@ -11,29 +11,36 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Api\StudentProfileController;
 use Illuminate\Support\Facades\Route;
 
-// Auth API
+// 1. PUBLIC AUTH ROUTES
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
 
-Route::middleware(['auth:sanctum', 'role:mahasiswa'])->group(function () {
-
+// 2. AUTHENTICATED COMMON ROUTES (Bisa diakses Admin maupun Mahasiswa)
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('/auth/me', [AuthController::class, 'me']);
     Route::post('/auth/logout', [AuthController::class, 'logout']);
-
-    // ✅ TAMBAHAN: route profil (tidak digating, ini yang melengkapi)
-    Route::get('/student-profile', [StudentProfileController::class, 'show']);
-    Route::put('/student-profile', [StudentProfileController::class, 'update']);
-
-    // ✅ CV & Analysis sekarang digating middleware profile.complete
-    Route::middleware('profile.complete')->group(function () {
-        Route::post('/cv/upload', [CVController::class, 'upload']);
-        Route::post('/cv/{cvFile}/extract', [CVController::class, 'extract']);
-        Route::post('/cv/{cvFile}/detect-skills', [CVController::class, 'detectSkills']);
-        Route::post('/analysis/{analysisResult}/match-career', [CVController::class, 'matchCareer']);
-        Route::post('/analysis/{analysisResult}/generate-roadmap', [CVController::class, 'generateRoadmap']);
-    });
 });
 
+// 3. STUDENT ROUTES (Khusus Mahasiswa)
+Route::middleware(['auth:sanctum', 'role:mahasiswa'])
+    ->prefix('student')
+    ->group(function () {
+
+        // Route profil mahasiswa
+        Route::get('/profile', [StudentProfileController::class, 'show']);
+        Route::put('/profile', [StudentProfileController::class, 'update']);
+
+        // CV & Analysis (memerlukan profil lengkap)
+        Route::middleware('profile.complete')->group(function () {
+            Route::post('/cv/upload', [CVController::class, 'upload']);
+            Route::post('/cv/{cvFile}/extract', [CVController::class, 'extract']);
+            Route::post('/cv/{cvFile}/detect-skills', [CVController::class, 'detectSkills']);
+            Route::post('/analysis/{analysisResult}/match-career', [CVController::class, 'matchCareer']);
+            Route::post('/analysis/{analysisResult}/generate-roadmap', [CVController::class, 'generateRoadmap']);
+        });
+    });
+
+// 4. ADMIN ROUTES (Khusus Admin)
 Route::middleware(['auth:sanctum', 'role:admin'])
     ->prefix('admin')
     ->group(function () {
@@ -52,8 +59,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])
         Route::apiResource('students', StudentController::class)
             ->only(['index', 'show', 'destroy']);
 
-
-        //mapping skill
+        // Mapping skill
         Route::get('careers/{career}/skills', [CareerSkillController::class, 'index']);
         Route::put('careers/{career}/skills', [CareerSkillController::class, 'update']);
     });

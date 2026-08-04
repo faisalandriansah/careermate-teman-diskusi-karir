@@ -344,7 +344,7 @@
 
 <script setup>
 import { computed, ref, onMounted } from "vue";
-import dashboardService from "@/services/dashboardService";
+import dashboardService from "@/services/admin/dashboardService";
 
 // ---- Greeting dinamis ----
 const greeting = computed(() => {

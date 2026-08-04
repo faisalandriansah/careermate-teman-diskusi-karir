@@ -177,7 +177,7 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import { getCareers, deleteCareer } from "@/services/careerService";
+import { getCareers, deleteCareer } from "@/services/admin/careerService";
 import ConfirmModal from "@/components/ConfirmModal.vue";
 import { notify } from "@/utils/toast";
 

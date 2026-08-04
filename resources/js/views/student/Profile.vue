@@ -192,52 +192,105 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { reactive, ref, onMounted } from "vue";
+import studentProfileService from "@/services/student/studentProfileService";
+import { useAuthStore } from "@/stores/auth";
 
-// Ganti dengan data asli dari API/store nanti
+const authStore = useAuthStore();
+
+// Nama field HARUS sama persis dengan kolom backend
 const profile = reactive({
     photoUrl: "",
-    name: "Achmad Faisal",
-    email: "faisal@example.com",
-    universitas: "Politeknik Negeri Malang",
-    jurusan: "Manajemen",
-    semester: "5",
-    github: "github.com/achmadfaisal",
-    linkedin: "linkedin.com/in/achmadfaisal",
-    portfolio: "achmadfaisal.dev",
+    name: "",
+    email: "",
+    university: "",
+    major: "",
+    semester: "",
+    phone: "",
+    github_url: "",
+    linkedin_url: "",
+    portfolio_url: "",
 });
 
 const isEditing = ref(false);
-function toggleEdit() {
-    isEditing.value = !isEditing.value;
-    // TODO: kalau isEditing berubah dari true -> false, panggil API simpan di sini
+const saving = ref(false);
+const errors = ref({});
+
+onMounted(async () => {
+    profile.name = authStore.user?.name ?? "";
+    profile.email = authStore.user?.email ?? "";
+
+    try {
+        const { profile: data } = await studentProfileService.getProfile();
+        if (data) {
+            profile.university = data.university ?? "";
+            profile.major = data.major ?? "";
+            profile.semester = data.semester ?? "";
+            profile.phone = data.phone ?? "";
+            profile.github_url = data.github_url ?? "";
+            profile.linkedin_url = data.linkedin_url ?? "";
+            profile.portfolio_url = data.portfolio_url ?? "";
+        }
+    } catch (err) {
+        console.error("Gagal memuat profil", err);
+    }
+});
+
+async function toggleEdit() {
+    if (isEditing.value) {
+        // lagi mode edit -> simpan
+        saving.value = true;
+        errors.value = {};
+        try {
+            await studentProfileService.updateProfile({
+                university: profile.university,
+                major: profile.major,
+                semester: profile.semester,
+                phone: profile.phone,
+                github_url: profile.github_url,
+                linkedin_url: profile.linkedin_url,
+                portfolio_url: profile.portfolio_url,
+            });
+            await authStore.fetchMe(); // refresh is_profile_complete
+            isEditing.value = false;
+        } catch (err) {
+            if (err.response?.status === 422) {
+                errors.value = err.response.data.errors;
+            }
+        } finally {
+            saving.value = false;
+        }
+    } else {
+        isEditing.value = true;
+    }
 }
 
 const fields = [
     { key: "email", label: "Email" },
-    { key: "universitas", label: "Universitas" },
-    { key: "jurusan", label: "Jurusan" },
+    { key: "university", label: "Universitas" },
+    { key: "major", label: "Jurusan" },
     { key: "semester", label: "Semester" },
+    { key: "phone", label: "Nomor HP" },
 ];
 
 const links = [
     {
-        key: "github",
+        key: "github_url",
         label: "Github",
         placeholder: "github.com/username",
-        icon: '<svg class="h-5 w-5 text-gray-700" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.339-2.221-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.31.678.921.678 1.856 0 1.339-.012 2.419-.012 2.749 0 .268.18.58.688.482A10.02 10.02 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>',
+        icon: "...",
     },
     {
-        key: "linkedin",
+        key: "linkedin_url",
         label: "LinkedIn",
         placeholder: "linkedin.com/in/username",
-        icon: '<svg class="h-5 w-5 text-blue-700" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 11.001-4.124 2.062 2.062 0 010 4.124zM7.114 20.452H3.558V9h3.556v11.452z"/></svg>',
+        icon: "...",
     },
     {
-        key: "portfolio",
+        key: "portfolio_url",
         label: "Portfolio",
         placeholder: "namamu.dev",
-        icon: '<svg class="h-5 w-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg>',
+        icon: "...",
     },
 ];
 </script>

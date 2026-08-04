@@ -85,7 +85,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { getCareer, updateCareer } from "@/services/careerService";
+import { getCareer, updateCareer } from "@/services/admin/careerService";
 import { notify } from "@/utils/toast";
 
 const router = useRouter();

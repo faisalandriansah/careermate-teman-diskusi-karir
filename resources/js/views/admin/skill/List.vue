@@ -183,7 +183,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { getSkills, deleteSkill } from "@/services/skillService";
+import { getSkills, deleteSkill } from "@/services/admin/skillService";
 import ConfirmModal from "@/components/ConfirmModal.vue";
 import { notify } from "@/utils/toast";
 

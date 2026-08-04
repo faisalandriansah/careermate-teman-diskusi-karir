@@ -231,7 +231,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import { studentService } from "@/services/studentService";
+import { studentService } from "@/services/admin/studentService";
 import StudentSearch from "@/components/student/StudentSearch.vue";
 import StudentSkeleton from "@/components/student/StudentSkeleton.vue";
 import StudentDetailModal from "@/components/student/StudentDetailModal.vue";

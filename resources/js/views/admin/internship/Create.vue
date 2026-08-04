@@ -276,7 +276,7 @@
 import { ref, computed, nextTick, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import { useInternshipStore } from "@/stores/useInternshipStore";
-import { getCareers } from "@/services/careerService";
+import { getCareers } from "@/services/admin/careerService";
 import { notify } from "@/utils/toast";
 
 const router = useRouter();

@@ -73,7 +73,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { getSkill, updateSkill } from "@/services/skillService";
+import { getSkill, updateSkill } from "@/services/admin/skillService";
 import { notify } from "@/utils/toast";
 
 const router = useRouter();

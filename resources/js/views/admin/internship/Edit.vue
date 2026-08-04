@@ -274,8 +274,8 @@
 <script setup>
 import { ref, computed, nextTick, onMounted, onBeforeUnmount } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { getInternship, updateInternship } from "@/services/internshipService";
-import { getCareers } from "@/services/careerService";
+import { getInternship, updateInternship } from "@/services/admin/internshipService";
+import { getCareers } from "@/services/admin/careerService";
 import { notify } from "@/utils/toast";
 
 const router = useRouter();

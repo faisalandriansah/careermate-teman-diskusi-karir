@@ -177,7 +177,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { getInternships, deleteInternship } from "@/services/internshipService";
+import { getInternships, deleteInternship } from "@/services/admin/internshipService";
 import ConfirmModal from "@/components/ConfirmModal.vue";
 import { notify } from "@/utils/toast";
 
