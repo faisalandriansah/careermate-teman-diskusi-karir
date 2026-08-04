@@ -16,7 +16,7 @@ class StudentController extends Controller
         $query = User::query()
             ->where('role', 'mahasiswa')
             ->with([
-                'profile',
+                'studentProfile',
                 'cvFiles' => function ($q) {
                     $q->latest()->limit(1); // ambil cv terbaru saja
                 },
@@ -64,7 +64,7 @@ class StudentController extends Controller
     {
         $mahasiswa = User::where('role', 'mahasiswa')
             ->with([
-                'profile',
+                'studentProfile',
                 'cvFiles' => function ($q) {
                     $q->latest()->limit(1);
                 },

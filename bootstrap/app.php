@@ -17,6 +17,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => \App\Http\Middleware\RoleMiddleware::class,
         ]);
     })
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->alias([
+            'profile.complete' => \App\Http\Middleware\EnsureProfileIsComplete::class,
+        ]);
+    })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();

@@ -50,9 +50,12 @@ class AuthController extends Controller
 
     public function me(Request $request): JsonResponse
     {
+        $user = $request->user()->load('studentProfile');
+
         return response()->json([
             'success' => true,
-            'data' => $request->user(),
+            'data' => $user,
+            'is_profile_complete' => $user->hasCompleteProfile(),
         ]);
     }
 
