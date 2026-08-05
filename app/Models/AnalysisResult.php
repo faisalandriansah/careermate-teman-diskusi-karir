@@ -7,7 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class AnalysisResult extends Model
 {
     protected $fillable = [
-        'user_id', 'cv_file_id', 'career_id', 'match_score', 'skills_json', 'skills_json', 'skill_gap_json', 'roadmap_json', 'ai_summary',
+        'user_id',
+        'cv_file_id',
+        'career_id',
+        'match_score',
+        'skills_json',
+        'skill_gap_json',
+        'roadmap_json',
+        'ai_summary',
     ];
 
     protected $casts = [
