@@ -6,7 +6,7 @@
         >
             <!-- Alert Profil Belum Lengkap -->
             <div
-                v-if="!isProfileComplete"
+                v-if="!isProfileLoading && !isProfileComplete"
                 class="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-xl border border-amber-500/30 bg-amber-500/10 backdrop-blur-md px-5 py-4 fade-up"
                 role="alert"
             >
@@ -447,6 +447,7 @@ const router = useRouter();
 // State & Timers
 const showToast = ref(false);
 const isShaking = ref(false);
+const isProfileLoading = ref(true);
 let toastTimer = null;
 
 // User State
@@ -520,8 +521,10 @@ function navigateToAnalysis() {
 }
 
 onMounted(async () => {
-    if (!authStore.user) {
+    try {
         await authStore.fetchMe();
+    } finally {
+        isProfileLoading.value = false;
     }
 });
 
