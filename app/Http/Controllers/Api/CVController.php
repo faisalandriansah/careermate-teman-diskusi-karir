@@ -7,6 +7,7 @@ use App\Http\Requests\UploadCVRequest;
 use App\Models\CVFile;
 use App\Models\AnalysisResult;
 use App\Services\PDFExtractorService;
+use App\Services\NotificationService;
 use Illuminate\Support\Str;
 use App\Services\SkillDetectionService;
 use App\Services\CareerMatchingService;
@@ -16,7 +17,7 @@ use Illuminate\Http\Request;
 
 class CVController extends Controller
 {
-    public function upload(UploadCVRequest $request)
+    public function upload(UploadCVRequest $request, NotificationService $notifications)
     {
         $validated = $request->validated();
 
@@ -33,6 +34,13 @@ class CVController extends Controller
             'mime_type' => $file->getClientMimeType(),
             'file_size' => $file->getSize(),
         ]);
+
+        $notifications->send(
+            'upload_cv',
+            'CV baru diunggah',
+            "{$request->user()->name} mengunggah CV \"{$cvFile->file_name}\".",
+            ['user_id' => $request->user()->id],
+        );
 
         return response()->json([
             'messgae' => 'CV berhasil diupload.',
@@ -92,7 +100,7 @@ class CVController extends Controller
         ], 201);
     }
 
-    public function matchCareer(AnalysisResult $analysisResult, CareerMatchingService $matcher)
+    public function matchCareer(AnalysisResult $analysisResult, CareerMatchingService $matcher, NotificationService $notifications)
     {
         if (empty($analysisResult->skills_json)) {
             return response()->json([
@@ -113,6 +121,13 @@ class CVController extends Controller
             'match_score' => $result['match_score'],
             'skill_gap_json' => $result['skill_gap'],
         ]);
+
+        $notifications->send(
+            'analisis',
+            'Analisis CV selesai',
+            "{$analysisResult->user->name} selesai dianalisis, skor kecocokan {$result['match_score']}% dengan karir \"{$result['career']->title}\".",
+            ['analysis_result_id' => $analysisResult->id],
+        );
 
         return response()->json([
             'message' => 'Career matching berhasil.',

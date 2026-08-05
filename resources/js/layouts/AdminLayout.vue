@@ -911,11 +911,22 @@
                                             <span class="text-sm font-semibold"
                                                 >Notifikasi</span
                                             >
-                                            <span
-                                                v-if="unreadCount > 0"
-                                                class="text-xs text-blue-600"
-                                                >{{ unreadCount }} baru</span
+                                            <div
+                                                class="flex items-center gap-2"
                                             >
+                                                <button
+                                                    v-if="unreadCount > 0"
+                                                    @click="markAllRead"
+                                                    class="text-xs text-blue-600 hover:text-blue-700"
+                                                >
+                                                    Tandai semua dibaca
+                                                </button>
+                                                <span
+                                                    v-if="unreadCount > 0"
+                                                    class="rounded-full bg-blue-50 px-1.5 py-0.5 text-xs font-medium text-blue-700"
+                                                    >{{ unreadCount }} baru</span
+                                                >
+                                            </div>
                                         </div>
                                         <hr class="border-t border-slate-100" />
                                         <div
@@ -931,18 +942,38 @@
                                             <li
                                                 v-for="n in notifications"
                                                 :key="n.id"
-                                                class="cursor-pointer px-4 py-3 text-sm transition-colors hover:bg-slate-50"
+                                                @click="markAsRead(n)"
+                                                class="cursor-pointer border-b border-slate-50 px-4 py-3 text-sm transition-colors last:border-b-0 hover:bg-slate-50"
                                             >
-                                                <p
-                                                    class="font-medium text-slate-800"
-                                                >
-                                                    {{ n.title }}
-                                                </p>
-                                                <p
-                                                    class="text-xs text-slate-400"
-                                                >
-                                                    {{ n.time }}
-                                                </p>
+                                                <div class="flex items-start gap-2">
+                                                    <span
+                                                        :class="
+                                                            n.read
+                                                                ? 'mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-slate-200'
+                                                                : 'mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-500'
+                                                        "
+                                                    ></span>
+                                                    <div
+                                                        class="min-w-0 flex-1"
+                                                    >
+                                                        <p
+                                                            class="font-medium text-slate-800"
+                                                        >
+                                                            {{ n.title }}
+                                                        </p>
+                                                        <p
+                                                            v-if="n.body"
+                                                            class="mt-0.5 line-clamp-2 text-xs text-slate-500"
+                                                        >
+                                                            {{ n.body }}
+                                                        </p>
+                                                        <p
+                                                            class="mt-1 text-[11px] text-slate-400"
+                                                        >
+                                                            {{ n.time }}
+                                                        </p>
+                                                    </div>
+                                                </div>
                                             </li>
                                         </ul>
                                     </div>
@@ -1320,7 +1351,9 @@ onMounted(() => {
 const notifOpen = ref(false);
 const notifRef = ref(null);
 const notifications = ref([]);
-const unreadCount = computed(() => notifications.value.length);
+const unreadCount = computed(
+    () => notifications.value.filter((n) => !n.read).length,
+);
 
 async function fetchNotifications() {
     try {
@@ -1329,6 +1362,25 @@ async function fetchNotifications() {
     } catch (e) {
         // endpoint notifikasi belum tersedia / gagal diambil, biarkan kosong
         notifications.value = [];
+    }
+}
+
+async function markAsRead(n) {
+    if (n.read) return;
+    n.read = true;
+    try {
+        await apiClient.post(`/admin/notifications/${n.id}/read`);
+    } catch (e) {
+        n.read = false;
+    }
+}
+
+async function markAllRead() {
+    notifications.value.forEach((n) => (n.read = true));
+    try {
+        await apiClient.post("/admin/notifications/read-all");
+    } catch (e) {
+        fetchNotifications();
     }
 }
 
@@ -1392,9 +1444,11 @@ function onClickOutside(e) {
 }
 
 let unregisterAfter = null;
+let notifTimer = null;
 onMounted(() => {
     document.addEventListener("click", onClickOutside);
     fetchNotifications();
+    notifTimer = setInterval(fetchNotifications, 30000);
 
     if (router && router.afterEach)
         unregisterAfter = router.afterEach(() => {
@@ -1408,6 +1462,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
     document.removeEventListener("click", onClickOutside);
     clearTimeout(debounceTimer);
+    if (notifTimer) clearInterval(notifTimer);
     document.body.style.overflow = "";
     if (typeof unregisterAfter === "function") {
         try {

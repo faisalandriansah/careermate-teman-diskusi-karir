@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function register(Request $request): JsonResponse
+    public function register(Request $request, NotificationService $notifications): JsonResponse
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -25,6 +26,13 @@ class AuthController extends Controller
             'password' => Hash::make($data['password']),
             'role' => 'mahasiswa',
         ]);
+
+        $notifications->send(
+            'registrasi',
+            'Mahasiswa baru mendaftar',
+            "{$user->name} ({$user->email}) bergabung sebagai mahasiswa baru.",
+            ['user_id' => $user->id],
+        );
 
         $token = $user->createToken('api-token')->plainTextToken;
 

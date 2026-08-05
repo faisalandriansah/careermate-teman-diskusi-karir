@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\InternshipController;
 use App\Http\Controllers\Admin\CareerSkillController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Api\StudentProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -58,6 +59,11 @@ Route::middleware(['auth:sanctum', 'role:admin'])
 
         Route::apiResource('students', StudentController::class)
             ->only(['index', 'show', 'destroy']);
+
+        // Notifikasi admin
+        Route::get('notifications', [NotificationController::class, 'index']);
+        Route::post('notifications/read-all', [NotificationController::class, 'markAllRead']);
+        Route::post('notifications/{notification}/read', [NotificationController::class, 'markRead']);
 
         // Mapping skill
         Route::get('careers/{career}/skills', [CareerSkillController::class, 'index']);
