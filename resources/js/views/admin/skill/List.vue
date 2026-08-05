@@ -70,9 +70,7 @@
                 >
             </div>
 
-            <div v-if="loading" class="py-10 text-center text-slate-500">
-                Loading...
-            </div>
+            <PageSkeleton v-if="loading" :count="6" />
 
             <div v-else class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                 <div
@@ -185,6 +183,7 @@
 import { ref, onMounted } from "vue";
 import { getSkills, deleteSkill } from "@/services/admin/skillService";
 import ConfirmModal from "@/components/ConfirmModal.vue";
+import PageSkeleton from "@/components/PageSkeleton.vue";
 import { notify } from "@/utils/toast";
 
 const skills = ref([]);

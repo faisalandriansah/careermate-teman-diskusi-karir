@@ -7,6 +7,7 @@ use App\Http\Requests\StoreSkillRequest;
 use App\Http\Requests\UpdateSkillRequest;
 use App\Models\Skill;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class SkillController extends Controller
 {
@@ -34,6 +35,8 @@ class SkillController extends Controller
     public function store(StoreSkillRequest $request)
     {
         $skill = Skill::create($request->validated());
+
+        Cache::forget('admin_dashboard');
 
         return response()->json([
             'message' => 'Skill berhasil ditambahkan.',
@@ -64,6 +67,8 @@ class SkillController extends Controller
     {
         $skill->update($request->validated());
 
+        Cache::forget('admin_dashboard');
+
         return response()->json([
             'message' => 'Skill berhasil diperbarui.',
             'data' => $skill,
@@ -76,6 +81,8 @@ class SkillController extends Controller
     public function destroy(Skill $skill)
     {
         $skill->delete();
+
+        Cache::forget('admin_dashboard');
 
         return response()->json([
             'message' => 'skill berhasil dihapus.',

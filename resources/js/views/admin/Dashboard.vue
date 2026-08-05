@@ -43,6 +43,10 @@
             </div>
         </div>
 
+        <!-- Skeleton saat memuat data -->
+        <PageSkeleton v-if="loading" variant="cards" :count="8" />
+
+        <template v-else>
         <!-- Ringkasan Sistem -->
         <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             <div
@@ -339,12 +343,14 @@
                 </button>
             </div>
         </div>
+        </template>
     </div>
 </template>
 
 <script setup>
 import { computed, ref, onMounted } from "vue";
 import dashboardService from "@/services/admin/dashboardService";
+import PageSkeleton from "@/components/PageSkeleton.vue";
 
 // ---- Greeting dinamis ----
 const greeting = computed(() => {

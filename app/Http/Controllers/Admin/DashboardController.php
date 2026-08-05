@@ -10,55 +10,58 @@ use App\Models\Internship;
 use App\Models\CVFile;
 use App\Models\CareerSkill;
 use App\Models\AnalysisResult;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $totalMahasiswa = User::where('role', 'mahasiswa')->count();
-        $sudahUpload = CVFile::distinct('user_id')->count('user_id');
-        $belumUpload = max($totalMahasiswa - $sudahUpload, 0);
-        $totalAnalisis = AnalysisResult::count();
+        return Cache::remember('admin_dashboard', 60, function () {
+            $totalMahasiswa = User::where('role', 'mahasiswa')->count();
+            $sudahUpload = CVFile::distinct('user_id')->count('user_id');
+            $belumUpload = max($totalMahasiswa - $sudahUpload, 0);
+            $totalAnalisis = AnalysisResult::count();
 
-        return response()->json([
-            'summary' => [
-                'mahasiswa' => $totalMahasiswa,
-                'skill' => Skill::count(),
-                'career' => Career::count(),
-                'magang' => Internship::count(),
-            ],
+            return response()->json([
+                'summary' => [
+                    'mahasiswa' => $totalMahasiswa,
+                    'skill' => Skill::count(),
+                    'career' => Career::count(),
+                    'magang' => Internship::count(),
+                ],
 
-            'usage_stats' => [
-                'sudah_upload' => $sudahUpload,
-                'belum_upload' => $belumUpload,
-                'total_analisis' => $totalAnalisis,
-            ],
+                'usage_stats' => [
+                    'sudah_upload' => $sudahUpload,
+                    'belum_upload' => $belumUpload,
+                    'total_analisis' => $totalAnalisis,
+                ],
 
-            'career_distribution' => AnalysisResult::select('career_id', DB::raw('count(*) as total'))
-                ->with('career:id,title')
-                ->groupBy('career_id')
-                ->orderByDesc('total')
-                ->limit(5)
-                ->get()
-                ->map(fn($row) => [
-                    'label' => $row->career->title ?? 'Unknown',
-                    'value' => $row->total,
-                ]),
+                'career_distribution' => AnalysisResult::select('career_id', DB::raw('count(*) as total'))
+                    ->with('career:id,title')
+                    ->groupBy('career_id')
+                    ->orderByDesc('total')
+                    ->limit(5)
+                    ->get()
+                    ->map(fn($row) => [
+                        'label' => $row->career->title ?? 'Unknown',
+                        'value' => $row->total,
+                    ]),
 
-            'popular_skills' => CareerSkill::select('skill_id', DB::raw('count(*) as total'), DB::raw('sum(weight) as total_weight'))
-                ->with('skill:id,name')
-                ->groupBy('skill_id')
-                ->orderByDesc('total_weight')
-                ->limit(3)
-                ->get()
-                ->map(fn($row) => [
-                    'name' => $row->skill->name ?? 'Unknown',
-                    'count' => $row->total,
-                ]),
+                'popular_skills' => CareerSkill::select('skill_id', DB::raw('count(*) as total'), DB::raw('sum(weight) as total_weight'))
+                    ->with('skill:id,name')
+                    ->groupBy('skill_id')
+                    ->orderByDesc('total_weight')
+                    ->limit(3)
+                    ->get()
+                    ->map(fn($row) => [
+                        'name' => $row->skill->name ?? 'Unknown',
+                        'count' => $row->total,
+                    ]),
 
-            'recent_activities' => $this->getRecentActivities(),
-        ]);
+                'recent_activities' => $this->getRecentActivities(),
+            ]);
+        });
     }
 
     private function getRecentActivities()

@@ -7,6 +7,7 @@ use App\Http\Requests\StoreInternshipRequest;
 use App\Http\Requests\UpdateInternshipRequest;
 use App\Models\Internship;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class InternshipController extends Controller
 {
@@ -34,6 +35,8 @@ class InternshipController extends Controller
     public function store(StoreInternshipRequest $request)
     {
         $internship = Internship::create($request->validated());
+
+        Cache::forget('admin_dashboard');
 
         return response()->json([
             'message' => 'Internship berhasil ditambahkan.',
@@ -66,6 +69,8 @@ class InternshipController extends Controller
     {
         $internship->update($request->validated());
 
+        Cache::forget('admin_dashboard');
+
         return response()->json([
             'message' => 'Internship berhasil diperbarui.',
             'data' => $internship,
@@ -78,6 +83,8 @@ class InternshipController extends Controller
     public function destroy(Internship $internship)
     {
         $internship->delete();
+
+        Cache::forget('admin_dashboard');
 
         return response()->json([
             'message' => 'Internship berhasil dihapus.',

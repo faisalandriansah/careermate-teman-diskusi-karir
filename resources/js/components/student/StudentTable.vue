@@ -285,7 +285,7 @@ const fetchStudents = async () => {
     loading.value = true;
     errorMessage.value = "";
     try {
-        const { data } = await studentService.getAll({ per_Page: 1000 });
+        const { data } = await studentService.getAll({ per_page: 1000 });
         // laravel paginate() bungkus data asli di field "data"
         const rows = data.data ?? data;
         students.value = rows.map(mapStudent);

@@ -7,6 +7,7 @@ use App\Http\Requests\StoreCareerRequest;
 use App\Http\Requests\UpdateCareerRequest;
 use App\Models\Career;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class CareerController extends Controller
 {
@@ -34,6 +35,8 @@ class CareerController extends Controller
     public function store(StoreCareerRequest $request)
     {
         $career = Career::create($request->validated());
+
+        Cache::forget('admin_dashboard');
 
         return response()->json([
             'message' => 'Career berhasil ditambahkan.',
@@ -66,6 +69,8 @@ class CareerController extends Controller
     {
         $career->update($request->validated());
 
+        Cache::forget('admin_dashboard');
+
         return response()->json([
             'message' => 'Career berhasil diperbarui.',
             'data' => $career,
@@ -78,6 +83,8 @@ class CareerController extends Controller
     public function destroy(Career $career)
     {
         $career->delete();
+
+        Cache::forget('admin_dashboard');
 
         return response()->json([
             'message' => 'Career berhasil dihapus.',

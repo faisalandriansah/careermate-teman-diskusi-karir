@@ -64,9 +64,7 @@
                 >
             </div>
 
-            <div v-if="loading" class="py-10 text-center text-slate-500">
-                loading...
-            </div>
+            <PageSkeleton v-if="loading" :count="6" />
 
             <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                 <div
@@ -179,6 +177,7 @@
 import { onMounted, ref } from "vue";
 import { getCareers, deleteCareer } from "@/services/admin/careerService";
 import ConfirmModal from "@/components/ConfirmModal.vue";
+import PageSkeleton from "@/components/PageSkeleton.vue";
 import { notify } from "@/utils/toast";
 
 const careers = ref([]);

@@ -18,10 +18,12 @@ class StudentController extends Controller
             ->with([
                 'studentProfile',
                 'cvFiles' => function ($q) {
-                    $q->latest()->limit(1); // ambil cv terbaru saja
+                    $q->select(['id', 'user_id', 'file_name', 'file_path', 'created_at'])
+                        ->latest()->limit(1); // ambil cv terbaru saja (tanpa extracted_text yang berat)
                 },
                 'analysisResults' => function ($q) {
-                    $q->latest()->limit(1)->with('career'); // ambil analisis terbaru + nama karir
+                    $q->select(['id', 'user_id', 'career_id', 'match_score', 'skills_json', 'created_at'])
+                        ->latest()->limit(1)->with('career:id,title'); // ambil analisis terbaru + nama karir
                 },
             ]);
 
