@@ -26,7 +26,7 @@ class CareerMatchingService
 
             foreach ($requiredSkills as $skill) {
                 $isOwned = collect($detectedSkills)
-                    ->contains(fn($s) => strtolower($s) === strtolower($skill->name));
+                    ->contains(fn($s) => strtolower($s['name']) === strtolower($skill->name));
                 if ($isOwned) {
                     $matchedWeight += $skill->pivot->weight;
                 } else {

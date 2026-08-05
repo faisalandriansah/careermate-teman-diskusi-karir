@@ -12,8 +12,12 @@ class SkillDetectionService
         $detected = [];
 
         foreach ($skills as $skill) {
-            if (stripos($text, $skill->name) !== false){
-                $detected[] = $skill->name;
+            $pattern = '/\b' . preg_quote($skill->name, '/') . '\b/i';
+            if (preg_match($pattern, $text)) {
+                $detected[] = [
+                    'id' => $skill->id,
+                    'name' => $skill->name,
+                ];
             }
         }
 

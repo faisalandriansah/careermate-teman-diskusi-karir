@@ -10,6 +10,32 @@ export default {
             onUploadProgress,
         });
 
+        return data; // {message, data: CvFile}
+    },
+
+    async extract(cvFileId) {
+        const { data } = await apiClient.post(`student/cv/${cvFileId}/extract`);
+        return data;
+    },
+
+    async detectSkills(cvFileId) {
+        const { data } = await apiClient.post(
+            `student/cv/${cvFileId}/detect-skills`,
+        );
+        return data;
+    },
+
+    async matchCareer(analysisResultId) {
+        const { data } = await apiClient.post(
+            `student/analysis/${analysisResultId}/match-career`,
+        );
+        return data;
+    },
+
+    async generateRoadmap(analysisResultId) {
+        const { data } = await apiClient.post(
+            `student/analysis/${analysisResultId}/generate-roadmap`,
+        );
         return data;
     },
 };

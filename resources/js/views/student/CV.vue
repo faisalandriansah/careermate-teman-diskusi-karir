@@ -380,7 +380,8 @@ const fileName = ref("");
 const fileSizeLabel = ref("");
 const selectedFile = ref(null);
 const errorMessage = ref("");
-const uploadedCvFile = ref(null); //hasil dari backend ketika sukses
+const finalAnalysisResult = ref(null); // hasil akhir buat redirect
+// const uploadedCvFile = ref(null); //hasil dari backend ketika sukses
 
 const MAX_SIZE_MB = 5; // Ukuran maksimal file dalam MB
 
@@ -434,56 +435,70 @@ function resetFile() {
     if (fileInput.value) fileInput.value.value = "";
 }
 
-// Stepper visual — jalan independen sebagai feedback selama nunggu response asli
-function playStepperAnimation() {
-    activeStep.value = 0;
-    const interval = setInterval(() => {
-        if (activeStep.value < steps.length - 1) {
-            activeStep.value++;
-        } else {
-            clearInterval(interval);
-        }
-    }, 700);
-    return interval;
-}
-
 async function startAnalysis() {
     if (!selectedFile.value) return;
 
     stage.value = "loading";
     errorMessage.value = "";
-    const stepperInterval = playStepperAnimation();
+    activeStep.value = 0;
 
     try {
-        const result = await cvService.uploadCV(selectedFile.value);
-        uploadedCvFile.value = result.data;
+        // Step 1: Upload
+        const uploadResult = await cvService.uploadCV(selectedFile.value);
+        const cvFileId = uploadResult.data.id;
+        activeStep.value = 1;
 
-        // pastikan stepper keliatan selesai sebelum pindah stage
-        activeStep.value = steps.length;
-        clearInterval(stepperInterval);
+        // Step 2: Extract PDF text
+        await cvService.extract(cvFileId);
+        activeStep.value = 2;
+
+        // Step 3: Detect skills
+        const detectResult = await cvService.detectSkills(cvFileId);
+        const analysisResultId = detectResult.data.id;
+        activeStep.value = 3;
+
+        // Step 4: Career matching
+        await cvService.matchCareer(analysisResultId);
+        activeStep.value = 4;
+
+        // Step 5: Generate roadmap
+        const roadmapResult = await cvService.generateRoadmap(analysisResultId);
+        activeStep.value = 5;
+
+        finalAnalysisResult.value = roadmapResult.data;
 
         setTimeout(() => {
             stage.value = "done";
         }, 400);
     } catch (err) {
-        clearInterval(stepperInterval);
         stage.value = "selected";
 
         if (err.response?.status === 422) {
             errorMessage.value =
-                err.response.data.errors?.cv?.[0] ?? "Validasi file gagal.";
+                err.response.data.message ??
+                err.response.data.errors?.cv?.[0] ??
+                "Validasi gagal.";
         } else if (err.response?.status === 403) {
             errorMessage.value =
                 "Silakan lengkapi profil terlebih dahulu sebelum upload CV.";
+        } else if (err.response?.status === 404) {
+            errorMessage.value =
+                err.response.data.message ??
+                "Tidak ditemukan career yang cocok. Hubungi admin.";
+        } else if (err.response?.status === 500) {
+            errorMessage.value =
+                err.response.data.message ??
+                "Terjadi kesalahan pada server AI. Coba lagi.";
         } else {
-            errorMessage.value = "Gagal mengunggah CV. Silakan coba lagi.";
+            errorMessage.value = "Gagal menganalisis CV. Silakan coba lagi.";
         }
     }
 }
 function goToResult() {
-    // TODO: aktifkan setelah Sprint 5-8 (extract, detect-skills, match-career, roadmap) selesai diimplementasi
-    // router.push({ name: "StudentHasilAnalisis", params: { id: uploadedCvFile.value.id } });
-    alert("Fitur Hasil Analisis masih dalam pengembangan (Sprint 5-8).");
+    router.push({
+        name: "StudentHasilAnalisis",
+        params: { id: finalAnalysisResult.value.id },
+    });
 }
 </script>
 

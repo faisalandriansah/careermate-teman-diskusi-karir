@@ -14,13 +14,17 @@ class RoadmapGeneratorService
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . config('services.groq.api_key'),
             'Content-Type' => 'application/json',
-        ])->post('https://api.groq.com/openai/v1/chat/completions', [
-            'model' => 'llama-3.3-70b-versatile',
-            'messages' => [
-                ['role' => 'user', 'content' => $prompt],
-            ],
-            'temperature' => 0.4,
-        ]);
+        ])
+            ->timeout(30)
+            ->retry(2, 500)
+            ->post('https://api.groq.com/openai/v1/chat/completions', [
+                'model' => 'llama-3.3-70b-versatile',
+                'messages' => [
+                    ['role' => 'user', 'content' => $prompt],
+                ],
+                'temperature' => 0.4,
+                'response_format' => ['type' => 'json_object'],
+            ]);
 
         if ($response->failed()) {
             throw new Exception('Gagal menghubungi AI: ' . $response->body());
@@ -33,7 +37,12 @@ class RoadmapGeneratorService
 
     private function buildPrompt(array $ownedSkills, array $skillGap, string $careerTitle): string
     {
-        $owned = implode(', ', $ownedSkills) ?: 'Belum ada skill terdeteksi';
+        // Ambil 'name' dari tiap elemen kalau berupa array, biarkan kalau sudah string
+        $ownedNames = array_map(function ($skill) {
+            return is_array($skill) ? ($skill['name'] ?? '') : $skill;
+        }, $ownedSkills);
+
+        $owned = implode(', ', array_filter($ownedNames)) ?: 'Belum ada skill terdeteksi';
         $gap = implode(', ', $skillGap) ?: 'Tidak ada skill gap';
 
         return <<<PROMPT
@@ -69,9 +78,13 @@ PROMPT;
             throw new Exception('Gagal parsing response AI menjadi JSON. Raw response: ' . $content);
         }
 
+        $roadmap = array_filter($decoded['roadmap'], function ($item) {
+            return isset($item['week']) && isset($item['topic']);
+        });
+
         return [
             'summary' => $decoded['summary'] ?? '',
-            'roadmap' => $decoded['roadmap'] ?? [],
+            'roadmap' => array_values($roadmap),
         ];
     }
 }
