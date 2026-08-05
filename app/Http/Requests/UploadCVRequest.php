@@ -23,7 +23,6 @@ class UploadCVRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => 'required|exists:users,id',
             'cv' => 'required|file|mimes:pdf|max:5120',
         ];
     }
@@ -31,8 +30,6 @@ class UploadCVRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'user_id.required' => 'User ID wajib diisi.',
-            'user_id.exists' => 'User tidak ditemukan.',
             'cv.required' => 'File CV wajib diupload.',
             'cv.file' => 'File yang diupload tidak valid.',
             'cv.mimes' => 'File CV harus berformat PDF.',

@@ -28,7 +28,7 @@ class CVController extends Controller
         $filePath = $file->storeAs('cv', $fileName, 'public');
 
         $cvFile = CVFile::create([
-            'user_id' => $validated['user_id'],
+            'user_id' => $request->user()->id,
             'file_name' => $file->getClientOriginalName(),
             'file_path' => $filePath,
             'mime_type' => $file->getClientMimeType(),
@@ -43,7 +43,7 @@ class CVController extends Controller
         );
 
         return response()->json([
-            'messgae' => 'CV berhasil diupload.',
+            'message' => 'CV berhasil diupload.',
             'data' => $cvFile,
         ], 201);
     }
@@ -90,7 +90,7 @@ class CVController extends Controller
             'user_id' => $cvFile->user_id,
             'cv_file_id' => $cvFile->id,
             'career_id' => null,
-            'match_score' => 0, 
+            'match_score' => 0,
             'skills_json' => $detectedSkills,
         ]);
 
@@ -112,7 +112,7 @@ class CVController extends Controller
 
         if (!$result['career']) {
             return response()->json([
-                'message' => 'Tidak ditemukan career yang cocok. Pastikan data career_skills sudah diisi.',       
+                'message' => 'Tidak ditemukan career yang cocok. Pastikan data career_skills sudah diisi.',
             ], 404);
         }
 

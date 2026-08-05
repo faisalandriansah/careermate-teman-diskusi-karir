@@ -97,6 +97,13 @@
                     </p>
                 </div>
 
+                <p
+                    v-if="errorMessage"
+                    class="mt-4 text-sm text-rose-500 text-center"
+                >
+                    {{ errorMessage }}
+                </p>
+
                 <!-- File terpilih -->
                 <div
                     v-if="stage === 'selected'"
@@ -338,6 +345,7 @@
             </p>
 
             <button
+                @click="goToResult"
                 class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm shadow-md transition active:scale-95"
             >
                 Lihat Hasil Analisis & Roadmap
@@ -361,12 +369,20 @@
 
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+import cvService from "@/services/student/cvService";
 
+const router = useRouter();
 const stage = ref("idle"); // idle | selected | loading | done
 const isDragging = ref(false);
 const fileInput = ref(null);
 const fileName = ref("");
 const fileSizeLabel = ref("");
+const selectedFile = ref(null);
+const errorMessage = ref("");
+const uploadedCvFile = ref(null); //hasil dari backend ketika sukses
+
+const MAX_SIZE_MB = 5; // Ukuran maksimal file dalam MB
 
 const steps = [
     "Mengunggah Berkas CV",
@@ -382,11 +398,19 @@ function triggerPicker() {
 }
 
 function setFile(file) {
+    errorMessage.value = "";
     if (!file) return;
+
     if (file.type !== "application/pdf") {
-        alert("Harap unggah file berformat PDF.");
+        errorMessage.value = "Harap unggah file berformat PDF.";
         return;
     }
+    if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+        errorMessage.value = `Ukuran file maksimal ${MAX_SIZE_MB}MB.`;
+        return;
+    }
+
+    selectedFile.value = file;
     fileName.value = file.name;
     fileSizeLabel.value = (file.size / 1024 / 1024).toFixed(2) + " MB";
     stage.value = "selected";
@@ -404,23 +428,62 @@ function handleDrop(e) {
 function resetFile() {
     fileName.value = "";
     fileSizeLabel.value = "";
+    selectedFile.value = null;
+    errorMessage.value = "";
     stage.value = "idle";
     if (fileInput.value) fileInput.value.value = "";
 }
 
-function startAnalysis() {
-    stage.value = "loading";
+// Stepper visual — jalan independen sebagai feedback selama nunggu response asli
+function playStepperAnimation() {
     activeStep.value = 0;
-
     const interval = setInterval(() => {
-        activeStep.value++;
-        if (activeStep.value >= steps.length) {
+        if (activeStep.value < steps.length - 1) {
+            activeStep.value++;
+        } else {
             clearInterval(interval);
-            setTimeout(() => {
-                stage.value = "done";
-            }, 500);
         }
-    }, 900);
+    }, 700);
+    return interval;
+}
+
+async function startAnalysis() {
+    if (!selectedFile.value) return;
+
+    stage.value = "loading";
+    errorMessage.value = "";
+    const stepperInterval = playStepperAnimation();
+
+    try {
+        const result = await cvService.uploadCV(selectedFile.value);
+        uploadedCvFile.value = result.data;
+
+        // pastikan stepper keliatan selesai sebelum pindah stage
+        activeStep.value = steps.length;
+        clearInterval(stepperInterval);
+
+        setTimeout(() => {
+            stage.value = "done";
+        }, 400);
+    } catch (err) {
+        clearInterval(stepperInterval);
+        stage.value = "selected";
+
+        if (err.response?.status === 422) {
+            errorMessage.value =
+                err.response.data.errors?.cv?.[0] ?? "Validasi file gagal.";
+        } else if (err.response?.status === 403) {
+            errorMessage.value =
+                "Silakan lengkapi profil terlebih dahulu sebelum upload CV.";
+        } else {
+            errorMessage.value = "Gagal mengunggah CV. Silakan coba lagi.";
+        }
+    }
+}
+function goToResult() {
+    // TODO: aktifkan setelah Sprint 5-8 (extract, detect-skills, match-career, roadmap) selesai diimplementasi
+    // router.push({ name: "StudentHasilAnalisis", params: { id: uploadedCvFile.value.id } });
+    alert("Fitur Hasil Analisis masih dalam pengembangan (Sprint 5-8).");
 }
 </script>
 
