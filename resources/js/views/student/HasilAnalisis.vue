@@ -1,31 +1,47 @@
 <template>
     <div class="container mx-auto px-4 py-8 max-w-5xl">
-        <!-- Top Bar Badge -->
-        <div class="flex items-center justify-between mb-4">
+        <!-- Top Bar Hero -->
+        <StudentHero compact>
             <div
-                class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-semibold"
+                class="flex flex-col sm:flex-row sm:items-center justify-between gap-4"
             >
-                <svg
-                    class="w-3.5 h-3.5 text-indigo-600 animate-pulse"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
+                <div>
+                    <div
+                        class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 backdrop-blur-md text-indigo-200 text-[11px] font-semibold uppercase tracking-widest mb-3"
+                    >
+                        <svg
+                            class="w-3.5 h-3.5 text-amber-300 animate-pulse"
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                            />
+                        </svg>
+                        <span>Laporan Hasil AI Resume Analysis</span>
+                    </div>
+                    <h1
+                        class="text-2xl md:text-3xl font-bold text-white"
+                    >
+                        Hasil Analisis CV Kamu
+                    </h1>
+                    <p class="mt-1.5 text-sm text-indigo-200/80 max-w-md">
+                        Ringkasan kecocokan karier, skill, dan rekomendasi
+                        roadmap dari analisis CV terakhir.
+                    </p>
+                </div>
+                <span
+                    class="shrink-0 text-xs text-indigo-200/70 font-medium"
+                    >Diperbarui: {{ currentDate }}</span
                 >
-                    <path
-                        d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
-                    />
-                </svg>
-                <span>Laporan Hasil AI Resume Analysis</span>
             </div>
-            <span class="text-xs text-slate-400 font-medium"
-                >Diperbarui: {{ currentDate }}</span
-            >
-        </div>
+        </StudentHero>
 
         <!-- Header: Score Ring + Mini Stats -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
             <!-- Ring Score Card -->
             <div
-                class="md:col-span-2 bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-6 shadow-sm flex items-center gap-6 relative overflow-hidden"
+                class="md:col-span-2 bg-white rounded-2xl border border-slate-100 p-5 sm:p-6 shadow-sm flex items-center gap-6 relative overflow-hidden"
             >
                 <div
                     class="relative shrink-0 h-20 w-20 flex items-center justify-center"
@@ -88,7 +104,7 @@
 
             <!-- Quick Metrics -->
             <div
-                class="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm flex flex-col justify-center gap-3"
+                class="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm flex flex-col justify-center gap-3"
             >
                 <div class="flex items-center justify-between text-xs">
                     <span class="text-slate-500 font-medium"
@@ -124,7 +140,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
             <!-- Skill Terdeteksi -->
             <div
-                class="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm flex flex-col justify-between"
+                class="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm flex flex-col justify-between"
             >
                 <div>
                     <div class="flex items-center justify-between mb-3">
@@ -165,7 +181,7 @@
 
             <!-- Skill Gap -->
             <div
-                class="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm flex flex-col justify-between"
+                class="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm flex flex-col justify-between"
             >
                 <div>
                     <div class="flex items-center justify-between mb-3">
@@ -206,7 +222,7 @@
 
             <!-- Career Recommendation -->
             <div
-                class="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm"
+                class="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm"
             >
                 <p
                     class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3.5 flex items-center justify-between"
@@ -266,7 +282,7 @@
         <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
             <!-- Internship Recommendation (2 cols) -->
             <div
-                class="md:col-span-2 bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm"
+                class="md:col-span-2 bg-white rounded-2xl border border-slate-100 p-5 shadow-sm"
             >
                 <p
                     class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3.5"
@@ -300,7 +316,7 @@
 
             <!-- Roadmap AI (3 cols) -->
             <div
-                class="md:col-span-3 bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm"
+                class="md:col-span-3 bg-white rounded-2xl border border-slate-100 p-5 shadow-sm"
             >
                 <div class="flex items-center justify-between mb-3.5">
                     <p
@@ -387,6 +403,7 @@
 
 <script setup>
 import { computed } from "vue";
+import StudentHero from "@/components/student/StudentHero.vue";
 
 const currentDate = "04 Agustus 2026";
 

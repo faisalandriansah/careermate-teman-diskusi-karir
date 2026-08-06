@@ -1,156 +1,78 @@
 <template>
     <div class="container mx-auto px-4 py-8 max-w-7xl">
-        <!-- ========== HERO HERO HERO ========== -->
-        <div
-            class="support-hero relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 p-6 md:p-12 mb-8 shadow-2xl fade-up"
-        >
-            <!-- Ambient Orbs -->
-            <div class="orb orb-blue"></div>
-            <div class="orb orb-indigo"></div>
-            <div class="orb orb-amber"></div>
-
-            <!-- Grid Pattern Background -->
+        <!-- ========== HERO ========== -->
+        <StudentHero>
             <div
-                class="absolute inset-0 opacity-[0.07] support-grid pointer-events-none"
-            ></div>
-
-            <!-- Floating 3D Help Icon -->
-            <div
-                class="hero-icon absolute right-8 md:right-16 top-1/2 -translate-y-1/2 hidden lg:flex"
+                class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 backdrop-blur-md text-indigo-200 text-[11px] font-semibold uppercase tracking-widest mb-3"
             >
-                <div class="float-3d float-anim">
-                    <div
-                        class="w-32 h-32 rounded-3xl bg-gradient-to-br from-indigo-500 via-violet-500 to-indigo-700 flex items-center justify-center shadow-2xl shadow-indigo-500/40 border border-white/10"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="w-16 h-16 text-white/90 drop-shadow-lg"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="1.6"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        >
-                            <path
-                                d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-                            ></path>
-                            <path
-                                d="M12 8a2 2 0 1 0-1.83 1.15A2 2 0 1 1 12 11"
-                            ></path>
-                            <path d="M12 14h.01"></path>
-                        </svg>
-                    </div>
-                    <!-- Floating mini badges around icon -->
-                    <div
-                        class="float-badge absolute -left-6 top-6 bg-white text-slate-800 text-xs font-bold px-3 py-1.5 rounded-xl shadow-lg float-anim-delay"
-                    >
-                        💬 24/7
-                    </div>
-                    <div
-                        class="float-badge absolute -bottom-3 -right-4 bg-emerald-500 text-white text-xs font-bold px-3 py-1.5 rounded-xl shadow-lg shadow-emerald-500/30 float-anim-delay2"
-                    >
-                        ⚡ Respon Cepat
-                    </div>
-                </div>
+                <svg
+                    class="w-3.5 h-3.5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M8 10h.01M12 10h.01M16 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0zM8 14h.01M12 14h.01"
+                    />
+                </svg>
+                <span>Support Center</span>
             </div>
+            <h1 class="text-2xl md:text-3xl font-bold text-white">
+                Kami Siap Membantu Kamu
+            </h1>
+            <p class="mt-1.5 text-sm text-indigo-200/80 max-w-xl leading-relaxed">
+                Pusat bantuan CareerMate. Tim support kami online untuk
+                menjawab kendala teknis, pertanyaan kuota, dan seputar
+                analisis CV berbasis AI.
+            </p>
+        </StudentHero>
 
-            <!-- Hero Content -->
-            <div class="relative z-10 max-w-xl">
-                <div
-                    class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 backdrop-blur-md text-indigo-200 text-[11px] font-semibold uppercase tracking-widest mb-4"
-                >
-                    <span
-                        class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"
-                    ></span>
-                    Support Center
-                </div>
-                <h1
-                    class="text-3xl md:text-4xl font-bold text-white leading-tight"
-                >
-                    Kami Siap
-                    <span
-                        class="bg-gradient-to-r from-indigo-300 via-violet-300 to-fuchsia-300 bg-clip-text text-transparent"
-                        >Membantu Kamu</span
-                    >
-                    🚀
-                </h1>
-                <p class="mt-3 text-sm md:text-base text-indigo-200/80 max-w-md leading-relaxed">
-                    Pusat bantuan CareerMate. Tim support kami online untuk
-                    menjawab kendala teknis, pertanyaan kuota, dan seputar
-                    analisis CV berbasis AI.
+        <!-- ========== STATS ========== -->
+        <div class="grid grid-cols-3 gap-3 mb-6">
+            <div
+                class="bg-white rounded-2xl border border-slate-100 shadow-sm px-3 py-4 text-center"
+            >
+                <p class="text-lg md:text-2xl font-bold text-slate-900">
+                    &lt; 5<span class="text-indigo-600">mnt</span>
                 </p>
-
-                <!-- Stats Row -->
-                <div class="mt-7 grid grid-cols-3 gap-3 max-w-sm">
-                    <div
-                        class="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 px-3 py-3 text-center"
-                    >
-                        <p class="text-xl md:text-2xl font-bold text-white">
-                            &lt; 5<span class="text-indigo-300">mnt</span>
-                        </p>
-                        <p class="text-[10px] text-indigo-200/70 mt-0.5">
-                            Rata-rata respon
-                        </p>
-                    </div>
-                    <div
-                        class="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 px-3 py-3 text-center"
-                    >
-                        <p class="text-xl md:text-2xl font-bold text-white">
-                            24/7
-                        </p>
-                        <p class="text-[10px] text-indigo-200/70 mt-0.5">
-                            Layanan aktif
-                        </p>
-                    </div>
-                    <div
-                        class="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 px-3 py-3 text-center"
-                    >
-                        <p class="text-xl md:text-2xl font-bold text-white">
-                            99%
-                        </p>
-                        <p class="text-[10px] text-indigo-200/70 mt-0.5">
-                            Masalah teratasi
-                        </p>
-                    </div>
-                </div>
+                <p class="text-[11px] text-slate-500 mt-1">Rata-rata respon</p>
+            </div>
+            <div
+                class="bg-white rounded-2xl border border-slate-100 shadow-sm px-3 py-4 text-center"
+            >
+                <p class="text-lg md:text-2xl font-bold text-slate-900">24/7</p>
+                <p class="text-[11px] text-slate-500 mt-1">Layanan aktif</p>
+            </div>
+            <div
+                class="bg-white rounded-2xl border border-slate-100 shadow-sm px-3 py-4 text-center"
+            >
+                <p class="text-lg md:text-2xl font-bold text-slate-900">99%</p>
+                <p class="text-[11px] text-slate-500 mt-1">Masalah teratasi</p>
             </div>
         </div>
 
-        <!-- ========== 3D TILT MAIN CARD ========== -->
-        <div class="perspective-1200">
+        <!-- ========== MAIN CARD ========== -->
+        <div>
             <div
-                ref="cardRef"
-                @mousemove="handleMouseMove"
-                @mouseleave="handleMouseLeave"
-                class="bg-white rounded-3xl border border-slate-200 shadow-xl shadow-slate-200/60 overflow-hidden relative group transform-preserve-3d transition-shadow duration-300"
-                :style="cardTransformStyle"
+                class="bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/60 overflow-hidden relative"
             >
-                <!-- Glare / Spotlight -->
-                <div
-                    class="pointer-events-none absolute -inset-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(circle_at_var(--mouse-x)_var(--mouse-y),rgba(99,102,241,0.15),transparent_45%)] z-10"
-                ></div>
-                <!-- Edge glow line top -->
-                <div
-                    class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-400/60 to-transparent z-30"
-                ></div>
-
                 <!-- Contact Info Cards -->
                 <div
-                    class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-100 border-b border-slate-100 relative z-20 translate-z-2"
+                    class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-100 border-b border-slate-100 relative"
                 >
                     <!-- Email -->
                     <div
-                        @mousemove="tiltCard"
-                        @mouseleave="untiltCard"
                         class="tilt-card p-7 relative group/email"
                     >
                         <div
-                            class="absolute inset-0 bg-gradient-to-br from-blue-50/0 via-blue-50/0 to-blue-50/80 opacity-0 group-hover/email:opacity-100 transition-all duration-300 pointer-events-none"
+                            class="absolute inset-0 bg-gradient-to-br from-indigo-50/0 via-indigo-50/0 to-indigo-50/80 opacity-0 group-hover/email:opacity-100 transition-all duration-300 pointer-events-none"
                         ></div>
                         <a href="mailto:support@careermate.example" class="relative block">
                             <div
-                                class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 text-white flex items-center justify-center mb-4 shadow-lg shadow-blue-500/30 group-hover/email:scale-110 group-hover/email:-rotate-6 transition-transform duration-300"
+                                class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-600 text-white flex items-center justify-center mb-4 shadow-lg shadow-indigo-500/30 group-hover/email:scale-110 group-hover/email:-rotate-6 transition-transform duration-300"
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -174,7 +96,7 @@
                                 Email Support
                             </p>
                             <p
-                                class="text-sm font-semibold text-slate-800 group-hover/email:text-blue-600 transition mt-1 truncate"
+                                class="text-sm font-semibold text-slate-800 group-hover/email:text-indigo-600 transition mt-1 truncate"
                             >
                                 support@careermate.example
                             </p>
@@ -188,8 +110,6 @@
 
                     <!-- Phone / WA -->
                     <div
-                        @mousemove="tiltCard"
-                        @mouseleave="untiltCard"
                         class="tilt-card p-7 relative group/wa"
                     >
                         <div
@@ -234,8 +154,6 @@
 
                     <!-- Working Hours -->
                     <div
-                        @mousemove="tiltCard"
-                        @mouseleave="untiltCard"
                         class="tilt-card p-7 relative group/hours"
                     >
                         <div
@@ -280,7 +198,7 @@
 
                 <!-- ========== FAQ + QUICK TOPICS ========== -->
                 <div
-                    class="p-6 sm:p-8 bg-slate-50/60 border-b border-slate-100 relative z-20 translate-z-2"
+                    class="p-6 sm:p-8 bg-slate-50/60 border-b border-slate-100 relative"
                 >
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <!-- FAQ Accordion -->
@@ -311,7 +229,7 @@
                                     :class="
                                         openFaq === i
                                             ? 'border-indigo-200 shadow-lg shadow-indigo-100'
-                                            : 'border-slate-200/80 hover:border-indigo-200'
+                                            : 'border-slate-100 hover:border-indigo-200'
                                     "
                                 >
                                     <button
@@ -392,7 +310,7 @@
                                     v-for="topic in quickTopics"
                                     :key="topic.title"
                                     @click="openFaq = topic.faqIndex ?? null"
-                                    class="tilt-card w-full p-4 rounded-2xl bg-white border border-slate-200/80 hover:border-indigo-200 shadow-xs hover:shadow-md transition-all duration-300 text-left group/topic relative overflow-hidden"
+                                    class="tilt-card w-full p-4 rounded-2xl bg-white border border-slate-100 hover:border-indigo-200 shadow-xs hover:shadow-md transition-all duration-300 text-left group/topic relative overflow-hidden"
                                 >
                                     <div
                                         class="absolute -right-6 -top-6 w-20 h-20 rounded-full opacity-10 group-hover/topic:opacity-25 transition group-hover/topic:scale-125"
@@ -467,7 +385,7 @@
 
                 <!-- ========== LOCATION & MAP ========== -->
                 <div
-                    class="grid grid-cols-1 md:grid-cols-12 relative z-20 translate-z-2"
+                    class="grid grid-cols-1 md:grid-cols-12 relative"
                 >
                     <!-- Address Side -->
                     <div
@@ -564,7 +482,7 @@
 
                 <!-- ========== FOOTER CTA ========== -->
                 <div
-                    class="p-6 md:p-7 bg-slate-900 text-white flex flex-col sm:flex-row items-center justify-between gap-4 relative z-20 overflow-hidden translate-z-2"
+                    class="p-6 md:p-7 bg-slate-900 text-white flex flex-col sm:flex-row items-center justify-between gap-4 relative overflow-hidden"
                 >
                     <div class="orb orb-footer"></div>
                     <div class="relative">
@@ -777,10 +695,8 @@
 
 <script setup>
 import { ref, computed } from "vue";
+import StudentHero from "@/components/student/StudentHero.vue";
 
-const cardRef = ref(null);
-const rotateX = ref(0);
-const rotateY = ref(0);
 const isCopied = ref(false);
 const isModalOpen = ref(false);
 const openFaq = ref(0);
@@ -876,53 +792,6 @@ const ticket = ref({
 
 const errors = ref({});
 
-// ---- 3D Tilt (main card) ----
-function handleMouseMove(e) {
-    if (!cardRef.value) return;
-    const rect = cardRef.value.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-
-    rotateX.value = -((y - centerY) / centerY) * 6;
-    rotateY.value = ((x - centerX) / centerX) * 8;
-
-    cardRef.value.style.setProperty("--mouse-x", `${x}px`);
-    cardRef.value.style.setProperty("--mouse-y", `${y}px`);
-}
-
-function handleMouseLeave() {
-    rotateX.value = 0;
-    rotateY.value = 0;
-}
-
-const cardTransformStyle = computed(() => ({
-    transform: `rotateX(${rotateX.value}deg) rotateY(${rotateY.value}deg)`,
-}));
-
-// ---- Per-card magnetic tilt ----
-function tiltCard(e) {
-    const card = e.currentTarget;
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const rx = -((y - rect.height / 2) / rect.height) * 10;
-    const ry = ((x - rect.width / 2) / rect.width) * 12;
-    card.style.transform = `perspective(500px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-3px)`;
-    card.style.boxShadow = "0 18px 35px -15px rgba(79, 70, 229, 0.25)";
-    card.style.transition = "transform 0.1s ease-out";
-}
-
-function untiltCard(e) {
-    const card = e.currentTarget;
-    card.style.transform =
-        "perspective(500px) rotateX(0deg) rotateY(0deg) translateY(0)";
-    card.style.boxShadow = "";
-    card.style.transition = "transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)";
-}
-
 // ---- FAQ height animation ----
 function setFaqHeight(el) {
     el.style.height = el.scrollHeight + "px";
@@ -994,33 +863,6 @@ async function submitTicket() {
 </script>
 
 <style scoped>
-.fade-up {
-    animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-@keyframes fadeUp {
-    from {
-        opacity: 0;
-        transform: translateY(14px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* ===== 3D utilities ===== */
-.perspective-1200 {
-    perspective: 1200px;
-}
-.transform-preserve-3d {
-    transform-style: preserve-3d;
-    will-change: transform;
-}
-.translate-z-2 {
-    transform: translateZ(16px);
-}
-
 /* ===== Orbs ===== */
 .orb {
     position: absolute;
@@ -1032,21 +874,14 @@ async function submitTicket() {
 .orb-blue {
     width: 220px;
     height: 220px;
-    background: #3b82f6;
+    background: #6366f1;
     top: -70px;
     right: 30px;
-}
-.orb-indigo {
-    width: 260px;
-    height: 260px;
-    background: #6366f1;
-    bottom: -100px;
-    left: -60px;
 }
 .orb-amber {
     width: 160px;
     height: 160px;
-    background: #f59e0b;
+    background: #8b5cf6;
     bottom: -40px;
     right: 140px;
 }
@@ -1063,36 +898,6 @@ async function submitTicket() {
     background: #6366f1;
     top: -60px;
     right: -30px;
-}
-
-/* Grid pattern */
-.support-grid {
-    background-image: linear-gradient(rgba(255, 255, 255, 0.5) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.5) 1px, transparent 1px);
-    background-size: 44px 44px;
-}
-
-/* ===== Hero floating icon ===== */
-.hero-icon {
-    z-index: 1;
-}
-.float-anim {
-    animation: floatY 6s ease-in-out infinite;
-}
-.float-anim-delay {
-    animation: floatY 5s ease-in-out infinite 1s;
-}
-.float-anim-delay2 {
-    animation: floatY 5.5s ease-in-out infinite 0.5s;
-}
-@keyframes floatY {
-    0%,
-    100% {
-        transform: translateY(0) rotate(0deg);
-    }
-    50% {
-        transform: translateY(-16px) rotate(-2deg);
-    }
 }
 
 /* ===== FAQ transition ===== */
@@ -1118,16 +923,5 @@ async function submitTicket() {
 .modal-leave-to .modal-pop {
     transform: translateY(20px) scale(0.95);
     opacity: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .float-anim,
-    .float-anim-delay,
-    .float-anim-delay2 {
-        animation: none;
-    }
-    .fade-up {
-        animation: none;
-    }
 }
 </style>

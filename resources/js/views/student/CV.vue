@@ -40,7 +40,7 @@
         >
             <!-- Area Dropzone (Mengambil 2 Kolom di Desktop) -->
             <div
-                class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 md:p-8 flex flex-col justify-between"
+                class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 p-6 md:p-8 flex flex-col justify-between"
             >
                 <!-- Drop zone -->
                 <div
@@ -114,7 +114,7 @@
                         >File Siap Dianalisis</label
                     >
                     <div
-                        class="mt-2 flex items-center gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200/80"
+                        class="mt-2 flex items-center gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-100"
                     >
                         <div
                             class="h-10 w-10 rounded-lg bg-rose-50 border border-rose-100 flex items-center justify-center shrink-0"
@@ -166,7 +166,7 @@
 
                     <button
                         @click="startAnalysis"
-                        class="mt-4 w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-semibold text-sm shadow-md transition-all hover:shadow-indigo-500/25 active:scale-95"
+                        class="mt-4 w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-semibold text-sm shadow-md transition-all hover:shadow-indigo-500/25 active:scale-95"
                     >
                         <svg
                             class="w-4 h-4 text-amber-300 animate-pulse"
@@ -245,7 +245,7 @@
         <!-- ============ STATE: LOADING AI ============ -->
         <div
             v-else-if="stage === 'loading'"
-            class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-8 sm:p-12 fade-up text-center max-w-xl mx-auto"
+            class="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 sm:p-12 fade-up text-center max-w-xl mx-auto"
         >
             <div
                 class="mx-auto h-20 w-20 rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center mb-4 relative"
@@ -329,7 +329,7 @@
         <!-- ============ STATE: DONE ============ -->
         <div
             v-else-if="stage === 'done'"
-            class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-8 sm:p-12 fade-up text-center max-w-xl mx-auto pop-in"
+            class="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 sm:p-12 fade-up text-center max-w-xl mx-auto pop-in"
         >
             <div
                 class="mx-auto h-20 w-20 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4 shadow-sm"

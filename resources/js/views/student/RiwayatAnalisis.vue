@@ -1,15 +1,68 @@
 <template>
     <div class="container mx-auto px-4 py-8 max-w-4xl">
         <!-- Header Page -->
-        <div class="flex items-center justify-between mb-2">
-            <div>
-                <h1 class="text-xl font-bold text-slate-800">
-                    Riwayat Analisis CV
-                </h1>
-                <p class="text-xs text-slate-500 mt-0.5">
-                    Pantau perkembangan analisis dan kecocokan profil Anda dari
-                    waktu ke waktu.
-                </p>
+        <StudentHero compact>
+            <div
+                class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 backdrop-blur-md text-indigo-200 text-[11px] font-semibold uppercase tracking-widest mb-3"
+            >
+                <svg
+                    class="w-3.5 h-3.5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                    />
+                </svg>
+                <span>Riwayat Analisis</span>
+            </div>
+            <h1 class="text-2xl md:text-3xl font-bold text-white">
+                Riwayat Analisis CV
+            </h1>
+            <p class="mt-1.5 text-sm text-indigo-200/80 max-w-md">
+                Pantau perkembangan analisis dan kecocokan profil Anda dari
+                waktu ke waktu.
+            </p>
+        </StudentHero>
+
+        <!-- Stats & Sort Bar -->
+        <div
+            class="flex flex-wrap items-center justify-between gap-3 mb-6 text-xs text-slate-500 font-medium bg-slate-50 p-3 rounded-xl border border-slate-100"
+        >
+            <div class="flex flex-wrap items-center gap-2">
+                <span
+                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white border border-slate-200 text-slate-700 font-semibold"
+                >
+                    Total {{ rawHistory.length }} Kali Analisis
+                </span>
+                <span>•</span>
+                <span
+                    >Rata-rata Skor Match:
+                    <strong class="text-slate-800">{{ avgScore }}%</strong></span
+                >
+                <span>•</span>
+                <span
+                    class="text-emerald-600 font-semibold inline-flex items-center gap-1"
+                >
+                    <svg
+                        class="w-3.5 h-3.5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                        />
+                    </svg>
+                    {{ trendLabel }}
+                </span>
             </div>
 
             <!-- Custom Sort Dropdown -->
@@ -50,7 +103,7 @@
 
                 <div
                     v-if="isSortOpen"
-                    class="absolute right-0 top-full mt-2 w-48 bg-white border border-slate-200/80 rounded-xl shadow-lg py-1.5 z-20 overflow-hidden"
+                    class="absolute right-0 top-full mt-2 w-48 bg-white border border-slate-100 rounded-xl shadow-lg py-1.5 z-20 overflow-hidden"
                 >
                     <button
                         v-for="opt in sortOptions"
@@ -83,44 +136,9 @@
             </div>
         </div>
 
-        <!-- Quick Stats Bar -->
-        <div
-            class="flex flex-wrap items-center gap-2 mb-6 text-xs text-slate-500 font-medium bg-slate-50 p-3 rounded-xl border border-slate-200/60"
-        >
-            <span
-                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white border border-slate-200 text-slate-700 font-semibold shadow-2xs"
-            >
-                Total {{ rawHistory.length }} Kali Analisis
-            </span>
-            <span>•</span>
-            <span
-                >Rata-rata Skor Match:
-                <strong class="text-slate-800">{{ avgScore }}%</strong></span
-            >
-            <span>•</span>
-            <span
-                class="text-emerald-600 font-semibold inline-flex items-center gap-1"
-            >
-                <svg
-                    class="w-3.5 h-3.5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-                    />
-                </svg>
-                {{ trendLabel }}
-            </span>
-        </div>
-
         <!-- History List Card -->
         <div
-            class="bg-white rounded-2xl border border-slate-200/80 divide-y divide-slate-100 shadow-sm overflow-hidden"
+            class="bg-white rounded-2xl border border-slate-100 divide-y divide-slate-100 shadow-sm overflow-hidden"
         >
             <div
                 v-for="item in sortedHistory"
@@ -323,6 +341,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
+import StudentHero from "@/components/student/StudentHero.vue";
 
 const emit = defineEmits(["select"]);
 
@@ -358,8 +377,8 @@ const rawHistory = [
         role: "Frontend Developer",
         skills: "Vue.js, JavaScript, Tailwind",
         score: 82,
-        iconBg: "bg-purple-50",
-        iconColor: "text-purple-600",
+        iconBg: "bg-indigo-50",
+        iconColor: "text-indigo-600",
         iconPath:
             "M4 6a2 2 0 012-2h12a2 2 0 012 2v2H4V6zM4 10h16v8a2 2 0 01-2 2H6a2 2 0 01-2-2v-8z",
     },

@@ -1,9 +1,7 @@
 <template>
     <div class="container mx-auto px-4 py-8 max-w-7xl">
         <!-- Hero Banner -->
-        <div
-            class="hero relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 p-6 md:p-10 mb-8 fade-up"
-        >
+        <StudentHero>
             <!-- Alert Profil Belum Lengkap -->
             <div
                 v-if="!isProfileLoading && !isProfileComplete"
@@ -37,25 +35,7 @@
                 </router-link>
             </div>
 
-            <!-- Glow Orbs -->
-            <div class="orb orb-blue" />
-            <div class="orb orb-amber" />
-
-            <!-- Route Line Background -->
-            <svg
-                class="absolute right-0 top-0 h-full w-1/2 opacity-[0.08] pointer-events-none"
-                viewBox="0 0 200 200"
-                fill="none"
-                aria-hidden="true"
-            >
-                <path
-                    d="M0 150 Q 60 20 120 100 T 200 40"
-                    stroke="white"
-                    stroke-width="3"
-                    stroke-dasharray="6 8"
-                />
-            </svg>
-
+            <!-- Greeting Content -->
             <div class="relative z-10">
                 <p
                     class="text-xs font-medium text-indigo-300 uppercase tracking-widest mb-1"
@@ -83,7 +63,7 @@
                     </template>
                 </p>
             </div>
-        </div>
+        </StudentHero>
 
         <!-- Toast Notification (Pengganti alert kaku) -->
         <transition name="toast">
@@ -132,7 +112,7 @@
                             :cy="svgConfig.center"
                             :r="svgConfig.radius"
                             fill="none"
-                            stroke="#2563EB"
+                            stroke="#4F46E5"
                             stroke-width="7"
                             stroke-linecap="round"
                             :stroke-dasharray="circleCircumference"
@@ -169,7 +149,7 @@
                     <div class="mt-2">
                         <span
                             v-if="isProfileComplete && lastAnalysis"
-                            class="inline-flex items-center gap-1 text-xs font-medium text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full"
+                            class="inline-flex items-center gap-1 text-xs font-medium text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-full"
                         >
                             <svg
                                 class="h-3 w-3"
@@ -195,7 +175,7 @@
                     <button
                         type="button"
                         @click="navigateToAnalysis"
-                        class="block mt-3 text-sm font-medium text-blue-600 hover:text-blue-700 mx-auto sm:mx-0 transition-colors"
+                        class="block mt-3 text-sm font-medium text-indigo-600 hover:text-indigo-700 mx-auto sm:mx-0 transition-colors"
                     >
                         Lihat detail analisis &rarr;
                     </button>
@@ -352,7 +332,7 @@
                     :class="[
                         'w-full group rounded-2xl p-6 text-left transition-all duration-200 flex items-center justify-between fade-up relative overflow-hidden',
                         isProfileComplete
-                            ? 'bg-blue-600 hover:bg-blue-700 text-white hover:-translate-y-0.5 hover:shadow-lg'
+                            ? 'bg-indigo-600 hover:bg-indigo-700 text-white hover:-translate-y-0.5 hover:shadow-lg'
                             : 'bg-slate-100/80 text-slate-400 border border-slate-200/60 hover:border-amber-300/80 cursor-pointer',
                         isShaking ? 'animate-shake' : '',
                     ]"
@@ -377,7 +357,7 @@
                             class="text-sm mt-0.5"
                             :class="
                                 isProfileComplete
-                                    ? 'text-blue-100'
+                                    ? 'text-indigo-100'
                                     : 'text-slate-400'
                             "
                         >
@@ -419,7 +399,7 @@
                     </p>
                 </div>
                 <svg
-                    class="h-5 w-5 text-blue-600 transition-transform group-hover:translate-x-1 shrink-0"
+                    class="h-5 w-5 text-indigo-600 transition-transform group-hover:translate-x-1 shrink-0"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -440,6 +420,7 @@
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
+import StudentHero from "@/components/student/StudentHero.vue";
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -571,30 +552,6 @@ onUnmounted(() => {
 
 .score-ring {
     transition: stroke-dashoffset 1s ease-out;
-}
-
-.orb {
-    position: absolute;
-    border-radius: 9999px;
-    filter: blur(40px);
-    opacity: 0.25;
-    pointer-events: none;
-}
-
-.orb-blue {
-    width: 180px;
-    height: 180px;
-    background: #3b82f6;
-    top: -60px;
-    right: 40px;
-}
-
-.orb-amber {
-    width: 140px;
-    height: 140px;
-    background: #f59e0b;
-    bottom: -50px;
-    right: 180px;
 }
 
 /* Toast Transitions */

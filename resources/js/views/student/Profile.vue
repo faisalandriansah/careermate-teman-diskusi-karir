@@ -2,12 +2,7 @@
     <!-- Lebarkan container ke max-w-7xl agar tidak banyak area kosong di monitor lebar -->
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 max-w-7xl">
         <!-- Banner Header Profil (Responsif Flex) -->
-        <div
-            class="hero relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 p-6 md:p-8 mb-6 shadow-lg fade-up"
-        >
-            <div class="orb orb-blue"></div>
-            <div class="orb orb-amber"></div>
-
+        <StudentHero>
             <div
                 class="relative flex flex-col sm:flex-row items-center sm:items-start md:items-center justify-between gap-6"
             >
@@ -42,7 +37,7 @@
                             </svg>
                         </div>
                         <button
-                            class="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-blue-600 hover:bg-blue-700 active:scale-95 flex items-center justify-center border-2 border-slate-900 transition shadow"
+                            class="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-indigo-600 hover:bg-indigo-700 active:scale-95 flex items-center justify-center border-2 border-slate-900 transition shadow"
                             title="Ganti foto"
                         >
                             <svg
@@ -154,13 +149,14 @@
                     }}</span>
                 </button>
             </div>
-        </div>
+        </StudentHero>
 
         <!-- Layout Grid 2 Kolom di Desktop (lg:grid-cols-3) -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Kolom Kiri: Data Diri (Memakan 2 Kolom di Desktop) -->
-            <div
-                class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200/80 p-5 md:p-7 fade-up"
+            <PageCard
+                class="lg:col-span-2 fade-up"
+                padding="p-5 md:p-7"
                 style="animation-delay: 0.05s"
             >
                 <div class="flex items-center justify-between mb-5">
@@ -214,7 +210,7 @@
                                     'w-full text-sm border rounded-lg px-3 py-2.5 transition focus:outline-none focus:ring-2',
                                     field.readonly
                                         ? 'bg-slate-100 text-slate-500 border-slate-200 cursor-not-allowed'
-                                        : 'border-slate-300 focus:ring-blue-500/20 focus:border-blue-500 text-slate-800',
+                                        : 'border-slate-300 focus:ring-indigo-100 focus:border-indigo-600 text-slate-800',
                                 ]"
                             />
                             <span
@@ -226,11 +222,12 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </PageCard>
 
             <!-- Kolom Kanan: Tautan Eksternal (Memakan 1 Kolom di Desktop) -->
-            <div
-                class="lg:col-span-1 bg-white rounded-2xl shadow-sm border border-slate-200/80 p-5 md:p-7 fade-up"
+            <PageCard
+                class="lg:col-span-1 fade-up"
+                padding="p-5 md:p-7"
                 style="animation-delay: 0.1s"
             >
                 <h2
@@ -289,7 +286,7 @@
                                         v-if="profile[link.key]"
                                         :href="formatUrl(profile[link.key])"
                                         target="_blank"
-                                        class="text-sm font-medium text-blue-600 hover:underline truncate block"
+                                        class="text-sm font-medium text-indigo-600 hover:underline truncate block"
                                     >
                                         {{ profile[link.key] }}
                                     </a>
@@ -306,7 +303,7 @@
                                         v-model="profile[link.key]"
                                         type="text"
                                         :placeholder="link.placeholder"
-                                        class="w-full text-sm border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-slate-800"
+                                        class="w-full text-sm border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-600 text-slate-800"
                                     />
                                 </div>
                             </div>
@@ -319,7 +316,7 @@
                         </span>
                     </div>
                 </div>
-            </div>
+            </PageCard>
         </div>
     </div>
 </template>
@@ -328,6 +325,8 @@
 import { reactive, ref, computed, onMounted } from "vue";
 import studentProfileService from "@/services/student/studentProfileService";
 import { useAuthStore } from "@/stores/auth";
+import StudentHero from "@/components/student/StudentHero.vue";
+import PageCard from "@/components/student/PageCard.vue";
 
 const authStore = useAuthStore();
 
@@ -456,26 +455,5 @@ const links = [
         opacity: 1;
         transform: translateY(0);
     }
-}
-.orb {
-    position: absolute;
-    border-radius: 9999px;
-    filter: blur(48px);
-    opacity: 0.2;
-    pointer-events: none;
-}
-.orb-blue {
-    width: 220px;
-    height: 220px;
-    background: #3b82f6;
-    top: -80px;
-    right: 20px;
-}
-.orb-amber {
-    width: 180px;
-    height: 180px;
-    background: #f59e0b;
-    bottom: -60px;
-    right: 160px;
 }
 </style>
