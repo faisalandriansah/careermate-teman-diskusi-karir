@@ -11,7 +11,7 @@
         >
             <!-- Header -->
             <div
-                class="relative px-5 pt-5 pb-6 sm:px-6 sm:pt-6 sm:pb-8 bg-gradient-to-br from-blue-600 to-indigo-700 shrink-0"
+                class="relative px-5 pt-5 pb-6 sm:px-6 sm:pt-6 sm:pb-8 bg-gradient-to-br from-indigo-600 to-blue-600 shrink-0"
             >
                 <button
                     type="button"

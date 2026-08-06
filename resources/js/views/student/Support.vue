@@ -3,7 +3,7 @@
         <!-- ========== HERO ========== -->
         <StudentHero>
             <div
-                class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 backdrop-blur-md text-indigo-200 text-[11px] font-semibold uppercase tracking-widest mb-3"
+                class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 backdrop-blur-md text-blue-200 text-[11px] font-semibold uppercase tracking-widest mb-3"
             >
                 <svg
                     class="w-3.5 h-3.5"
@@ -23,7 +23,7 @@
             <h1 class="text-2xl md:text-3xl font-bold text-white">
                 Kami Siap Membantu Kamu
             </h1>
-            <p class="mt-1.5 text-sm text-indigo-200/80 max-w-xl leading-relaxed">
+            <p class="mt-1.5 text-sm text-blue-200/80 max-w-xl leading-relaxed">
                 Pusat bantuan CareerMate. Tim support kami online untuk
                 menjawab kendala teknis, pertanyaan kuota, dan seputar
                 analisis CV berbasis AI.
@@ -36,7 +36,7 @@
                 class="bg-white rounded-2xl border border-slate-100 shadow-sm px-3 py-4 text-center"
             >
                 <p class="text-lg md:text-2xl font-bold text-slate-900">
-                    &lt; 5<span class="text-indigo-600">mnt</span>
+                    &lt; 5<span class="text-blue-600">mnt</span>
                 </p>
                 <p class="text-[11px] text-slate-500 mt-1">Rata-rata respon</p>
             </div>
@@ -68,11 +68,11 @@
                         class="tilt-card p-7 relative group/email"
                     >
                         <div
-                            class="absolute inset-0 bg-gradient-to-br from-indigo-50/0 via-indigo-50/0 to-indigo-50/80 opacity-0 group-hover/email:opacity-100 transition-all duration-300 pointer-events-none"
+                            class="absolute inset-0 bg-gradient-to-br from-blue-50/0 via-blue-50/0 to-blue-50/80 opacity-0 group-hover/email:opacity-100 transition-all duration-300 pointer-events-none"
                         ></div>
                         <a href="mailto:support@careermate.example" class="relative block">
                             <div
-                                class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-600 text-white flex items-center justify-center mb-4 shadow-lg shadow-indigo-500/30 group-hover/email:scale-110 group-hover/email:-rotate-6 transition-transform duration-300"
+                                class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex items-center justify-center mb-4 shadow-lg shadow-blue-600/30 group-hover/email:scale-110 group-hover/email:-rotate-6 transition-transform duration-300"
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -96,7 +96,7 @@
                                 Email Support
                             </p>
                             <p
-                                class="text-sm font-semibold text-slate-800 group-hover/email:text-indigo-600 transition mt-1 truncate"
+                                class="text-sm font-semibold text-slate-800 group-hover/email:text-blue-600 transition mt-1 truncate"
                             >
                                 support@careermate.example
                             </p>
@@ -204,7 +204,7 @@
                         <!-- FAQ Accordion -->
                         <div>
                             <p
-                                class="text-xs font-bold text-indigo-600 uppercase tracking-wider mb-4 flex items-center gap-2"
+                                class="text-xs font-bold text-blue-600 uppercase tracking-wider mb-4 flex items-center gap-2"
                             >
                                 <svg
                                     class="w-4 h-4"
@@ -228,8 +228,8 @@
                                     class="rounded-2xl bg-white border transition-all duration-300"
                                     :class="
                                         openFaq === i
-                                            ? 'border-indigo-200 shadow-lg shadow-indigo-100'
-                                            : 'border-slate-100 hover:border-indigo-200'
+                                            ? 'border-blue-200 shadow-lg shadow-blue-100'
+                                            : 'border-slate-100 hover:border-blue-200'
                                     "
                                 >
                                     <button
@@ -238,7 +238,7 @@
                                     >
                                         <span
                                             class="text-xs sm:text-[13px] font-semibold text-slate-800"
-                                            :class="{ 'text-indigo-600': openFaq === i }"
+                                            :class="{ 'text-blue-600': openFaq === i }"
                                         >
                                             {{ faq.q }}
                                         </span>
@@ -246,7 +246,7 @@
                                             class="shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300"
                                             :class="
                                                 openFaq === i
-                                                    ? 'bg-indigo-600 text-white rotate-180'
+                                                    ? 'bg-blue-600 text-white rotate-180'
                                                     : 'bg-slate-100 text-slate-500'
                                             "
                                         >
@@ -288,7 +288,7 @@
                         <!-- Quick Topics -->
                         <div>
                             <p
-                                class="text-xs font-bold text-indigo-600 uppercase tracking-wider mb-4 flex items-center gap-2"
+                                class="text-xs font-bold text-blue-600 uppercase tracking-wider mb-4 flex items-center gap-2"
                             >
                                 <svg
                                     class="w-4 h-4"
@@ -310,7 +310,7 @@
                                     v-for="topic in quickTopics"
                                     :key="topic.title"
                                     @click="openFaq = topic.faqIndex ?? null"
-                                    class="tilt-card w-full p-4 rounded-2xl bg-white border border-slate-100 hover:border-indigo-200 shadow-xs hover:shadow-md transition-all duration-300 text-left group/topic relative overflow-hidden"
+                                    class="tilt-card w-full p-4 rounded-2xl bg-white border border-slate-100 hover:border-blue-200 shadow-xs hover:shadow-md transition-all duration-300 text-left group/topic relative overflow-hidden"
                                 >
                                     <div
                                         class="absolute -right-6 -top-6 w-20 h-20 rounded-full opacity-10 group-hover/topic:opacity-25 transition group-hover/topic:scale-125"
@@ -327,7 +327,7 @@
                                         </span>
                                         <div class="min-w-0">
                                             <p
-                                                class="text-xs font-bold text-slate-800 group-hover/topic:text-indigo-600 transition"
+                                                class="text-xs font-bold text-slate-800 group-hover/topic:text-blue-600 transition"
                                             >
                                                 {{ topic.title }}
                                             </p>
@@ -338,7 +338,7 @@
                                             </p>
                                         </div>
                                         <svg
-                                            class="w-4 h-4 text-slate-300 group-hover/topic:text-indigo-400 group-hover/topic:translate-x-1 transition ml-auto shrink-0"
+                                            class="w-4 h-4 text-slate-300 group-hover/topic:text-blue-400 group-hover/topic:translate-x-1 transition ml-auto shrink-0"
                                             viewBox="0 0 24 24"
                                             fill="none"
                                             stroke="currentColor"
@@ -355,7 +355,7 @@
 
                             <!-- CTA Card -->
                             <div
-                                class="mt-4 p-4 rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 text-white relative overflow-hidden"
+                                class="mt-4 p-4 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white relative overflow-hidden"
                             >
                                 <div class="orb orb-card"></div>
                                 <div class="relative flex items-center gap-3.5">
@@ -365,7 +365,7 @@
                                             Tidak menemukan solusinya?
                                         </p>
                                         <p
-                                            class="text-[11px] text-indigo-100/90 mt-0.5"
+                                            class="text-[11px] text-blue-100/90 mt-0.5"
                                         >
                                             Buka tiket dan tim kami akan bantu
                                             langsung.
@@ -373,7 +373,7 @@
                                     </div>
                                     <button
                                         @click="openTicketForm"
-                                        class="shrink-0 px-3.5 py-2 rounded-xl bg-white text-indigo-700 text-xs font-bold hover:bg-indigo-50 transition shadow-md"
+                                        class="shrink-0 px-3.5 py-2 rounded-xl bg-white text-blue-700 text-xs font-bold hover:bg-blue-50 transition shadow-md"
                                     >
                                         Buka Tiket
                                     </button>
@@ -393,10 +393,10 @@
                     >
                         <div>
                             <div
-                                class="flex items-center gap-2 text-indigo-600 mb-3"
+                                class="flex items-center gap-2 text-blue-600 mb-3"
                             >
                                 <span
-                                    class="w-8 h-8 rounded-xl bg-indigo-50 flex items-center justify-center"
+                                    class="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center"
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -433,7 +433,7 @@
                                     Kunjungan: Sen–Jum 09.00–16.00
                                 </div>
                                 <div class="flex items-center gap-2 text-xs text-slate-500">
-                                    <span class="text-indigo-500">●</span>
+                                    <span class="text-blue-500">●</span>
                                     Parkir tersedia di area Gedung Thamrin
                                 </div>
                             </div>
@@ -455,7 +455,7 @@
                             <a
                                 :href="directionsUrl"
                                 target="_blank"
-                                class="flex-1 py-2.5 px-3 rounded-xl bg-indigo-600 text-white text-xs font-semibold hover:bg-indigo-700 transition text-center shadow-md shadow-indigo-600/20 active:scale-[0.98]"
+                                class="flex-1 py-2.5 px-3 rounded-xl bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 transition text-center shadow-md shadow-blue-600/20 active:scale-[0.98]"
                             >
                                 Google Maps ↗
                             </a>
@@ -496,7 +496,7 @@
                     </div>
                     <button
                         @click="openTicketForm"
-                        class="relative w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-500 hover:from-indigo-400 hover:to-violet-400 text-white text-xs font-semibold transition shadow-lg shadow-indigo-500/30 whitespace-nowrap active:scale-[0.98]"
+                        class="relative w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white text-xs font-semibold transition shadow-lg shadow-blue-600/30 whitespace-nowrap active:scale-[0.98]"
                     >
                         Open Support Ticket
                     </button>
@@ -519,13 +519,13 @@
                         class="relative p-6 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 overflow-hidden"
                     >
                         <div class="orb orb-blue"></div>
-                        <div class="orb orb-amber"></div>
+                        <div class="orb orb-blue2"></div>
                         <div class="relative flex items-center justify-between">
                             <div>
                                 <h3 class="text-lg font-bold text-white">
                                     Buat Tiket Kendala
                                 </h3>
-                                <p class="text-xs text-indigo-200/80 mt-0.5">
+                                <p class="text-xs text-blue-200/80 mt-0.5">
                                     Tim engineer kami akan merespons maksimal 24
                                     jam.
                                 </p>
@@ -569,7 +569,7 @@
                                         'w-full text-xs p-3 rounded-xl border focus:outline-none focus:ring-2 transition',
                                         errors.name
                                             ? 'border-rose-300 focus:ring-rose-200'
-                                            : 'border-slate-200 focus:border-indigo-500 focus:ring-indigo-100',
+                                            : 'border-slate-200 focus:border-blue-500 focus:ring-blue-100',
                                     ]"
                                 />
                                 <p
@@ -593,7 +593,7 @@
                                         'w-full text-xs p-3 rounded-xl border focus:outline-none focus:ring-2 transition',
                                         errors.email
                                             ? 'border-rose-300 focus:ring-rose-200'
-                                            : 'border-slate-200 focus:border-indigo-500 focus:ring-indigo-100',
+                                            : 'border-slate-200 focus:border-blue-500 focus:ring-blue-100',
                                     ]"
                                 />
                                 <p
@@ -614,7 +614,7 @@
                                 </label>
                                 <select
                                     v-model="ticket.category"
-                                    class="w-full text-xs p-3 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition bg-white"
+                                    class="w-full text-xs p-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition bg-white"
                                 >
                                     <option
                                         v-for="cat in categories"
@@ -664,7 +664,7 @@
                                     'w-full text-xs p-3.5 rounded-xl border focus:outline-none focus:ring-2 transition resize-none',
                                     errors.message
                                         ? 'border-rose-300 focus:ring-rose-200'
-                                        : 'border-slate-200 focus:border-indigo-500 focus:ring-indigo-100',
+                                        : 'border-slate-200 focus:border-blue-500 focus:ring-blue-100',
                                 ]"
                             ></textarea>
                             <p
@@ -678,7 +678,7 @@
                         <button
                             type="submit"
                             :disabled="sending"
-                            class="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-bold hover:from-indigo-500 hover:to-violet-500 transition shadow-lg shadow-indigo-500/25 active:scale-[0.99] disabled:opacity-60"
+                            class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-700 text-white text-xs font-bold hover:from-blue-700 hover:to-indigo-800 transition shadow-lg shadow-blue-600/25 active:scale-[0.99] disabled:opacity-60"
                         >
                             {{
                                 sending
@@ -731,7 +731,7 @@ const quickTopics = [
         emoji: "📄",
         title: "Analisis CV Gagal",
         desc: "Format file tidak terbaca oleh AI",
-        color: "#6366f1",
+        color: "#2563eb",
         bg: "#eef2ff",
         faqIndex: 0,
     },
@@ -772,7 +772,7 @@ const priorities = [
         label: "Normal",
         value: "normal",
         activeClass:
-            "bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-500/30",
+            "bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-600/30",
     },
     {
         label: "Urgent",
@@ -874,28 +874,28 @@ async function submitTicket() {
 .orb-blue {
     width: 220px;
     height: 220px;
-    background: #6366f1;
+    background: #2563eb;
     top: -70px;
     right: 30px;
 }
-.orb-amber {
+.orb-blue2 {
     width: 160px;
     height: 160px;
-    background: #8b5cf6;
+    background: #3b82f6;
     bottom: -40px;
     right: 140px;
 }
 .orb-card {
     width: 120px;
     height: 120px;
-    background: #a78bfa;
+    background: #60a5fa;
     top: -50px;
     right: -40px;
 }
 .orb-footer {
     width: 160px;
     height: 160px;
-    background: #6366f1;
+    background: #2563eb;
     top: -60px;
     right: -30px;
 }

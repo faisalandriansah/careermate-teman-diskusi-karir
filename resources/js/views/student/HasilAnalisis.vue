@@ -7,7 +7,7 @@
             >
                 <div>
                     <div
-                        class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 backdrop-blur-md text-indigo-200 text-[11px] font-semibold uppercase tracking-widest mb-3"
+                        class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 backdrop-blur-md text-blue-200 text-[11px] font-semibold uppercase tracking-widest mb-3"
                     >
                         <svg
                             class="w-3.5 h-3.5 text-amber-300 animate-pulse"
@@ -25,13 +25,13 @@
                     >
                         Hasil Analisis CV Kamu
                     </h1>
-                    <p class="mt-1.5 text-sm text-indigo-200/80 max-w-md">
+                    <p class="mt-1.5 text-sm text-blue-200/80 max-w-md">
                         Ringkasan kecocokan karier, skill, dan rekomendasi
                         roadmap dari analisis CV terakhir.
                     </p>
                 </div>
                 <span
-                    class="shrink-0 text-xs text-indigo-200/70 font-medium"
+                    class="shrink-0 text-xs text-blue-200/70 font-medium"
                     >Diperbarui: {{ currentDate }}</span
                 >
             </div>
@@ -63,7 +63,7 @@
                             cy="36"
                             r="30"
                             fill="none"
-                            stroke="#4F46E5"
+                            stroke="#2563eb"
                             stroke-width="6"
                             stroke-linecap="round"
                             :stroke-dasharray="strokeDasharray"
@@ -129,7 +129,7 @@
                         >Estimasi Langkah Roadmap</span
                     >
                     <span
-                        class="font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md"
+                        class="font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md"
                         >{{ roadmapSteps.length }} Langkah</span
                     >
                 </div>
@@ -228,7 +228,7 @@
                     class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3.5 flex items-center justify-between"
                 >
                     <span>Rekomendasi Karir</span>
-                    <span class="text-[10px] text-indigo-600 font-semibold"
+                    <span class="text-[10px] text-blue-600 font-semibold"
                         >AI Ranked</span
                     >
                 </p>
@@ -242,7 +242,7 @@
                             class="shrink-0 h-6 w-6 rounded-lg text-xs font-bold flex items-center justify-center"
                             :class="
                                 i === 0
-                                    ? 'bg-indigo-600 text-white shadow-sm'
+                                    ? 'bg-blue-600 text-white shadow-sm'
                                     : 'bg-slate-100 text-slate-500'
                             "
                         >
@@ -266,7 +266,7 @@
                                     class="h-full rounded-full transition-all duration-500"
                                     :class="
                                         i === 0
-                                            ? 'bg-indigo-600'
+                                            ? 'bg-blue-600'
                                             : 'bg-slate-300'
                                     "
                                     :style="{ width: c.score + '%' }"
@@ -294,11 +294,11 @@
                         v-for="company in internships"
                         :key="company"
                         href="#"
-                        class="flex items-center justify-between p-3 bg-slate-50 hover:bg-indigo-50/50 rounded-xl border border-slate-100 hover:border-indigo-100 text-xs font-medium text-slate-700 hover:text-indigo-700 transition group"
+                        class="flex items-center justify-between p-3 bg-slate-50 hover:bg-blue-50/50 rounded-xl border border-slate-100 hover:border-blue-100 text-xs font-medium text-slate-700 hover:text-blue-700 transition group"
                     >
                         <span>{{ company }}</span>
                         <svg
-                            class="h-4 w-4 text-slate-400 group-hover:text-indigo-600 transition"
+                            class="h-4 w-4 text-slate-400 group-hover:text-blue-600 transition"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -323,7 +323,7 @@
                         class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5"
                     >
                         <svg
-                            class="w-3.5 h-3.5 text-indigo-600"
+                            class="w-3.5 h-3.5 text-blue-600"
                             fill="currentColor"
                             viewBox="0 0 24 24"
                         >
@@ -344,7 +344,7 @@
                         class="flex items-start gap-2.5 p-3 bg-slate-50 border border-slate-100 rounded-xl"
                     >
                         <span
-                            class="h-5 w-5 mt-0.5 rounded-lg bg-indigo-600 text-white text-[11px] font-bold flex items-center justify-center shrink-0 shadow-sm"
+                            class="h-5 w-5 mt-0.5 rounded-lg bg-blue-600 text-white text-[11px] font-bold flex items-center justify-center shrink-0 shadow-sm"
                         >
                             {{ i + 1 }}
                         </span>
@@ -380,7 +380,7 @@
             </button>
             <button
                 @click="reuploadCv"
-                class="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold transition active:scale-95 shadow-md shadow-indigo-500/20"
+                class="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition active:scale-95 shadow-md shadow-blue-600/20"
             >
                 <svg
                     class="h-4 w-4"

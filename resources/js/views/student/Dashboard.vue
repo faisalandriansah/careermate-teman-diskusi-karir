@@ -38,14 +38,14 @@
             <!-- Greeting Content -->
             <div class="relative z-10">
                 <p
-                    class="text-xs font-medium text-indigo-300 uppercase tracking-widest mb-1"
+                    class="text-xs font-medium text-blue-300 uppercase tracking-widest mb-1"
                 >
                     {{ greetingTime }}
                 </p>
                 <h1 class="text-2xl md:text-3xl font-semibold text-white">
                     Halo, {{ studentName }} 👋
                 </h1>
-                <p class="mt-2 text-sm text-indigo-200/80 max-w-md">
+                <p class="mt-2 text-sm text-blue-200/80 max-w-md">
                     <template v-if="isProfileComplete && lastAnalysis">
                         Kamu sudah
                         <span class="font-semibold text-white"
@@ -112,7 +112,7 @@
                             :cy="svgConfig.center"
                             :r="svgConfig.radius"
                             fill="none"
-                            stroke="#4F46E5"
+                            stroke="#2563eb"
                             stroke-width="7"
                             stroke-linecap="round"
                             :stroke-dasharray="circleCircumference"
@@ -149,7 +149,7 @@
                     <div class="mt-2">
                         <span
                             v-if="isProfileComplete && lastAnalysis"
-                            class="inline-flex items-center gap-1 text-xs font-medium text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-full"
+                            class="inline-flex items-center gap-1 text-xs font-medium text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full"
                         >
                             <svg
                                 class="h-3 w-3"
@@ -175,7 +175,7 @@
                     <button
                         type="button"
                         @click="navigateToAnalysis"
-                        class="block mt-3 text-sm font-medium text-indigo-600 hover:text-indigo-700 mx-auto sm:mx-0 transition-colors"
+                        class="block mt-3 text-sm font-medium text-blue-600 hover:text-blue-700 mx-auto sm:mx-0 transition-colors"
                     >
                         Lihat detail analisis &rarr;
                     </button>
@@ -332,7 +332,7 @@
                     :class="[
                         'w-full group rounded-2xl p-6 text-left transition-all duration-200 flex items-center justify-between fade-up relative overflow-hidden',
                         isProfileComplete
-                            ? 'bg-indigo-600 hover:bg-indigo-700 text-white hover:-translate-y-0.5 hover:shadow-lg'
+                            ? 'bg-blue-600 hover:bg-blue-700 text-white hover:-translate-y-0.5 hover:shadow-lg'
                             : 'bg-slate-100/80 text-slate-400 border border-slate-200/60 hover:border-amber-300/80 cursor-pointer',
                         isShaking ? 'animate-shake' : '',
                     ]"
@@ -357,7 +357,7 @@
                             class="text-sm mt-0.5"
                             :class="
                                 isProfileComplete
-                                    ? 'text-indigo-100'
+                                    ? 'text-blue-100'
                                     : 'text-slate-400'
                             "
                         >
@@ -399,7 +399,7 @@
                     </p>
                 </div>
                 <svg
-                    class="h-5 w-5 text-indigo-600 transition-transform group-hover:translate-x-1 shrink-0"
+                    class="h-5 w-5 text-blue-600 transition-transform group-hover:translate-x-1 shrink-0"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"

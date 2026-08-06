@@ -1,13 +1,16 @@
 <template>
     <div class="min-h-screen bg-slate-100">
         <!-- Simple header for student layout -->
-        <header class="bg-white border-b border-slate-100 shadow-sm relative z-40">
+        <header
+            class="sticky top-0 bg-white/80 backdrop-blur-xl border-b border-slate-200/60 relative z-40"
+        >
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center h-16">
-                    <div class="flex items-center">
+                <div class="flex items-center justify-between h-16 gap-4">
+                    <!-- Left: Logo -->
+                    <div class="flex-1 flex items-center min-w-0">
                         <router-link
                             to="/student/dashboard"
-                            class="flex items-center gap-2.5"
+                            class="flex items-center gap-2.5 shrink-0"
                         >
                             <img
                                 :src="logo"
@@ -15,58 +18,152 @@
                                 class="w-8 h-8 object-contain"
                             />
                             <span
-                                class="text-lg font-bold text-slate-900 tracking-tight"
+                                class="font-display text-lg font-bold text-slate-900 tracking-tight"
                                 >CareerMate</span
                             >
                         </router-link>
                     </div>
 
-                    <div class="flex items-center space-x-2 sm:space-x-3">
-                        <!-- Desktop Nav -->
-                        <nav class="hidden md:flex items-center space-x-1">
-                            <router-link
-                                to="/student/dashboard"
-                                class="px-3 py-2 text-sm font-medium text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
-                                active-class="bg-slate-100 text-slate-900 font-semibold"
-                                >Dashboard</router-link
+                    <!-- Center: Nav -->
+                    <nav class="hidden lg:flex items-center gap-0.5 shrink-0">
+                        <router-link
+                            v-for="item in navItems"
+                            :key="item.to"
+                            :to="item.to"
+                            class="px-3 py-2 text-sm font-medium rounded-lg whitespace-nowrap transition-colors"
+                            :class="
+                                isActive(item.to)
+                                        ? 'text-blue-600 font-semibold'
+                                    : 'text-slate-600 hover:text-slate-900'
+                            "
+                            >{{ item.label }}</router-link
+                        >
+                    </nav>
+
+                    <!-- Right: Actions -->
+                    <div class="flex-1 flex items-center justify-end gap-2 sm:gap-3 min-w-0">
+                        <!-- Search (desktop) -->
+                        <div ref="searchEl" class="relative hidden xl:block">
+                            <svg
+                                class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
                             >
-                            <router-link
-                                to="/student/profile"
-                                class="px-3 py-2 text-sm font-medium text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
-                                active-class="bg-slate-100 text-slate-900 font-semibold"
-                                >Profile</router-link
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M21 21l-4.35-4.35M17 10.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z"
+                                />
+                            </svg>
+                            <input
+                                ref="searchInput"
+                                v-model="searchQuery"
+                                @focus="searchOpen = true"
+                                @keydown.enter.prevent="submitSearch"
+                                @keydown.esc="closeSearch"
+                                type="text"
+                                placeholder="Cari halaman..."
+                                class="h-10 w-48 pl-9 pr-9 text-sm rounded-xl border border-slate-200 bg-slate-50/70 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition placeholder:text-slate-400"
+                            />
+                            <span
+                                class="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] font-semibold text-slate-300 border border-slate-200 rounded px-1.5 py-0.5"
+                                >/</span
                             >
-                            <router-link
-                                to="/student/cv"
-                                class="px-3 py-2 text-sm font-medium text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
-                                active-class="bg-slate-100 text-slate-900 font-semibold"
-                                >Upload CV</router-link
+                            <transition name="dropdown">
+                                <div
+                                    v-if="searchOpen && searchResults.length"
+                                    class="dropdown-panel absolute right-0 z-50 mt-2 w-72 rounded-xl border border-slate-100 bg-white shadow-xl shadow-slate-200/60 overflow-hidden"
+                                >
+                                    <button
+                                        v-for="(item, i) in searchResults"
+                                        :key="item.to"
+                                        @click="goSearch(item.to)"
+                                        class="flex w-full items-center justify-between gap-3 px-4 py-2.5 text-left text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors"
+                                    >
+                                        <span>{{ item.label }}</span>
+                                        <span
+                                            v-if="i === 0"
+                                            class="text-[10px] font-bold text-slate-300"
+                                            >↵</span
+                                        >
+                                    </button>
+                                </div>
+                                <div
+                                    v-else-if="searchOpen && searchQuery"
+                                    class="dropdown-panel absolute right-0 z-50 mt-2 w-72 rounded-xl border border-slate-100 bg-white shadow-xl shadow-slate-200/60 px-4 py-3 text-sm text-slate-400"
+                                >
+                                    Tidak ada halaman cocok
+                                </div>
+                            </transition>
+                        </div>
+
+                        <!-- Notification Bell -->
+                        <div ref="notifRef" class="relative hidden sm:block">
+                            <button
+                                @click="notifOpen = !notifOpen"
+                                class="flex items-center justify-center h-10 w-10 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors relative"
+                                title="Notifikasi"
                             >
-                            <router-link
-                                to="/student/HasilAnalisis"
-                                class="px-3 py-2 text-sm font-medium text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
-                                active-class="bg-slate-100 text-slate-900 font-semibold"
-                                >Hasil Analisis</router-link
-                            >
-                            <router-link
-                                to="/student/RiwayatAnalisis"
-                                class="px-3 py-2 text-sm font-medium text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
-                                active-class="bg-slate-100 text-slate-900 font-semibold"
-                                >Riwayat Analisis</router-link
-                            >
-                            <router-link
-                                to="/student/support"
-                                class="px-3 py-2 text-sm font-medium text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
-                                active-class="bg-slate-100 text-slate-900 font-semibold"
-                                >Support</router-link
-                            >
-                        </nav>
+                                <svg
+                                    class="h-5 w-5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                                    />
+                                </svg>
+                                <span
+                                    class="absolute top-2.5 right-2.5 h-2 w-2 rounded-full bg-blue-600 ring-2 ring-white"
+                                ></span>
+                            </button>
+                            <transition name="dropdown">
+                                <div
+                                    v-if="notifOpen"
+                                    class="dropdown-panel absolute right-0 z-50 mt-2 w-72 rounded-xl border border-slate-100 bg-white shadow-xl shadow-slate-200/60 p-5 text-center"
+                                >
+                                    <div
+                                        class="mx-auto w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center"
+                                    >
+                                        <svg
+                                            class="h-5 w-5 text-blue-600"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                                            />
+                                        </svg>
+                                    </div>
+                                    <p
+                                        class="mt-3 text-sm font-semibold text-slate-700"
+                                    >
+                                        Belum ada notifikasi
+                                    </p>
+                                    <p
+                                        class="text-xs text-slate-400 mt-1"
+                                    >
+                                        Kabar baru akan muncul di sini.
+                                    </p>
+                                </div>
+                            </transition>
+                        </div>
 
                         <!-- Mobile Menu Button -->
                         <button
                             ref="mobBtnRef"
                             @click.stop="toggleMobile"
-                            class="md:hidden flex items-center justify-center h-10 w-10 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors"
+                            class="lg:hidden flex items-center justify-center h-10 w-10 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors"
                             :aria-label="mobileOpen ? 'Tutup menu' : 'Buka menu'"
                         >
                             <svg
@@ -105,41 +202,13 @@
                                 @click="stdOpen = !stdOpen"
                                 title="Menu akun"
                                 :class="[
-                                    'group flex items-center gap-2 rounded-full border bg-white py-1.5 pl-1.5 pr-2.5 transition-all duration-200',
+                                    'h-9 w-9 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-semibold transition-all duration-200',
                                     stdOpen
-                                        ? 'border-slate-300 shadow-sm'
-                                        : 'border-slate-200 hover:border-slate-300',
+                                        ? 'ring-2 ring-blue-200'
+                                        : 'hover:ring-2 hover:ring-blue-100',
                                 ]"
                             >
-                                <div
-                                    class="h-8 w-8 shrink-0 rounded-full bg-indigo-600 flex items-center justify-center text-white text-xs font-semibold"
-                                >
-                                    {{ shortInitial }}
-                                </div>
-                                <div class="hidden sm:block text-left">
-                                    <div
-                                        class="text-sm font-semibold text-slate-800 leading-tight"
-                                    >
-                                        {{ displayName }}
-                                    </div>
-                                    <div
-                                        class="text-[11px] text-slate-500 leading-tight"
-                                    >
-                                        {{ displayRole }}
-                                    </div>
-                                </div>
-                                <svg
-                                    class="h-3.5 w-3.5 text-slate-400 transition-transform duration-200"
-                                    :class="stdOpen ? 'rotate-180' : ''"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2.5"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                >
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
+                                {{ shortInitial }}
                             </button>
 
                             <!-- Dropdown Panel -->
@@ -154,7 +223,7 @@
                                     >
                                         <div class="flex items-center gap-3">
                                             <div
-                                                class="h-10 w-10 shrink-0 rounded-full bg-indigo-600 flex items-center justify-center text-white text-sm font-semibold"
+                                                class="h-10 w-10 shrink-0 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-semibold"
                                             >
                                                 {{ shortInitial }}
                                             </div>
@@ -328,48 +397,48 @@
                     <nav
                         v-if="mobileOpen"
                         ref="mobRef"
-                        class="md:hidden pb-3 pt-1 border-t border-slate-100 space-y-0.5"
+                        class="lg:hidden pb-3 pt-1 border-t border-slate-100 space-y-0.5"
                     >
                         <router-link
                             to="/student/dashboard"
                             @click="mobileOpen = false"
                             class="block px-3 py-2.5 text-sm font-medium text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
-                            active-class="bg-slate-100 text-slate-900 font-semibold"
+                            active-class="text-blue-600 font-semibold bg-blue-50"
                             >Dashboard</router-link
                         >
                         <router-link
                             to="/student/profile"
                             @click="mobileOpen = false"
                             class="block px-3 py-2.5 text-sm font-medium text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
-                            active-class="bg-slate-100 text-slate-900 font-semibold"
+                            active-class="text-blue-600 font-semibold bg-blue-50"
                             >Profile</router-link
                         >
                         <router-link
                             to="/student/cv"
                             @click="mobileOpen = false"
                             class="block px-3 py-2.5 text-sm font-medium text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
-                            active-class="bg-slate-100 text-slate-900 font-semibold"
+                            active-class="text-blue-600 font-semibold bg-blue-50"
                             >Upload CV</router-link
                         >
                         <router-link
                             to="/student/HasilAnalisis"
                             @click="mobileOpen = false"
                             class="block px-3 py-2.5 text-sm font-medium text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
-                            active-class="bg-slate-100 text-slate-900 font-semibold"
+                            active-class="text-blue-600 font-semibold bg-blue-50"
                             >Hasil Analisis</router-link
                         >
                         <router-link
                             to="/student/RiwayatAnalisis"
                             @click="mobileOpen = false"
                             class="block px-3 py-2.5 text-sm font-medium text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
-                            active-class="bg-slate-100 text-slate-900 font-semibold"
+                            active-class="text-blue-600 font-semibold bg-blue-50"
                             >Riwayat Analisis</router-link
                         >
                         <router-link
                             to="/student/support"
                             @click="mobileOpen = false"
                             class="block px-3 py-2.5 text-sm font-medium text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
-                            active-class="bg-slate-100 text-slate-900 font-semibold"
+                            active-class="text-blue-600 font-semibold bg-blue-50"
                             >Support</router-link
                         >
                     </nav>
@@ -388,7 +457,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import apiClient from "@/services/api";
 import logo from "@/assets/logo.png";
@@ -400,8 +469,59 @@ const stdRef = ref(null);
 const mobRef = ref(null);
 const mobBtnRef = ref(null);
 const lastMobileToggle = ref(0);
+const searchQuery = ref("");
+const searchOpen = ref(false);
+const searchEl = ref(null);
+const searchInput = ref(null);
+const notifOpen = ref(false);
+const notifRef = ref(null);
 const router = useRouter();
+const route = useRoute();
 const auth = useAuthStore();
+
+const navItems = [
+    { to: "/student/dashboard", label: "Dashboard" },
+    { to: "/student/profile", label: "Profile" },
+    { to: "/student/cv", label: "Upload CV" },
+    { to: "/student/HasilAnalisis", label: "Hasil Analisis" },
+    { to: "/student/RiwayatAnalisis", label: "Riwayat Analisis" },
+    { to: "/student/support", label: "Support" },
+];
+
+function isActive(path) {
+    return route.path === path;
+}
+
+const searchResults = computed(() => {
+    const q = searchQuery.value.trim().toLowerCase();
+    if (!q) return [];
+    return navItems.filter((i) => i.label.toLowerCase().includes(q));
+});
+
+function closeSearch() {
+    searchOpen.value = false;
+    searchQuery.value = "";
+    searchInput.value?.blur();
+}
+function submitSearch() {
+    const results = searchResults.value;
+    if (results.length) {
+        closeSearch();
+        router.push(results[0].to);
+    }
+}
+function goSearch(to) {
+    closeSearch();
+    router.push(to);
+}
+function onKeydown(e) {
+    if (e.key !== "/") return;
+    const tag = e.target?.tagName;
+    if (tag !== "INPUT" && tag !== "TEXTAREA") {
+        e.preventDefault();
+        searchInput.value?.focus();
+    }
+}
 
 const displayName = computed(() => auth.user?.name || "Student User");
 const displayEmail = computed(() => auth.user?.email || "");
@@ -452,12 +572,17 @@ function toggleMobile() {
 function onClickOutside(e) {
     const stdEl = stdRef.value;
     const mobEl = mobRef.value;
+    const searchElRef = searchEl.value;
+    const notifEl = notifRef.value;
     if (stdEl && !stdEl.contains(e.target)) stdOpen.value = false;
     if (mobEl && !mobEl.contains(e.target)) mobileOpen.value = false;
+    if (searchElRef && !searchElRef.contains(e.target)) searchOpen.value = false;
+    if (notifEl && !notifEl.contains(e.target)) notifOpen.value = false;
 }
 
 onMounted(async () => {
     document.addEventListener("click", onClickOutside);
+    document.addEventListener("keydown", onKeydown);
 
     if (auth.token) {
         try {
@@ -469,6 +594,7 @@ onMounted(async () => {
 });
 onBeforeUnmount(() => {
     document.removeEventListener("click", onClickOutside);
+    document.removeEventListener("keydown", onKeydown);
 });
 </script>
 

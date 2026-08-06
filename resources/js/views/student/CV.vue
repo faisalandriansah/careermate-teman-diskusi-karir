@@ -4,10 +4,10 @@
         <!-- Header -->
         <div class="text-center mb-8 fade-up">
             <div
-                class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 mb-3 shadow-sm"
+                class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 mb-3 shadow-sm"
             >
                 <svg
-                    class="w-4 h-4 text-indigo-600 animate-spin-slow"
+                    class="w-4 h-4 text-blue-600 animate-spin-slow"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -47,8 +47,8 @@
                     class="relative rounded-2xl border-2 border-dashed transition-all duration-200 px-6 py-10 md:py-12 text-center flex flex-col items-center justify-center cursor-pointer group"
                     :class="
                         isDragging
-                            ? 'border-indigo-500 bg-indigo-50/60 scale-[0.99]'
-                            : 'border-slate-200 hover:border-indigo-400 hover:bg-slate-50/50'
+                            ? 'border-blue-500 bg-blue-50/60 scale-[0.99]'
+                            : 'border-slate-200 hover:border-blue-400 hover:bg-slate-50/50'
                     "
                     @dragover.prevent="isDragging = true"
                     @dragleave.prevent="isDragging = false"
@@ -56,10 +56,10 @@
                     @click="triggerPicker"
                 >
                     <div
-                        class="h-16 w-16 rounded-2xl bg-indigo-50 group-hover:bg-indigo-100/80 flex items-center justify-center mb-4 transition-colors shadow-sm"
+                        class="h-16 w-16 rounded-2xl bg-blue-50 group-hover:bg-blue-100/80 flex items-center justify-center mb-4 transition-colors shadow-sm"
                     >
                         <svg
-                            class="h-8 w-8 text-indigo-600"
+                            class="h-8 w-8 text-blue-600"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -81,7 +81,7 @@
 
                     <button
                         type="button"
-                        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-md transition active:scale-95"
+                        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-md transition active:scale-95"
                     >
                         Pilih File PDF
                     </button>
@@ -166,7 +166,7 @@
 
                     <button
                         @click="startAnalysis"
-                        class="mt-4 w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-semibold text-sm shadow-md transition-all hover:shadow-indigo-500/25 active:scale-95"
+                        class="mt-4 w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-semibold text-sm shadow-md transition-all hover:shadow-blue-600/25 active:scale-95"
                     >
                         <svg
                             class="w-4 h-4 text-amber-300 animate-pulse"
@@ -184,13 +184,13 @@
 
             <!-- Side Panel: Info Fitur AI (Mengisi Ruang Kanan agar Lebih Estetis) -->
             <div
-                class="lg:col-span-1 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 rounded-2xl p-6 text-white relative overflow-hidden shadow-sm flex flex-col justify-between"
+                class="lg:col-span-1 bg-gradient-to-br from-blue-950 via-blue-900 to-blue-800 rounded-2xl p-6 text-white relative overflow-hidden shadow-sm flex flex-col justify-between"
             >
                 <div class="orb orb-indigo"></div>
 
                 <div class="relative z-10">
                     <div
-                        class="flex items-center gap-2 text-indigo-300 text-xs font-semibold tracking-wider uppercase mb-3"
+                        class="flex items-center gap-2 text-blue-300 text-xs font-semibold tracking-wider uppercase mb-3"
                     >
                         <span>✨ Kemampuan AI</span>
                     </div>
@@ -198,7 +198,7 @@
                         Apa yang AI Lakukan pada CV Anda?
                     </h3>
 
-                    <ul class="space-y-3.5 text-xs text-indigo-100/80">
+                    <ul class="space-y-3.5 text-xs text-blue-100/80">
                         <li class="flex items-start gap-2.5">
                             <span
                                 class="h-5 w-5 rounded-md bg-white/10 flex items-center justify-center shrink-0 text-amber-300 font-bold"
@@ -234,7 +234,7 @@
                 </div>
 
                 <div
-                    class="relative z-10 mt-6 pt-4 border-t border-white/10 text-[11px] text-indigo-200/60 flex items-center justify-between"
+                    class="relative z-10 mt-6 pt-4 border-t border-white/10 text-[11px] text-blue-200/60 flex items-center justify-between"
                 >
                     <span>🔒 Data Anda Terenkripsi</span>
                     <span>PDF Only</span>
@@ -248,13 +248,13 @@
             class="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 sm:p-12 fade-up text-center max-w-xl mx-auto"
         >
             <div
-                class="mx-auto h-20 w-20 rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center mb-4 relative"
+                class="mx-auto h-20 w-20 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center mb-4 relative"
             >
                 <span
-                    class="absolute inset-0 rounded-full border-2 border-indigo-200 border-t-indigo-600 animate-spin"
+                    class="absolute inset-0 rounded-full border-2 border-blue-200 border-t-blue-600 animate-spin"
                 ></span>
                 <svg
-                    class="h-9 w-9 text-indigo-600 animate-pulse"
+                    class="h-9 w-9 text-blue-600 animate-pulse"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -293,7 +293,7 @@
                         i < activeStep
                             ? 'text-slate-800 font-medium'
                             : i === activeStep
-                              ? 'text-indigo-600 font-bold'
+                              ? 'text-blue-600 font-bold'
                               : 'text-slate-400'
                     "
                 >
@@ -303,7 +303,7 @@
                             i < activeStep
                                 ? 'bg-emerald-500 text-white'
                                 : i === activeStep
-                                  ? 'bg-indigo-600 text-white ring-4 ring-indigo-100'
+                                  ? 'bg-blue-600 text-white ring-4 ring-blue-100'
                                   : 'bg-slate-200 text-slate-500'
                         "
                     >
@@ -550,7 +550,7 @@ function goToResult() {
 .orb-indigo {
     width: 160px;
     height: 160px;
-    background: #6366f1;
+    background: #2563eb;
     top: -40px;
     right: -20px;
 }

@@ -23,7 +23,7 @@
                             />
                             <svg
                                 v-else
-                                class="h-10 w-10 text-indigo-200"
+                                class="h-10 w-10 text-blue-200"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -37,7 +37,7 @@
                             </svg>
                         </div>
                         <button
-                            class="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-indigo-600 hover:bg-indigo-700 active:scale-95 flex items-center justify-center border-2 border-slate-900 transition shadow"
+                            class="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-blue-600 hover:bg-blue-700 active:scale-95 flex items-center justify-center border-2 border-slate-900 transition shadow"
                             title="Ganti foto"
                         >
                             <svg
@@ -69,7 +69,7 @@
                         >
                             {{ profile.name || "Pengguna" }}
                         </h1>
-                        <p class="text-sm text-indigo-200/90 mt-1 truncate">
+                        <p class="text-sm text-blue-200/90 mt-1 truncate">
                             {{ profile.major || "Jurusan belum diisi" }} ·
                             {{
                                 profile.university || "Universitas belum diisi"
@@ -79,7 +79,7 @@
                             class="mt-2 flex flex-wrap items-center justify-center sm:justify-start gap-2"
                         >
                             <span
-                                class="inline-block text-xs font-medium text-indigo-100 bg-white/10 backdrop-blur-md px-3 py-1 rounded-full border border-white/10"
+                                class="inline-block text-xs font-medium text-blue-100 bg-white/10 backdrop-blur-md px-3 py-1 rounded-full border border-white/10"
                             >
                                 Semester {{ profile.semester || "-" }}
                             </span>
@@ -164,7 +164,7 @@
                         class="text-base font-semibold text-slate-800 flex items-center gap-2"
                     >
                         <svg
-                            class="w-5 h-5 text-indigo-600"
+                            class="w-5 h-5 text-blue-600"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -210,7 +210,7 @@
                                     'w-full text-sm border rounded-lg px-3 py-2.5 transition focus:outline-none focus:ring-2',
                                     field.readonly
                                         ? 'bg-slate-100 text-slate-500 border-slate-200 cursor-not-allowed'
-                                        : 'border-slate-300 focus:ring-indigo-100 focus:border-indigo-600 text-slate-800',
+                                        : 'border-slate-300 focus:ring-blue-100 focus:border-blue-600 text-slate-800',
                                 ]"
                             />
                             <span
@@ -234,7 +234,7 @@
                     class="text-base font-semibold text-slate-800 mb-5 flex items-center gap-2"
                 >
                     <svg
-                        class="w-5 h-5 text-indigo-600"
+                        class="w-5 h-5 text-blue-600"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -286,7 +286,7 @@
                                         v-if="profile[link.key]"
                                         :href="formatUrl(profile[link.key])"
                                         target="_blank"
-                                        class="text-sm font-medium text-indigo-600 hover:underline truncate block"
+                                        class="text-sm font-medium text-blue-600 hover:underline truncate block"
                                     >
                                         {{ profile[link.key] }}
                                     </a>
@@ -303,7 +303,7 @@
                                         v-model="profile[link.key]"
                                         type="text"
                                         :placeholder="link.placeholder"
-                                        class="w-full text-sm border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-600 text-slate-800"
+                                        class="w-full text-sm border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-600 text-slate-800"
                                     />
                                 </div>
                             </div>

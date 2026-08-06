@@ -73,7 +73,7 @@
                         <div class="flex items-start justify-between gap-2">
                             <div class="flex min-w-0 items-center gap-3">
                                 <div
-                                    class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-sm font-semibold text-white"
+                                    class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-blue-600 text-sm font-semibold text-white"
                                 >
                                     {{ student.name.charAt(0).toUpperCase() }}
                                 </div>
