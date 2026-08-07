@@ -55,7 +55,7 @@
                             <span
                                 class="w-1.5 h-1.5 rounded-full bg-emerald-400"
                             ></span>
-                            {{ student.last_analysis.match_percentage }}% cocok
+                            {{ scoreDisplay }} cocok
                             dengan
                             {{ student.last_analysis.recommended_career }}
                         </div>
@@ -333,16 +333,16 @@
                                             :stroke="scoreColor"
                                             stroke-width="3"
                                             stroke-linecap="round"
-                                            :stroke-dasharray="`${student.last_analysis.match_percentage * 0.974} 100`"
+                                            :stroke-dasharray="ringCircumference"
+                                            :stroke-dashoffset="ringOffset"
+                                            :transform="`rotate(${ringRotate} 18 18)`"
                                         />
                                     </svg>
                                     <span
-                                        class="absolute inset-0 flex items-center justify-center text-sm font-semibold text-gray-900"
+                                        class="absolute inset-0 flex items-center justify-center font-bold text-gray-900"
+                                        :class="scoreTextClass"
                                     >
-                                        {{
-                                            student.last_analysis
-                                                .match_percentage
-                                        }}%
+                                        {{ scoreDisplay }}
                                     </span>
                                 </div>
                                 <div class="min-w-0">
@@ -435,5 +435,30 @@ const scoreColor = computed(() => {
     if (score >= 75) return "#059669"; // emerald-600
     if (score >= 50) return "#2563eb"; // blue-600
     return "#d97706"; // amber-600
+});
+
+const RING_RADIUS = 15.5;
+const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
+
+const matchScore = computed(() =>
+    Math.round(props.student?.last_analysis?.match_percentage ?? 0),
+);
+
+const scoreDisplay = computed(() => `${matchScore.value}%`);
+
+const ringCircumference = computed(() => RING_CIRCUMFERENCE);
+
+const ringOffset = computed(() => {
+    const score = Math.min(Math.max(matchScore.value, 0), 100);
+    return RING_CIRCUMFERENCE - (score / 100) * RING_CIRCUMFERENCE;
+});
+
+const ringRotate = "-90";
+
+const scoreTextClass = computed(() => {
+    const score = matchScore.value;
+    if (score >= 100) return "text-[11px] tracking-tight";
+    if (score >= 10) return "text-sm";
+    return "text-[13px]";
 });
 </script>

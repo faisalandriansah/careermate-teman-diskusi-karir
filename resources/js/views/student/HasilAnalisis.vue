@@ -1,5 +1,22 @@
 <template>
-    <div class="container mx-auto px-4 py-8 max-w-5xl">
+    <div v-if="loading" class="flex items-center justify-center py-24">
+        <p class="text-sm text-slate-400">Memuat hasil analisis...</p>
+    </div>
+
+    <div
+        v-else-if="errorMessage"
+        class="flex flex-col items-center justify-center py-24 gap-3"
+    >
+        <p class="text-sm text-rose-500">{{ errorMessage }}</p>
+        <button
+            @click="router.push({ name: 'StudentCV' })"
+            class="text-sm text-blue-600 underline"
+        >
+            Kembali ke Upload CV
+        </button>
+    </div>
+
+    <div v-else class="container mx-auto px-4 py-8 max-w-5xl">
         <!-- Top Bar Hero -->
         <StudentHero compact>
             <div
@@ -20,9 +37,7 @@
                         </svg>
                         <span>Laporan Hasil AI Resume Analysis</span>
                     </div>
-                    <h1
-                        class="text-2xl md:text-3xl font-bold text-white"
-                    >
+                    <h1 class="text-2xl md:text-3xl font-bold text-white">
                         Hasil Analisis CV Kamu
                     </h1>
                     <p class="mt-1.5 text-sm text-blue-200/80 max-w-md">
@@ -30,8 +45,7 @@
                         roadmap dari analisis CV terakhir.
                     </p>
                 </div>
-                <span
-                    class="shrink-0 text-xs text-blue-200/70 font-medium"
+                <span class="shrink-0 text-xs text-blue-200/70 font-medium"
                     >Diperbarui: {{ currentDate }}</span
                 >
             </div>
@@ -136,8 +150,8 @@
             </div>
         </div>
 
-        <!-- Skill Terdeteksi, Skill Gap, Career Recommendation -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
+        <!-- Skill Terdeteksi & Skill Gap (Career Recommendation DIHAPUS) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
             <!-- Skill Terdeteksi -->
             <div
                 class="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm flex flex-col justify-between"
@@ -219,104 +233,12 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Career Recommendation -->
-            <div
-                class="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm"
-            >
-                <p
-                    class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3.5 flex items-center justify-between"
-                >
-                    <span>Rekomendasi Karir</span>
-                    <span class="text-[10px] text-blue-600 font-semibold"
-                        >AI Ranked</span
-                    >
-                </p>
-                <div class="space-y-3">
-                    <div
-                        v-for="(c, i) in careers"
-                        :key="c.title"
-                        class="flex items-center gap-3"
-                    >
-                        <span
-                            class="shrink-0 h-6 w-6 rounded-lg text-xs font-bold flex items-center justify-center"
-                            :class="
-                                i === 0
-                                    ? 'bg-blue-600 text-white shadow-sm'
-                                    : 'bg-slate-100 text-slate-500'
-                            "
-                        >
-                            {{ i + 1 }}
-                        </span>
-                        <div class="flex-1 min-w-0">
-                            <div
-                                class="flex justify-between text-xs font-medium mb-1"
-                            >
-                                <span class="text-slate-700 truncate">{{
-                                    c.title
-                                }}</span>
-                                <span class="text-slate-500 font-bold shrink-0"
-                                    >{{ c.score }}%</span
-                                >
-                            </div>
-                            <div
-                                class="h-1.5 bg-slate-100 rounded-full overflow-hidden"
-                            >
-                                <div
-                                    class="h-full rounded-full transition-all duration-500"
-                                    :class="
-                                        i === 0
-                                            ? 'bg-blue-600'
-                                            : 'bg-slate-300'
-                                    "
-                                    :style="{ width: c.score + '%' }"
-                                ></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
-        <!-- Internship + Roadmap AI -->
-        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-            <!-- Internship Recommendation (2 cols) -->
+        <!-- Roadmap AI (Internship DIHAPUS, sekarang full width) -->
+        <div class="grid grid-cols-1 gap-4 mb-6">
             <div
-                class="md:col-span-2 bg-white rounded-2xl border border-slate-100 p-5 shadow-sm"
-            >
-                <p
-                    class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3.5"
-                >
-                    Rekomendasi Tempat Magang
-                </p>
-                <div class="flex flex-col gap-2">
-                    <a
-                        v-for="company in internships"
-                        :key="company"
-                        href="#"
-                        class="flex items-center justify-between p-3 bg-slate-50 hover:bg-blue-50/50 rounded-xl border border-slate-100 hover:border-blue-100 text-xs font-medium text-slate-700 hover:text-blue-700 transition group"
-                    >
-                        <span>{{ company }}</span>
-                        <svg
-                            class="h-4 w-4 text-slate-400 group-hover:text-blue-600 transition"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                            />
-                        </svg>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Roadmap AI (3 cols) -->
-            <div
-                class="md:col-span-3 bg-white rounded-2xl border border-slate-100 p-5 shadow-sm"
+                class="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm"
             >
                 <div class="flex items-center justify-between mb-3.5">
                     <p
@@ -355,6 +277,21 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- AI Summary (BARU) -->
+        <div
+            class="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm mb-6"
+            v-if="aiSummary"
+        >
+            <p
+                class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2"
+            >
+                Ringkasan AI
+            </p>
+            <p class="text-sm text-slate-600 leading-relaxed">
+                {{ aiSummary }}
+            </p>
         </div>
 
         <!-- Actions -->
@@ -402,49 +339,68 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { ref, computed, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import StudentHero from "@/components/student/StudentHero.vue";
+import analysisService from "@/services/student/analysisService";
 
-const currentDate = "04 Agustus 2026";
+const route = useRoute();
+const router = useRouter();
 
-const detectedSkills = ["PHP", "Laravel", "MySQL", "Git", "Docker"];
-const gapSkills = ["Vue.js", "REST API", "Testing"];
+const loading = ref(true);
+const errorMessage = ref("");
+const analysis = ref(null);
 
-const careers = [
-    { title: "Backend Developer", score: 95 },
-    { title: "Fullstack Developer", score: 90 },
-    { title: "Software Engineer", score: 87 },
-];
+const currentDate = computed(() => {
+    if (!analysis.value?.updated_at) return "-";
+    return new Date(analysis.value.updated_at).toLocaleDateString("id-ID", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+    });
+});
 
-const internships = [
-    "PT Telkom Indonesia",
-    "PT GITS Indonesia",
-    "PT Astra Digital",
-];
+const detectedSkills = computed(() =>
+    (analysis.value?.skills_json ?? []).map((s) =>
+        typeof s === "string" ? s : s.name,
+    ),
+);
+const gapSkills = computed(() => analysis.value?.skill_gap_json ?? []);
+const roadmapSteps = computed(() =>
+    (analysis.value?.roadmap_json ?? []).map((r) => r.topic),
+);
+const aiSummary = computed(() => analysis.value?.ai_summary ?? "");
 
-const roadmapSteps = [
-    "Pelajari REST API Standards",
-    "Belajar Dasar Containerization (Docker)",
-    "Bangun Portofolio Aplikasi Backend",
-    "Belajar Automated Testing (PHPUnit)",
-];
+const topCareer = computed(() => ({
+    title: analysis.value?.career?.title ?? "Belum ada rekomendasi",
+}));
+const matchScore = computed(() => analysis.value?.match_score ?? 0);
 
-// Top Career Computed
-const topCareer = computed(() => careers[0]);
-const matchScore = computed(() => topCareer.value.score);
-
-// Dynamic Circular Progress Calculation
-const strokeDasharray = 188; // 2 * PI * r (r=30 -> 188.49)
+const strokeDasharray = 188;
 const strokeDashoffset = computed(() => {
     return strokeDasharray - (strokeDasharray * matchScore.value) / 100;
 });
 
+onMounted(async () => {
+    try {
+        const analysisId = route.params.id;
+        const result = analysisId
+            ? await analysisService.getResult(analysisId)
+            : await analysisService.getLatest();
+        analysis.value = result.data;
+    } catch (err) {
+        errorMessage.value =
+            err.response?.data?.message ?? "Gagal memuat hasil analisis.";
+    } finally {
+        loading.value = false;
+    }
+});
+
 function downloadPdf() {
-    alert("Mengunduh laporan hasil analisis AI...");
+    alert("Fitur download PDF belum tersedia.");
 }
 
 function reuploadCv() {
-    // Logic navigasi ke halaman upload CV
-    console.log("Kembali ke halaman upload");
+    router.push({ name: "StudentCV" });
 }
 </script>

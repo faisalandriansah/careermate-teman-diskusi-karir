@@ -38,6 +38,8 @@ Route::middleware(['auth:sanctum', 'role:mahasiswa'])
             Route::post('/cv/{cvFile}/detect-skills', [CVController::class, 'detectSkills']);
             Route::post('/analysis/{analysisResult}/match-career', [CVController::class, 'matchCareer']);
             Route::post('/analysis/{analysisResult}/generate-roadmap', [CVController::class, 'generateRoadmap']);
+            Route::get('/analysis/latest', [CVController::class, 'latestResult']);
+            Route::get('/analysis/{analysisResult}', [CVController::class, 'showResult']);
         });
     });
 
@@ -59,6 +61,8 @@ Route::middleware(['auth:sanctum', 'role:admin'])
 
         Route::apiResource('students', StudentController::class)
             ->only(['index', 'show', 'destroy']);
+
+        Route::get('students/{student}/cv/{cvFile}', [StudentController::class, 'showCV']);
 
         // Notifikasi admin
         Route::get('notifications', [NotificationController::class, 'index']);

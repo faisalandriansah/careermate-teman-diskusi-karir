@@ -203,7 +203,7 @@ const routes = [
                 },
             },
             {
-                path: "hasilAnalisis",
+                path: "hasilAnalisis/:id?",
                 name: "StudentHasilAnalisis",
                 component: StudentHasilAnalisis,
                 meta: {

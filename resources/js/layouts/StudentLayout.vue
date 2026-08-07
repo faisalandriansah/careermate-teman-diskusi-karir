@@ -33,7 +33,7 @@
                             class="px-3 py-2 text-sm font-medium rounded-lg whitespace-nowrap transition-colors"
                             :class="
                                 isActive(item.to)
-                                        ? 'text-blue-600 font-semibold'
+                                    ? 'text-blue-600 font-semibold'
                                     : 'text-slate-600 hover:text-slate-900'
                             "
                             >{{ item.label }}</router-link
@@ -41,7 +41,9 @@
                     </nav>
 
                     <!-- Right: Actions -->
-                    <div class="flex-1 flex items-center justify-end gap-2 sm:gap-3 min-w-0">
+                    <div
+                        class="flex-1 flex items-center justify-end gap-2 sm:gap-3 min-w-0"
+                    >
                         <!-- Search (desktop) -->
                         <div ref="searchEl" class="relative hidden xl:block">
                             <svg
@@ -150,9 +152,7 @@
                                     >
                                         Belum ada notifikasi
                                     </p>
-                                    <p
-                                        class="text-xs text-slate-400 mt-1"
-                                    >
+                                    <p class="text-xs text-slate-400 mt-1">
                                         Kabar baru akan muncul di sini.
                                     </p>
                                 </div>
@@ -164,7 +164,9 @@
                             ref="mobBtnRef"
                             @click.stop="toggleMobile"
                             class="lg:hidden flex items-center justify-center h-10 w-10 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors"
-                            :aria-label="mobileOpen ? 'Tutup menu' : 'Buka menu'"
+                            :aria-label="
+                                mobileOpen ? 'Tutup menu' : 'Buka menu'
+                            "
                         >
                             <svg
                                 v-if="!mobileOpen"
@@ -314,12 +316,8 @@
                                                 <path
                                                     d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"
                                                 ></path>
-                                                <path
-                                                    d="M3 3v5h5"
-                                                ></path>
-                                                <path
-                                                    d="M12 7v5l4 2"
-                                                ></path>
+                                                <path d="M3 3v5h5"></path>
+                                                <path d="M12 7v5l4 2"></path>
                                             </svg>
                                             <span class="flex-1 text-left"
                                                 >Riwayat Analisis</span
@@ -576,7 +574,8 @@ function onClickOutside(e) {
     const notifEl = notifRef.value;
     if (stdEl && !stdEl.contains(e.target)) stdOpen.value = false;
     if (mobEl && !mobEl.contains(e.target)) mobileOpen.value = false;
-    if (searchElRef && !searchElRef.contains(e.target)) searchOpen.value = false;
+    if (searchElRef && !searchElRef.contains(e.target))
+        searchOpen.value = false;
     if (notifEl && !notifEl.contains(e.target)) notifOpen.value = false;
 }
 

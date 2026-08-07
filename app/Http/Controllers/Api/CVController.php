@@ -166,4 +166,32 @@ class CVController extends Controller
             'data' => $analysisResult->fresh('career'),
         ]);
     }
+
+    public function showResult(AnalysisResult $analysisResult)
+    {
+        abort_if($analysisResult->user_id !== auth()->id(), 403, 'Anda tidak berhak mengakses data ini.');
+
+        return response()->json([
+            'data' => $analysisResult->load('career'),
+        ]);
+    }
+
+    public function latestResult()
+    {
+        $analysisResult = AnalysisResult::with('career')
+            ->where('user_id', auth()->id())
+            ->latest()
+            ->first();
+
+        if (!$analysisResult) {
+            return response()->json([
+                'message' => 'Belum ada hasil analisis CV.',
+                'data' => null,
+            ], 404);
+        }
+
+        return response()->json([
+            'data' => $analysisResult,
+        ]);
+    }
 }

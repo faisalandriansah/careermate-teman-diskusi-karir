@@ -117,7 +117,7 @@
                             </p>
                             <p class="text-slate-500">
                                 Match:
-                                {{ student.last_analysis.match_percentage }}%
+                                {{ Math.round(student.last_analysis.match_percentage) }}%
                             </p>
                         </div>
                     </div>
@@ -225,6 +225,7 @@
             v-if="showDetailModal"
             :student="selectedStudent"
             @close="closeDetailModal"
+            @viewCV="openCV"
         />
     </div>
 </template>
@@ -232,6 +233,7 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { studentService } from "@/services/admin/studentService";
+import apiClient from "@/services/api";
 import StudentSearch from "@/components/student/StudentSearch.vue";
 import StudentSkeleton from "@/components/student/StudentSkeleton.vue";
 import StudentDetailModal from "@/components/student/StudentDetailModal.vue";
@@ -265,11 +267,13 @@ const mapStudent = (raw) => {
         portfolio: raw.student_profile?.portfolio_url ?? null,
         registration_date: raw.created_at,
         cv_file: latestCv?.file_name ?? null,
+        cv_file_id: latestCv?.id ?? null,
         cv_file_url: latestCv?.file_path ?? null,
         detected_skills: latestAnalysis?.skills_json
-            ? typeof latestAnalysis.skills_json === "string"
-                ? JSON.parse(latestAnalysis.skills_json)
-                : latestAnalysis.skills_json
+            ? (typeof latestAnalysis.skills_json === "string"
+                  ? JSON.parse(latestAnalysis.skills_json)
+                  : latestAnalysis.skills_json
+              ).map((s) => (typeof s === "string" ? s : s?.name))
             : [],
         last_analysis: latestAnalysis
             ? {
@@ -353,5 +357,19 @@ const openDetailModal = (student) => {
 const closeDetailModal = () => {
     showDetailModal.value = false;
     selectedStudent.value = null;
+};
+
+const openCV = async (student) => {
+    if (!student.cv_file_id) return;
+    try {
+        const response = await apiClient.get(
+            `/admin/students/${student.id}/cv/${student.cv_file_id}`,
+            { responseType: "blob", cache: false },
+        );
+        const url = window.URL.createObjectURL(response.data);
+        window.open(url, "_blank");
+    } catch (err) {
+        alert("Gagal membuka CV. File mungkin tidak tersedia.");
+    }
 };
 </script>

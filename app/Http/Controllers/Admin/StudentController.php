@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\CVFile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class StudentController extends Controller
 {
@@ -106,5 +108,20 @@ class StudentController extends Controller
         return response()->json([
             'message' => 'mahasiswa berhasil dihapus'
         ]);
+    }
+
+    /**
+     * Stream / preview file CV milik mahasiswa.
+     * GET /admin/students/{student}/cv/{cvFile}
+     */
+    public function showCV(User $student, CVFile $cvFile)
+    {
+        abort_if($cvFile->user_id !== $student->id, 404, 'CV tidak ditemukan.');
+
+        $fullPath = Storage::disk('public')->path($cvFile->file_path);
+
+        abort_if(!file_exists($fullPath), 404, 'File CV tidak ditemukan.');
+
+        return response()->file($fullPath);
     }
 }
