@@ -181,8 +181,25 @@
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div v-if="isProfileLoading" class="col-span-full">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <div
+                                v-for="n in 4"
+                                :key="n"
+                                class="space-y-2"
+                            >
+                                <div
+                                    class="h-3 w-24 bg-slate-200 rounded animate-pulse"
+                                ></div>
+                                <div
+                                    class="h-[42px] bg-slate-100 rounded-lg animate-pulse"
+                                ></div>
+                            </div>
+                        </div>
+                    </div>
                     <div
                         v-for="field in fields"
+                        v-else
                         :key="field.key"
                         class="space-y-1"
                     >
@@ -250,8 +267,28 @@
                 </h2>
 
                 <div class="space-y-4">
+                    <div v-if="isProfileLoading">
+                        <div
+                            v-for="n in 3"
+                            :key="n"
+                            class="p-3.5 rounded-xl border border-slate-100 bg-slate-50/50 flex items-center gap-3"
+                        >
+                            <div
+                                class="h-9 w-9 rounded-lg bg-slate-200 animate-pulse shrink-0"
+                            ></div>
+                            <div class="flex-1 space-y-2">
+                                <div
+                                    class="h-3 w-24 bg-slate-200 rounded animate-pulse"
+                                ></div>
+                                <div
+                                    class="h-4 w-full bg-slate-100 rounded animate-pulse"
+                                ></div>
+                            </div>
+                        </div>
+                    </div>
                     <div
                         v-for="link in links"
+                        v-else
                         :key="link.key"
                         class="p-3.5 rounded-xl border border-slate-100 bg-slate-50/50 flex flex-col justify-center"
                     >
@@ -346,6 +383,18 @@ const profile = reactive({
 const isEditing = ref(false);
 const saving = ref(false);
 const errors = ref({});
+const isProfileLoading = ref(!authStore.user?.student_profile);
+
+function applyProfileData(data) {
+    if (!data) return;
+    profile.university = data.university ?? "";
+    profile.major = data.major ?? "";
+    profile.semester = data.semester ?? "";
+    profile.phone = data.phone ?? "";
+    profile.github_url = data.github_url ?? "";
+    profile.linkedin_url = data.linkedin_url ?? "";
+    profile.portfolio_url = data.portfolio_url ?? "";
+}
 
 // Cek kelengkapan profil secara otomatis
 const isProfileComplete = computed(() => {
@@ -361,19 +410,18 @@ onMounted(async () => {
     profile.name = authStore.user?.name ?? "";
     profile.email = authStore.user?.email ?? "";
 
+    // Pre-populate instan dari auth store (tanpa menunggu network)
+    applyProfileData(authStore.user?.student_profile);
+
     try {
         const { profile: data } = await studentProfileService.getProfile();
         if (data) {
-            profile.university = data.university ?? "";
-            profile.major = data.major ?? "";
-            profile.semester = data.semester ?? "";
-            profile.phone = data.phone ?? "";
-            profile.github_url = data.github_url ?? "";
-            profile.linkedin_url = data.linkedin_url ?? "";
-            profile.portfolio_url = data.portfolio_url ?? "";
+            applyProfileData(data);
         }
     } catch (err) {
         console.error("Gagal memuat profil", err);
+    } finally {
+        isProfileLoading.value = false;
     }
 });
 

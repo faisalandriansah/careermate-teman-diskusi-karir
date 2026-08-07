@@ -23,6 +23,9 @@
         <div class="relative z-10">
             <slot />
         </div>
+
+        <!-- Elemen dekoratif yang "mengintip" dari luar batas hero -->
+        <slot name="peek" />
     </div>
 </template>
 

@@ -55,7 +55,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
             <!-- Ring Score Card -->
             <div
-                class="md:col-span-2 bg-white rounded-2xl border border-slate-100 p-5 sm:p-6 shadow-sm flex items-center gap-6 relative overflow-hidden"
+                class="md:col-span-2 bg-white rounded-2xl border border-slate-100 p-5 sm:p-6 shadow-sm flex items-center gap-4 sm:gap-6 relative overflow-hidden"
             >
                 <div
                     class="relative shrink-0 h-20 w-20 flex items-center justify-center"
@@ -80,15 +80,16 @@
                             stroke="#2563eb"
                             stroke-width="6"
                             stroke-linecap="round"
-                            :stroke-dasharray="strokeDasharray"
-                            :stroke-dashoffset="strokeDashoffset"
+                            :stroke-dasharray="ringCircumference"
+                            :stroke-dashoffset="ringOffset"
                             class="transition-all duration-1000 ease-out"
                         />
                     </svg>
                     <span
-                        class="absolute inset-0 flex items-center justify-center text-lg font-bold text-slate-800"
+                        class="absolute inset-0 flex items-center justify-center font-bold text-slate-800"
+                        :class="scoreTextClass"
                     >
-                        {{ matchScore }}%
+                        {{ scoreDisplay }}
                     </span>
                 </div>
 
@@ -376,9 +377,23 @@ const topCareer = computed(() => ({
 }));
 const matchScore = computed(() => analysis.value?.match_score ?? 0);
 
-const strokeDasharray = 188;
-const strokeDashoffset = computed(() => {
-    return strokeDasharray - (strokeDasharray * matchScore.value) / 100;
+const RING_RADIUS = 30;
+const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
+
+const scoreDisplay = computed(() => `${Math.round(matchScore.value)}%`);
+
+const ringCircumference = computed(() => RING_CIRCUMFERENCE);
+
+const ringOffset = computed(() => {
+    const score = Math.min(Math.max(matchScore.value, 0), 100);
+    return RING_CIRCUMFERENCE - (score / 100) * RING_CIRCUMFERENCE;
+});
+
+const scoreTextClass = computed(() => {
+    const score = Math.round(matchScore.value);
+    if (score >= 100) return "text-base";
+    if (score >= 10) return "text-lg";
+    return "text-xl";
 });
 
 onMounted(async () => {

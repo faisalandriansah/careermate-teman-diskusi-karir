@@ -39,14 +39,13 @@
                 >
                     Total {{ rawHistory.length }} Kali Analisis
                 </span>
-                <span>•</span>
                 <span
+                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-slate-500"
                     >Rata-rata Skor Match:
                     <strong class="text-slate-800">{{ avgScore }}%</strong></span
                 >
-                <span>•</span>
                 <span
-                    class="text-emerald-600 font-semibold inline-flex items-center gap-1"
+                    class="text-emerald-600 font-semibold inline-flex items-center gap-1 px-2.5 py-1"
                 >
                     <svg
                         class="w-3.5 h-3.5"
@@ -66,7 +65,7 @@
             </div>
 
             <!-- Custom Sort Dropdown -->
-            <div class="relative shrink-0" ref="dropdownRef">
+            <div class="relative shrink-0 ml-auto" ref="dropdownRef">
                 <button
                     @click="isSortOpen = !isSortOpen"
                     class="flex items-center gap-2 text-xs font-semibold text-slate-700 bg-white border border-slate-200 rounded-xl px-3.5 py-2 hover:bg-slate-50 hover:border-slate-300 transition shadow-sm"

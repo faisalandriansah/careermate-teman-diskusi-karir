@@ -31,26 +31,36 @@
         </StudentHero>
 
         <!-- ========== STATS ========== -->
-        <div class="grid grid-cols-3 gap-3 mb-6">
+        <div class="grid grid-cols-3 gap-2 sm:gap-3 mb-6">
             <div
-                class="bg-white rounded-2xl border border-slate-100 shadow-sm px-3 py-4 text-center"
+                class="bg-white rounded-2xl border border-slate-100 shadow-sm px-2 sm:px-3 py-3 sm:py-4 text-center"
             >
-                <p class="text-lg md:text-2xl font-bold text-slate-900">
+                <p class="text-base sm:text-lg md:text-2xl font-bold text-slate-900">
                     &lt; 5<span class="text-blue-600">mnt</span>
                 </p>
-                <p class="text-[11px] text-slate-500 mt-1">Rata-rata respon</p>
+                <p class="text-[10px] sm:text-[11px] text-slate-500 mt-1">
+                    Rata-rata respon
+                </p>
             </div>
             <div
-                class="bg-white rounded-2xl border border-slate-100 shadow-sm px-3 py-4 text-center"
+                class="bg-white rounded-2xl border border-slate-100 shadow-sm px-2 sm:px-3 py-3 sm:py-4 text-center"
             >
-                <p class="text-lg md:text-2xl font-bold text-slate-900">24/7</p>
-                <p class="text-[11px] text-slate-500 mt-1">Layanan aktif</p>
+                <p class="text-base sm:text-lg md:text-2xl font-bold text-slate-900">
+                    24/7
+                </p>
+                <p class="text-[10px] sm:text-[11px] text-slate-500 mt-1">
+                    Layanan aktif
+                </p>
             </div>
             <div
-                class="bg-white rounded-2xl border border-slate-100 shadow-sm px-3 py-4 text-center"
+                class="bg-white rounded-2xl border border-slate-100 shadow-sm px-2 sm:px-3 py-3 sm:py-4 text-center"
             >
-                <p class="text-lg md:text-2xl font-bold text-slate-900">99%</p>
-                <p class="text-[11px] text-slate-500 mt-1">Masalah teratasi</p>
+                <p class="text-base sm:text-lg md:text-2xl font-bold text-slate-900">
+                    99%
+                </p>
+                <p class="text-[10px] sm:text-[11px] text-slate-500 mt-1">
+                    Masalah teratasi
+                </p>
             </div>
         </div>
 

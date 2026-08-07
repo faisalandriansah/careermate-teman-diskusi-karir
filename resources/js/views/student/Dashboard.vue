@@ -36,16 +36,25 @@
             </div>
 
             <!-- Greeting Content -->
-            <div class="relative z-10">
+            <div
+                class="relative z-10 pr-28 sm:pr-36 md:pr-40 lg:pr-48"
+            >
                 <p
-                    class="text-xs font-medium text-blue-300 uppercase tracking-widest mb-1"
+                    class="text-xs font-medium text-blue-300 uppercase tracking-widest mb-1 animate-greeting"
+                    style="animation-delay: 0.05s"
                 >
                     {{ greetingTime }}
                 </p>
-                <h1 class="text-2xl md:text-3xl font-semibold text-white">
+                <h1
+                    class="text-2xl md:text-3xl font-semibold text-white animate-greeting"
+                    style="animation-delay: 0.15s"
+                >
                     Halo, {{ studentName }} 👋
                 </h1>
-                <p class="mt-2 text-sm text-blue-200/80 max-w-md">
+                <p
+                    class="mt-2 text-sm text-blue-200/80 max-w-md animate-greeting"
+                    style="animation-delay: 0.25s"
+                >
                     <template v-if="isProfileComplete && lastAnalysis">
                         Kamu sudah
                         <span class="font-semibold text-white"
@@ -63,6 +72,23 @@
                     </template>
                 </p>
             </div>
+
+            <!-- AI Maskot "mengintip" dari bawah kartu hero -->
+            <template #peek>
+                <div
+                    class="absolute -bottom-6 right-3 sm:right-6 pointer-events-none select-none z-10 animate-greeting"
+                    style="animation-delay: 0.4s"
+                >
+                    <div class="relative">
+                        <span class="ai-halo"></span>
+                        <img
+                            src="@/assets/newaiimg.png"
+                            alt="AI Maskot"
+                            class="ai-breathe relative w-28 sm:w-32 md:w-36 lg:w-44"
+                        />
+                    </div>
+                </div>
+            </template>
         </StudentHero>
 
         <!-- Toast Notification (Pengganti alert kaku) -->
@@ -93,9 +119,27 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
             <!-- Analisis Terakhir -->
             <div
-                class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 p-6 md:p-7 fade-up flex flex-col sm:flex-row sm:items-center gap-6"
+                class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 p-6 md:p-7 fade-up flex flex-col sm:flex-row sm:items-center gap-6 transition-transform duration-300 hover:-translate-y-0.5"
                 style="animation-delay: 0.05s"
             >
+                <template v-if="isDashboardLoading">
+                    <div
+                        class="shrink-0 h-24 w-24 mx-auto sm:mx-0 rounded-full bg-slate-100 animate-pulse"
+                    ></div>
+                    <div class="flex-1 space-y-3">
+                        <div
+                            class="h-3 w-28 bg-slate-200 rounded animate-pulse"
+                        ></div>
+                        <div
+                            class="h-5 w-44 bg-slate-200 rounded animate-pulse"
+                        ></div>
+                        <div
+                            class="h-6 w-32 bg-slate-100 rounded-full animate-pulse"
+                        ></div>
+                    </div>
+                </template>
+
+                <template v-else>
                 <div class="relative shrink-0 h-24 w-24 mx-auto sm:mx-0">
                     <svg viewBox="0 0 80 80" class="h-24 w-24 -rotate-90">
                         <circle
@@ -125,7 +169,7 @@
                     >
                         {{
                             isProfileComplete && lastAnalysis
-                                ? `${lastAnalysis.score}%`
+                                ? `${animatedScore}%`
                                 : "--"
                         }}
                     </span>
@@ -180,13 +224,32 @@
                         Lihat detail analisis &rarr;
                     </button>
                 </div>
+                </template>
             </div>
 
             <!-- Upload Terakhir -->
             <div
-                class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 md:p-7 fade-up flex flex-col justify-center"
+                class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 md:p-7 fade-up flex flex-col justify-center transition-transform duration-300 hover:-translate-y-0.5"
                 style="animation-delay: 0.1s"
             >
+                <template v-if="isDashboardLoading">
+                    <div
+                        class="h-12 w-12 rounded-xl bg-slate-100 animate-pulse mb-4"
+                    ></div>
+                    <div class="space-y-2">
+                        <div
+                            class="h-3 w-24 bg-slate-200 rounded animate-pulse"
+                        ></div>
+                        <div
+                            class="h-5 w-32 bg-slate-200 rounded animate-pulse"
+                        ></div>
+                        <div
+                            class="h-3 w-28 bg-slate-100 rounded animate-pulse"
+                        ></div>
+                    </div>
+                </template>
+
+                <template v-else>
                 <div
                     class="h-12 w-12 rounded-xl bg-amber-50 flex items-center justify-center mb-4"
                 >
@@ -223,6 +286,7 @@
                             : "Belum mengunggah CV"
                     }}
                 </p>
+                </template>
             </div>
         </div>
 
@@ -236,23 +300,58 @@
                     Progress Roadmap
                 </h2>
                 <span
+                    v-if="isDashboardLoading"
+                    class="text-sm font-bold text-slate-400 bg-slate-100 px-3 py-1 rounded-full animate-pulse"
+                >
+                    --%
+                </span>
+                <span
+                    v-else
                     class="text-sm font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full"
                 >
                     {{ isProfileComplete ? roadmapProgress : 0 }}%
                 </span>
             </div>
 
-            <div class="relative px-3">
+            <div v-if="isDashboardLoading" class="relative px-3">
+                <div class="absolute top-3 left-3 right-3 h-1 rounded-full">
+                    <div
+                        class="h-full bg-slate-200 rounded-full animate-pulse"
+                    ></div>
+                </div>
+                <div class="relative flex justify-between">
+                    <div
+                        v-for="n in 4"
+                        :key="n"
+                        class="flex flex-col items-center"
+                    >
+                        <div
+                            class="h-6 w-6 rounded-full bg-slate-100 animate-pulse"
+                        ></div>
+                        <div
+                            class="mt-3 h-3 w-14 bg-slate-100 rounded animate-pulse"
+                        ></div>
+                    </div>
+                </div>
+            </div>
+
+            <div v-else class="relative px-3">
                 <!-- Progress Track -->
                 <div
                     class="absolute top-3 left-3 right-3 h-1 bg-slate-100 rounded-full"
                 />
                 <div
-                    class="absolute top-3 left-3 h-1 bg-emerald-500 rounded-full transition-all duration-700"
-                    :style="{
-                        width: `${isProfileComplete ? roadmapProgress : 0}%`,
-                    }"
-                />
+                    class="absolute top-3 left-3 right-3 h-1 overflow-hidden rounded-full"
+                >
+                    <div
+                        class="progress-fill"
+                        :style="{
+                            transform: `scaleX(${roadmapProgressScale})`,
+                        }"
+                    >
+                        <span class="progress-shimmer"></span>
+                    </div>
+                </div>
 
                 <!-- Milestones -->
                 <div class="relative flex justify-between">
@@ -262,13 +361,17 @@
                         class="flex flex-col items-center"
                     >
                         <div
-                            class="h-6 w-6 rounded-full border-2 flex items-center justify-center text-[10px] font-bold transition-colors duration-500 z-10"
-                            :class="
+                            class="h-6 w-6 rounded-full border-2 flex items-center justify-center text-[10px] font-bold transition-colors duration-500 z-10 milestone-dot"
+                            :class="[
                                 isProfileComplete &&
                                 roadmapProgress >= milestone.threshold
                                     ? 'bg-emerald-500 border-emerald-500 text-white'
-                                    : 'bg-white border-slate-300 text-slate-400'
-                            "
+                                    : 'bg-white border-slate-300 text-slate-400',
+                                isProfileComplete &&
+                                roadmapProgress >= milestone.threshold
+                                    ? 'milestone-pop'
+                                    : '',
+                            ]"
                         >
                             <svg
                                 v-if="
@@ -288,7 +391,7 @@
                             <span v-else>{{ index + 1 }}</span>
                         </div>
                         <span
-                            class="mt-2 text-xs text-center"
+                            class="mt-2 text-[10px] sm:text-xs text-center"
                             :class="
                                 isProfileComplete &&
                                 roadmapProgress >= milestone.threshold
@@ -421,6 +524,7 @@ import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import StudentHero from "@/components/student/StudentHero.vue";
+import analysisService from "@/services/student/analysisService";
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -430,18 +534,93 @@ const showToast = ref(false);
 const isShaking = ref(false);
 const isProfileLoading = ref(true);
 let toastTimer = null;
+let scoreTimer = null;
 
 // User State
 const studentName = computed(() => authStore.user?.name ?? "Mahasiswa");
 const isProfileComplete = computed(() => authStore.isProfileComplete ?? false);
 
-// Data Mock / State (Akan null jika profil belum lengkap)
-const lastAnalysis = ref({
-    role: "Backend Developer",
-    score: 95,
+// Data Analisis Terakhir (dinamis dari API, dengan cache agar cepat saat kembali)
+const CACHE_KEY = "latestAnalysis";
+
+function readCachedAnalysis() {
+    try {
+        const raw = localStorage.getItem(CACHE_KEY);
+        return raw ? JSON.parse(raw) : null;
+    } catch {
+        return null;
+    }
+}
+
+function writeCachedAnalysis(data) {
+    try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+    } catch {
+        /* ignore quota errors */
+    }
+}
+
+function clearCachedAnalysis() {
+    try {
+        localStorage.removeItem(CACHE_KEY);
+    } catch {
+        /* ignore */
+    }
+}
+
+const latestAnalysis = ref(readCachedAnalysis());
+const isDashboardLoading = ref(!latestAnalysis.value);
+
+const lastAnalysis = computed(() => {
+    if (!latestAnalysis.value) return null;
+    return {
+        id: latestAnalysis.value.id,
+        role: latestAnalysis.value.career?.title ?? "Belum ada rekomendasi",
+        score: latestAnalysis.value.match_score,
+    };
 });
-const lastUploadDate = ref("03 Agustus 2026");
-const roadmapProgress = ref(40);
+
+const lastUploadDate = computed(() => {
+    if (!latestAnalysis.value?.created_at) return null;
+    return new Date(latestAnalysis.value.created_at).toLocaleDateString(
+        "id-ID",
+        {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+        },
+    );
+});
+
+const roadmapProgress = computed(() => {
+    const score = lastAnalysis.value?.score ?? 0;
+    return Math.min(Math.max(Math.round(score), 0), 100);
+});
+
+const roadmapProgressScale = computed(
+    () => (isProfileComplete.value ? roadmapProgress.value : 0) / 100,
+);
+
+const animatedScore = ref(0);
+
+function animateScore(target) {
+    if (scoreTimer) cancelAnimationFrame(scoreTimer);
+    const start = animatedScore.value;
+    const duration = 1000;
+    const startTime = performance.now();
+    const step = (now) => {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        animatedScore.value = Math.round(start + (target - start) * eased);
+        if (progress < 1) {
+            scoreTimer = requestAnimationFrame(step);
+        } else {
+            scoreTimer = null;
+        }
+    };
+    scoreTimer = requestAnimationFrame(step);
+}
 
 const milestones = [
     { label: "Mulai", threshold: 0 },
@@ -498,35 +677,229 @@ function handleUploadClick() {
 }
 
 function navigateToAnalysis() {
+    if (lastAnalysis.value?.id) {
+        router.push({
+            name: "StudentHasilAnalisis",
+            params: { id: lastAnalysis.value.id },
+        });
+        return;
+    }
     router.push({ name: "StudentCV" });
 }
 
 onMounted(async () => {
+    // Jika ada cache, tampilkan dulu & mulai animasi skor tanpa menunggu jaringan
+    if (latestAnalysis.value) {
+        animateScore(lastAnalysis.value?.score ?? 0);
+    }
+
+    // Jalankan fetchMe & getLatest secara paralel (dulu berurutan → 2x lambat)
     try {
-        await authStore.fetchMe();
+        await Promise.all([
+            authStore.fetchMe(),
+            analysisService
+                .getLatest()
+                .then((result) => {
+                    latestAnalysis.value = result.data;
+                    writeCachedAnalysis(result.data);
+                    animateScore(lastAnalysis.value?.score ?? 0);
+                })
+                .catch(() => {
+                    latestAnalysis.value = null;
+                    clearCachedAnalysis();
+                }),
+        ]);
     } finally {
         isProfileLoading.value = false;
+        isDashboardLoading.value = false;
     }
 });
 
 onUnmounted(() => {
     if (toastTimer) clearTimeout(toastTimer);
+    if (scoreTimer) cancelAnimationFrame(scoreTimer);
 });
 </script>
 
 <style scoped>
 .fade-up {
-    animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
 }
 
 @keyframes fadeUp {
     from {
         opacity: 0;
-        transform: translateY(12px);
+        transform: translate3d(0, 12px, 0);
     }
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+/* Greeting entrance (stagger) */
+.animate-greeting {
+    animation: greetingIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+@keyframes greetingIn {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 10px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+/* AI maskot breathing + halo */
+.ai-breathe {
+    animation: aiBreathe 3.5s ease-in-out infinite;
+    filter: drop-shadow(0 12px 24px rgba(37, 99, 235, 0.45));
+    will-change: transform;
+    backface-visibility: hidden;
+}
+
+@keyframes aiBreathe {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.04);
+    }
+}
+
+.ai-halo {
+    position: absolute;
+    inset: -12px;
+    border-radius: 9999px;
+    background: radial-gradient(
+        circle,
+        rgba(96, 165, 250, 0.55),
+        rgba(37, 99, 235, 0.25) 45%,
+        transparent 70%
+    );
+    filter: blur(20px);
+    animation: aiGlow 3.5s ease-in-out infinite;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+}
+
+/* Bayangan lantai supaya maskot terlihat berdiri */
+.ai-shadow {
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    height: 14px;
+    border-radius: 9999px;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(2, 6, 23, 0.4),
+        transparent 70%
+    );
+    filter: blur(5px);
+}
+
+@media (min-width: 768px) {
+    .ai-halo {
+        inset: -20px;
+    }
+}
+
+@keyframes aiGlow {
+    0%,
+    100% {
+        opacity: 0.7;
+        transform: scale(0.92);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.08);
+    }
+}
+
+/* Progress bar fill + shimmer */
+.progress-fill {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    width: 100%;
+    background: #10b981;
+    border-radius: 9999px;
+    transform-origin: left center;
+    transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+    backface-visibility: hidden;
+}
+
+.progress-shimmer {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.6),
+        transparent
+    );
+    animation: shimmer 1.8s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* Milestone dots */
+.milestone-dot {
+    position: relative;
+}
+
+.milestone-pop {
+    animation: milestonePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5);
+    will-change: transform;
+    backface-visibility: hidden;
+}
+
+.milestone-pop::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border-radius: 9999px;
+    border: 2px solid rgba(16, 185, 129, 0.5);
+    animation: pulseRing 2s infinite;
+}
+
+@keyframes milestonePop {
+    0% {
+        transform: scale(0.4);
+    }
+    60% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes pulseRing {
+    0% {
+        transform: scale(0.8);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.6);
+        opacity: 0;
     }
 }
 
@@ -551,17 +924,38 @@ onUnmounted(() => {
 }
 
 .score-ring {
-    transition: stroke-dashoffset 1s ease-out;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: stroke-dashoffset;
 }
 
 /* Toast Transitions */
 .toast-enter-active,
 .toast-leave-active {
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .toast-enter-from,
 .toast-leave-to {
     opacity: 0;
     transform: translateY(16px) scale(0.95);
+}
+
+/* Hormati user yang mematikan animasi (aksesibilitas & performa) */
+@media (prefers-reduced-motion: reduce) {
+    .fade-up,
+    .animate-greeting,
+    .ai-breathe,
+    .ai-halo,
+    .progress-shimmer,
+    .milestone-pop,
+    .milestone-pop::after,
+    .animate-shake,
+    .toast-enter-active,
+    .toast-leave-active {
+        animation: none !important;
+        transition: none !important;
+    }
+    .progress-fill {
+        transition: none !important;
+    }
 }
 </style>
