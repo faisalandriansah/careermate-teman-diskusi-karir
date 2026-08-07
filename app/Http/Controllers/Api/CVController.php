@@ -13,6 +13,7 @@ use App\Services\SkillDetectionService;
 use App\Services\CareerMatchingService;
 use App\Services\RoadmapGeneratorService;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class CVController extends Controller
@@ -193,5 +194,18 @@ class CVController extends Controller
         return response()->json([
             'data' => $analysisResult,
         ]);
+    }
+
+    public function downloadPdf(AnalysisResult $analysisResult)
+    {
+        abort_if($analysisResult->user_id !== auth()->id(), 403, 'Anda tidak berhak mengakses data ini.');
+
+        $analysisResult->load('career');
+
+        $pdf = Pdf::loadView('pdf.hasil-analisis', [
+            'analysis' => $analysisResult,
+        ]);
+
+        return $pdf->download('hasil-analisis-' . $analysisResult->id . '.pdf');
     }
 }

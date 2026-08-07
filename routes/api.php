@@ -40,6 +40,7 @@ Route::middleware(['auth:sanctum', 'role:mahasiswa'])
             Route::post('/analysis/{analysisResult}/generate-roadmap', [CVController::class, 'generateRoadmap']);
             Route::get('/analysis/latest', [CVController::class, 'latestResult']);
             Route::get('/analysis/{analysisResult}', [CVController::class, 'showResult']);
+            Route::get('/analysis/{analysisResult}/pdf', [CVController::class, 'downloadPdf']); //download pdf
         });
     });
 

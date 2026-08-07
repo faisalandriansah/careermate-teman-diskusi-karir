@@ -296,7 +296,7 @@
         </div>
 
         <!-- Actions -->
-        <div class="flex flex-col sm:flex-row gap-3">
+        <div class="no-print flex flex-col sm:flex-row gap-3">
             <button
                 @click="downloadPdf"
                 class="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl border border-slate-300 bg-white text-slate-700 text-xs font-semibold hover:bg-slate-50 transition active:scale-95 shadow-sm"
@@ -344,9 +344,11 @@ import { ref, computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import StudentHero from "@/components/student/StudentHero.vue";
 import analysisService from "@/services/student/analysisService";
+import apiClient from "@/services/api";
 
 const route = useRoute();
 const router = useRouter();
+const analysisId = route.params.id;
 
 const loading = ref(true);
 const errorMessage = ref("");
@@ -411,8 +413,29 @@ onMounted(async () => {
     }
 });
 
-function downloadPdf() {
-    alert("Fitur download PDF belum tersedia.");
+async function downloadPdf() {
+    try {
+        const id = analysis.value?.id;
+        if (!id) {
+            alert("Data analisis belum tersedia.");
+            return;
+        }
+
+        const response = await apiClient.get(`student/analysis/${id}/pdf`, {
+            responseType: "blob",
+        });
+
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `hasil-analisis-${id}.pdf`);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
+    } catch (err) {
+        alert("Gagal mengunduh PDF. Silakan coba lagi.");
+    }
 }
 
 function reuploadCv() {
