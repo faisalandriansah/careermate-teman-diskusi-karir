@@ -247,7 +247,7 @@ const router = createRouter({
     routes,
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, from) => {
     const token = localStorage.getItem("token");
     const rawUser = localStorage.getItem("user");
 
@@ -264,26 +264,26 @@ router.beforeEach((to, from, next) => {
 
     // Jika membutuhkan autentikasi tapi token tidak ada
     if (to.meta.requiresAuth && !token) {
-        return next("/login");
+        return "/login";
     }
 
     // Jika sudah login tetapi mencoba akses halaman login/register
     if ((to.path === "/login" || to.path === "/register") && token) {
         if (user?.role === "admin") {
-            return next("/admin/dashboard");
+            return "/admin/dashboard";
         }
-        return next("/student/dashboard");
+        return "/student/dashboard";
     }
 
     // Cek role user
     if (to.meta.role && user?.role !== to.meta.role) {
         if (user?.role === "admin") {
-            return next("/admin/dashboard");
+            return "/admin/dashboard";
         }
-        return next("/student/dashboard");
+        return "/student/dashboard";
     }
 
-    next();
+    return true;
 });
 
 export default router;

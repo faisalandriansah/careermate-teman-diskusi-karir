@@ -206,6 +206,29 @@ class CVController extends Controller
             'analysis' => $analysisResult,
         ]);
 
+        $this->registerPdfFonts($pdf);
+
         return $pdf->download('hasil-analisis-' . $analysisResult->id . '.pdf');
+    }
+
+    private function registerPdfFonts(\Barryvdh\DomPDF\PDF $pdf): void
+    {
+        $fontDir = storage_path('fonts');
+        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
+
+        $fonts = [
+            'Regular' => 'normal',
+            'Medium' => '500',
+            'SemiBold' => '600',
+            'Bold' => 'bold',
+        ];
+
+        foreach ($fonts as $name => $weight) {
+            $fontMetrics->registerFont([
+                'family' => 'Inter',
+                'weight' => $weight,
+                'style' => 'normal',
+            ], $fontDir . '/Inter/Inter-' . $name . '.ttf');
+        }
     }
 }
