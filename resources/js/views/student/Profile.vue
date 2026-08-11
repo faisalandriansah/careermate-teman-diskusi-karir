@@ -298,16 +298,18 @@
                             >
                                 <svg
                                     class="w-5 h-5"
-                                    fill="none"
-                                    stroke="currentColor"
+                                    :fill="link.filled ? 'currentColor' : 'none'"
+                                    :stroke="link.filled ? 'none' : 'currentColor'"
                                     viewBox="0 0 24 24"
                                 >
                                     <path
+                                        v-if="!link.filled"
                                         stroke-linecap="round"
                                         stroke-linejoin="round"
                                         stroke-width="1.8"
                                         :d="link.iconD"
                                     />
+                                    <path v-else :d="link.iconD" />
                                 </svg>
                             </div>
                             <div class="min-w-0 flex-1">
@@ -479,7 +481,8 @@ const links = [
         key: "linkedin_url",
         label: "LinkedIn",
         placeholder: "linkedin.com/in/username",
-        iconD: "M21 13v10h-6v-8a2 2 0 00-2-2 2 2 0 00-2 2v8h-6v-10h6v1.8c.8-1.2 2.1-1.8 3.5-1.8 3.2 0 5.5 2.1 5.5 6.2zM3 9h4v14h-4zM5 3a2 2 0 100 4 2 2 0 000-4z",
+        filled: true,
+        iconD: "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 11.001-4.124 2.062 2.062 0 01-.001 4.124zM7.114 20.452H3.558V9h3.556v11.452z",
     },
     {
         key: "portfolio_url",

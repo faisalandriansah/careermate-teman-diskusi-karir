@@ -231,4 +231,16 @@ class CVController extends Controller
             ], $fontDir . '/Inter/Inter-' . $name . '.ttf');
         }
     }
+
+    public function history(Request $request)
+    {
+        $results = AnalysisResult::with('career', 'cvFile')
+            ->where('user_id', $request->user()->id)
+            ->orderByDesc('created_at')
+            ->get();
+
+        return response()->json([
+            'data' => $results,
+        ]);
+    }
 }

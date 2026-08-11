@@ -1,4 +1,24 @@
 <template>
+    <div v-if="loading" class="flex items-center justify-center py-24">
+        <p class="text-sm text-slate-400">Memuat riwayat analisis...</p>
+    </div>
+
+    <div
+        v-else-if="errorMessage"
+        class="flex flex-col items-center justify-center py-24 gap-3"
+    >
+        <p class="text-sm text-rose-500">{{ errorMessage }}</p>
+    </div>
+
+    <div
+        v-else-if="rawHistory.length === 0"
+        class="flex flex-col items-center justify-center py-24 gap-3"
+    >
+        <p class="text-sm text-slate-400">Belum ada riwayat analisis.</p>
+        <router-link to="/student/cv" class="text-sm text-blue-600 underline">
+            Upload CV Sekarang
+        </router-link>
+    </div>
     <div class="container mx-auto px-4 py-8 max-w-4xl">
         <!-- Header Page -->
         <StudentHero compact>
@@ -42,7 +62,9 @@
                 <span
                     class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-slate-500"
                     >Rata-rata Skor Match:
-                    <strong class="text-slate-800">{{ avgScore }}%</strong></span
+                    <strong class="text-slate-800"
+                        >{{ avgScore }}%</strong
+                    ></span
                 >
                 <span
                     class="text-emerald-600 font-semibold inline-flex items-center gap-1 px-2.5 py-1"
@@ -340,48 +362,14 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
+import { useRouter } from "vue-router";
 import StudentHero from "@/components/student/StudentHero.vue";
+import analysisService from "@/services/student/analysisService";
 
-const emit = defineEmits(["select"]);
-
-const rawHistory = [
-    {
-        id: 1,
-        date: "2026-08-03",
-        dateShort: "03 Agu 2026",
-        role: "Backend Developer",
-        skills: "PHP, Laravel, MySQL",
-        score: 95,
-        iconBg: "bg-blue-50",
-        iconColor: "text-blue-600",
-        iconPath:
-            "M5 12a2 2 0 012-2h10a2 2 0 012 2v6a2 2 0 01-2 2H7a2 2 0 01-2-2v-6zM5 12V8a2 2 0 012-2h10a2 2 0 012 2v4M9 16h.01M13 16h.01",
-    },
-    {
-        id: 2,
-        date: "2026-07-20",
-        dateShort: "20 Jul 2026",
-        role: "Backend Developer",
-        skills: "PHP, Laravel, MySQL",
-        score: 90,
-        iconBg: "bg-blue-50",
-        iconColor: "text-blue-600",
-        iconPath:
-            "M5 12a2 2 0 012-2h10a2 2 0 012 2v6a2 2 0 01-2 2H7a2 2 0 01-2-2v-6zM5 12V8a2 2 0 012-2h10a2 2 0 012 2v4M9 16h.01M13 16h.01",
-    },
-    {
-        id: 3,
-        date: "2026-07-12",
-        dateShort: "12 Jul 2026",
-        role: "Frontend Developer",
-        skills: "Vue.js, JavaScript, Tailwind",
-        score: 82,
-        iconBg: "bg-blue-50",
-        iconColor: "text-blue-600",
-        iconPath:
-            "M4 6a2 2 0 012-2h12a2 2 0 012 2v2H4V6zM4 10h16v8a2 2 0 01-2 2H6a2 2 0 01-2-2v-8z",
-    },
-];
+const router = useRouter();
+const loading = ref(true);
+const errorMessage = ref("");
+const rawHistory = ref([]);
 
 const sortOptions = [
     { value: "terbaru", label: "Terbaru" },
@@ -409,11 +397,54 @@ function handleClickOutside(e) {
     }
 }
 
-onMounted(() => document.addEventListener("click", handleClickOutside));
+onMounted(async () => {
+    document.addEventListener("click", handleClickOutside);
+
+    try {
+        const result = await analysisService.getHistory();
+        rawHistory.value = mapHistory(result.data);
+    } catch (err) {
+        errorMessage.value = "Gagal memuat riwayat analisis.";
+    } finally {
+        loading.value = false;
+    }
+});
 onUnmounted(() => document.removeEventListener("click", handleClickOutside));
 
+// Ubah data mentah dari API jadi bentuk yang dipakai tampilan
+function mapHistory(items) {
+    return items.map((item) => {
+        const skillNames = (item.skills_json ?? [])
+            .map((s) => (typeof s === "string" ? s : s.name))
+            .slice(0, 3)
+            .join(", ");
+
+        return {
+            id: item.id,
+            date: item.created_at,
+            dateShort: formatDateShort(item.created_at),
+            role: item.career?.title ?? "Belum ada rekomendasi",
+            skills: skillNames || "Belum ada skill terdeteksi",
+            score: item.match_score ?? 0,
+            iconBg: "bg-blue-50",
+            iconColor: "text-blue-600",
+            iconPath:
+                "M5 12a2 2 0 012-2h10a2 2 0 012 2v6a2 2 0 01-2 2H7a2 2 0 01-2-2v-6zM5 12V8a2 2 0 012-2h10a2 2 0 012 2v4M9 16h.01M13 16h.01",
+        };
+    });
+}
+
+function formatDateShort(dateStr) {
+    if (!dateStr) return "-";
+    return new Date(dateStr).toLocaleDateString("id-ID", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+    });
+}
+
 const history = computed(() =>
-    rawHistory.map((item, i) => ({ ...item, isLatest: i === 0 })),
+    rawHistory.value.map((item, i) => ({ ...item, isLatest: i === 0 })),
 );
 
 const sortedHistory = computed(() => {
@@ -424,15 +455,20 @@ const sortedHistory = computed(() => {
     return items.sort((a, b) => new Date(b.date) - new Date(a.date));
 });
 
-const avgScore = computed(() =>
-    Math.round(
-        rawHistory.reduce((sum, h) => sum + h.score, 0) / rawHistory.length,
-    ),
-);
+const avgScore = computed(() => {
+    if (rawHistory.value.length === 0) return 0;
+    return Math.round(
+        rawHistory.value.reduce((sum, h) => sum + h.score, 0) /
+            rawHistory.value.length,
+    );
+});
 
 const trendLabel = computed(() => {
-    if (rawHistory.length < 2) return "belum ada tren";
-    const diff = rawHistory[0].score - rawHistory[1].score;
+    if (rawHistory.value.length < 2) return "belum ada tren";
+    const sorted = [...rawHistory.value].sort(
+        (a, b) => new Date(b.date) - new Date(a.date),
+    );
+    const diff = sorted[0].score - sorted[1].score;
     if (diff > 0) return `naik ${diff} poin dari analisis sebelumnya`;
     if (diff < 0)
         return `turun ${Math.abs(diff)} poin dari analisis sebelumnya`;
@@ -440,6 +476,6 @@ const trendLabel = computed(() => {
 });
 
 function viewDetail(item) {
-    emit("select", item);
+    router.push({ name: "StudentHasilAnalisis", params: { id: item.id } });
 }
 </script>

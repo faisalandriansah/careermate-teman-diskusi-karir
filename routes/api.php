@@ -38,6 +38,7 @@ Route::middleware(['auth:sanctum', 'role:mahasiswa'])
             Route::post('/cv/{cvFile}/detect-skills', [CVController::class, 'detectSkills']);
             Route::post('/analysis/{analysisResult}/match-career', [CVController::class, 'matchCareer']);
             Route::post('/analysis/{analysisResult}/generate-roadmap', [CVController::class, 'generateRoadmap']);
+            Route::get('/analysis/history', [CVController::class, 'history']);
             Route::get('/analysis/latest', [CVController::class, 'latestResult']);
             Route::get('/analysis/{analysisResult}', [CVController::class, 'showResult']);
             Route::get('/analysis/{analysisResult}/pdf', [CVController::class, 'downloadPdf']); //download pdf
