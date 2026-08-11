@@ -241,12 +241,14 @@
             <div
                 class="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm"
             >
-                <div class="flex items-center justify-between mb-3.5">
+                <div
+                    class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-3 mb-3.5"
+                >
                     <p
                         class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5"
                     >
                         <svg
-                            class="w-3.5 h-3.5 text-blue-600"
+                            class="w-3.5 h-3.5 text-blue-600 shrink-0"
                             fill="currentColor"
                             viewBox="0 0 24 24"
                         >
@@ -256,15 +258,16 @@
                         </svg>
                         Roadmap Pengembangan AI
                     </p>
-                    <span class="text-[10px] text-slate-400"
+                    <span
+                        class="text-[10px] text-slate-400 shrink-0 whitespace-nowrap"
                         >Langkah yang Disarankan</span
                     >
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
                     <div
                         v-for="(step, i) in roadmapSteps"
                         :key="step"
-                        class="flex items-start gap-2.5 p-3 bg-slate-50 border border-slate-100 rounded-xl"
+                        class="flex items-start gap-2.5 p-3 bg-slate-50 border border-slate-100 rounded-xl min-w-0"
                     >
                         <span
                             class="h-5 w-5 mt-0.5 rounded-lg bg-blue-600 text-white text-[11px] font-bold flex items-center justify-center shrink-0 shadow-sm"
@@ -272,7 +275,7 @@
                             {{ i + 1 }}
                         </span>
                         <span
-                            class="text-xs font-semibold text-slate-700 leading-snug"
+                            class="text-xs font-semibold text-slate-700 leading-snug min-w-0 flex-1 break-words"
                             >{{ step }}</span
                         >
                     </div>

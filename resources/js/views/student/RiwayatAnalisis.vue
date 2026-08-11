@@ -19,7 +19,10 @@
             Upload CV Sekarang
         </router-link>
     </div>
-    <div class="container mx-auto px-4 py-8 max-w-4xl">
+    <div
+        v-else
+        class="container mx-auto px-4 py-8 max-w-5xl"
+    >
         <!-- Header Page -->
         <StudentHero compact>
             <div
@@ -51,9 +54,9 @@
 
         <!-- Stats & Sort Bar -->
         <div
-            class="flex flex-wrap items-center justify-between gap-3 mb-6 text-xs text-slate-500 font-medium bg-slate-50 p-3 rounded-xl border border-slate-100"
+            class="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center justify-between gap-3 mb-6 text-xs text-slate-500 font-medium bg-slate-50 p-3 rounded-xl border border-slate-100"
         >
-            <div class="flex flex-wrap items-center gap-2">
+            <div class="flex flex-wrap items-center gap-2 min-w-0">
                 <span
                     class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white border border-slate-200 text-slate-700 font-semibold"
                 >
@@ -258,9 +261,9 @@
                     </button>
                 </div>
 
-                <!-- ===== Desktop Layout (sm+) ===== -->
+                <!-- ===== Tablet/Desktop Layout (sm+) ===== -->
                 <div
-                    class="hidden sm:grid grid-cols-[40px_110px_1fr_160px_100px] items-center gap-4 px-5 py-4"
+                    class="hidden sm:grid grid-cols-[40px_minmax(0,1fr)_110px_90px] lg:grid-cols-[40px_110px_minmax(0,1fr)_150px_100px] items-center gap-3 lg:gap-4 px-4 sm:px-5 py-4"
                 >
                     <!-- Icon -->
                     <div
@@ -283,10 +286,11 @@
                         </svg>
                     </div>
 
-                    <!-- Date -->
-                    <span class="text-xs font-medium text-slate-400">{{
-                        item.dateShort
-                    }}</span>
+                    <!-- Date (hanya tampil di lg+) -->
+                    <span
+                        class="hidden lg:block text-xs font-medium text-slate-400 truncate"
+                        >{{ item.dateShort }}</span
+                    >
 
                     <!-- Role & Skills -->
                     <div class="min-w-0">
@@ -309,9 +313,11 @@
                     </div>
 
                     <!-- Score Progress -->
-                    <div class="flex items-center gap-2.5">
+                    <div
+                        class="flex items-center gap-2 lg:gap-2.5 min-w-0 mr-1.5 sm:mr-2 lg:mr-3"
+                    >
                         <div
-                            class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden"
+                            class="flex-1 min-w-0 h-2 bg-slate-100 rounded-full overflow-hidden"
                         >
                             <div
                                 class="h-full rounded-full transition-all duration-500"
@@ -324,7 +330,7 @@
                             ></div>
                         </div>
                         <span
-                            class="text-xs font-bold w-9 text-right"
+                            class="text-xs font-bold w-9 text-right shrink-0"
                             :class="
                                 item.isLatest
                                     ? 'text-blue-600'
