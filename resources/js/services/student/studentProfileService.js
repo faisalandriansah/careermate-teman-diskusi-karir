@@ -10,4 +10,20 @@ export default {
         const { data } = await apiClient.put("student/profile", payload);
         return data;
     },
-}; 
+
+    async uploadPhoto(file) {
+        const formData = new FormData();
+        formData.append("photo", file);
+
+        const { data } = await apiClient.post(
+            "student/profile/photo",
+            formData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            },
+        );
+        return data;
+    },
+};

@@ -1,19 +1,82 @@
 <template>
-    <div v-if="loading" class="flex items-center justify-center py-24">
+    <div v-if="loading" class="flex flex-col items-center justify-center py-24 gap-4">
+        <div class="loading-ring"></div>
         <p class="text-sm text-slate-400">Memuat hasil analisis...</p>
     </div>
 
+    <EmptyState
+        v-else-if="isEmpty"
+        icon="analysis"
+        title="Belum Ada Hasil Analisis"
+        description="Upload CV-mu sekarang dan biarkan AI menganalisis kecocokan karier, skill yang kamu kuasai, serta roadmap pengembangan yang disarankan."
+        :steps="['Upload CV kamu', 'AI menganalisis profil', 'Terima rekomendasi karier']"
+        primary-label="Upload CV Sekarang"
+        :primary-to="{ name: 'StudentCV' }"
+        secondary-label="Lihat Riwayat Analisis"
+        :secondary-to="{ name: 'StudentRiwayatAnalisis' }"
+    />
+
     <div
         v-else-if="errorMessage"
-        class="flex flex-col items-center justify-center py-24 gap-3"
+        class="container mx-auto px-4 py-8 max-w-2xl"
     >
-        <p class="text-sm text-rose-500">{{ errorMessage }}</p>
-        <button
-            @click="router.push({ name: 'StudentCV' })"
-            class="text-sm text-blue-600 underline"
+        <div
+            class="relative overflow-hidden rounded-3xl bg-white border border-slate-100 shadow-sm"
         >
-            Kembali ke Upload CV
-        </button>
+            <div class="px-6 py-12 flex flex-col items-center text-center">
+                <div
+                    class="h-16 w-16 rounded-2xl bg-rose-50 border border-rose-100 flex items-center justify-center mb-5"
+                >
+                    <svg
+                        class="h-8 w-8 text-rose-500"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M12 9v3.75m0 3.75h.008v.008H12v-.008zM21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                    </svg>
+                </div>
+                <h2 class="text-lg font-bold text-slate-800">
+                    Gagal Memuat Hasil Analisis
+                </h2>
+                <p class="mt-2 max-w-sm text-sm text-slate-500">
+                    {{ errorMessage }}
+                </p>
+                <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                    <button
+                        type="button"
+                        @click="loadAnalysis"
+                        class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition active:scale-95 shadow-md shadow-blue-600/25"
+                    >
+                        <svg
+                            class="h-4 w-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                            />
+                        </svg>
+                        Coba Lagi
+                    </button>
+                    <router-link
+                        :to="{ name: 'StudentCV' }"
+                        class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-slate-200 bg-white text-slate-700 text-xs font-semibold hover:bg-slate-50 transition active:scale-95 shadow-sm"
+                    >
+                        Kembali ke Upload CV
+                    </router-link>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div v-else class="container mx-auto px-4 py-8 max-w-5xl">
@@ -104,14 +167,20 @@
                     >
                         {{ topCareer.title }}
                     </h1>
+                    <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                        Seberapa cocok profil CV kamu dengan peran ini, dinilai
+                        oleh AI dari skill yang kamu miliki.
+                    </p>
                     <div class="mt-2.5 flex items-center gap-2">
                         <span
-                            class="text-xs font-semibold px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60 inline-flex items-center gap-1.5"
+                            class="text-xs font-semibold px-3 py-1 rounded-full border inline-flex items-center gap-1.5"
+                            :class="matchBadgeClass"
                         >
                             <span
-                                class="h-1.5 w-1.5 rounded-full bg-emerald-500"
+                                class="h-1.5 w-1.5 rounded-full"
+                                :class="matchDotClass"
                             ></span>
-                            Kecocokan Sangat Tinggi
+                            {{ matchLabel }}
                         </span>
                     </div>
                 </div>
@@ -182,6 +251,9 @@
                             >Valid</span
                         >
                     </div>
+                    <p class="text-[11px] text-slate-400 mb-3 -mt-1.5">
+                        Skill yang AI temukan di dalam CV kamu.
+                    </p>
                     <div class="flex flex-wrap gap-1.5">
                         <span
                             v-for="s in detectedSkills"
@@ -223,6 +295,10 @@
                             >Perlu Dipelajari</span
                         >
                     </div>
+                    <p class="text-[11px] text-slate-400 mb-3 -mt-1.5">
+                        Skill yang belum kamu kuasai, tapi penting untuk peran
+                        ini. Mulai pelajari satu per satu ya.
+                    </p>
                     <div class="flex flex-wrap gap-1.5">
                         <span
                             v-for="s in gapSkills"
@@ -263,6 +339,10 @@
                         >Langkah yang Disarankan</span
                     >
                 </div>
+                <p class="text-[11px] text-slate-400 mb-3.5 -mt-1.5">
+                    Panduan langkah demi langkah yang bisa kamu ikuti untuk
+                    mengembangkan skill dan mendekati target kariermu.
+                </p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
                     <div
                         v-for="(step, i) in roadmapSteps"
@@ -292,6 +372,9 @@
                 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2"
             >
                 Ringkasan AI
+            </p>
+            <p class="text-[11px] text-slate-400 mb-3 -mt-1.5">
+                Rangkuman singkat dari AI tentang profil dan potensimu.
             </p>
             <p class="text-sm text-slate-600 leading-relaxed">
                 {{ aiSummary }}
@@ -346,6 +429,7 @@
 import { ref, computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import StudentHero from "@/components/student/StudentHero.vue";
+import EmptyState from "@/components/student/EmptyState.vue";
 import analysisService from "@/services/student/analysisService";
 import apiClient from "@/services/api";
 
@@ -355,6 +439,7 @@ const analysisId = route.params.id;
 
 const loading = ref(true);
 const errorMessage = ref("");
+const isEmpty = ref(false);
 const analysis = ref(null);
 
 const currentDate = computed(() => {
@@ -401,20 +486,54 @@ const scoreTextClass = computed(() => {
     return "text-xl";
 });
 
-onMounted(async () => {
+const matchLabel = computed(() => {
+    const score = Math.round(matchScore.value);
+    if (score >= 80) return "Kecocokan Sangat Tinggi";
+    if (score >= 60) return "Kecocokan Tinggi";
+    if (score >= 40) return "Kecocokan Sedang";
+    return "Kecocokan Perlu Ditingkatkan";
+});
+
+const matchBadgeClass = computed(() => {
+    const score = matchScore.value;
+    if (score >= 80) return "bg-emerald-50 text-emerald-700 border-emerald-200/60";
+    if (score >= 60) return "bg-blue-50 text-blue-700 border-blue-200/60";
+    if (score >= 40) return "bg-amber-50 text-amber-700 border-amber-200/60";
+    return "bg-rose-50 text-rose-700 border-rose-200/60";
+});
+
+const matchDotClass = computed(() => {
+    const score = matchScore.value;
+    if (score >= 80) return "bg-emerald-500";
+    if (score >= 60) return "bg-blue-500";
+    if (score >= 40) return "bg-amber-500";
+    return "bg-rose-500";
+});
+
+async function loadAnalysis() {
+    loading.value = true;
+    errorMessage.value = "";
+    isEmpty.value = false;
     try {
-        const analysisId = route.params.id;
-        const result = analysisId
-            ? await analysisService.getResult(analysisId)
+        const id = route.params.id;
+        const result = id
+            ? await analysisService.getResult(id)
             : await analysisService.getLatest();
         analysis.value = result.data;
     } catch (err) {
-        errorMessage.value =
-            err.response?.data?.message ?? "Gagal memuat hasil analisis.";
+        if (err.response?.status === 404) {
+            isEmpty.value = true;
+        } else {
+            errorMessage.value =
+                err.response?.data?.message ??
+                "Gagal memuat hasil analisis.";
+        }
     } finally {
         loading.value = false;
     }
-});
+}
+
+onMounted(loadAnalysis);
 
 async function downloadPdf() {
     try {
@@ -445,3 +564,26 @@ function reuploadCv() {
     router.push({ name: "StudentCV" });
 }
 </script>
+
+<style scoped>
+.loading-ring {
+    height: 44px;
+    width: 44px;
+    border-radius: 9999px;
+    border: 3px solid #e2e8f0;
+    border-top-color: #2563eb;
+    animation: loadingSpin 0.8s linear infinite;
+}
+
+@keyframes loadingSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .loading-ring {
+        animation-duration: 2s;
+    }
+}
+</style>

@@ -37,10 +37,12 @@
                             </svg>
                         </div>
                         <button
-                            class="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-blue-600 hover:bg-blue-700 active:scale-95 flex items-center justify-center border-2 border-slate-900 transition shadow"
+                            @click="triggerPhotoPicker"
+                            class="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-blue-600 hover:bg-blue-700 flex items-center justify-center border-2 border-slate-900 transition"
                             title="Ganti foto"
                         >
                             <svg
+                                v-if="!uploadingPhoto"
                                 class="h-4 w-4 text-white"
                                 fill="none"
                                 stroke="currentColor"
@@ -59,7 +61,34 @@
                                     d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
                                 />
                             </svg>
+                            <svg
+                                v-else
+                                class="h-4 w-4 text-white animate-spin"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                            >
+                                <circle
+                                    class="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    stroke-width="4"
+                                ></circle>
+                                <path
+                                    class="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                                ></path>
+                            </svg>
                         </button>
+                        <input
+                            ref="photoInput"
+                            type="file"
+                            accept="image/png, image/jpeg"
+                            class="hidden"
+                            @change="handlePhotoSelect"
+                        />
                     </div>
 
                     <!-- Nama & Kampus -->
@@ -183,11 +212,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div v-if="isProfileLoading" class="col-span-full">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                            <div
-                                v-for="n in 4"
-                                :key="n"
-                                class="space-y-2"
-                            >
+                            <div v-for="n in 4" :key="n" class="space-y-2">
                                 <div
                                     class="h-3 w-24 bg-slate-200 rounded animate-pulse"
                                 ></div>
@@ -298,8 +323,12 @@
                             >
                                 <svg
                                     class="w-5 h-5"
-                                    :fill="link.filled ? 'currentColor' : 'none'"
-                                    :stroke="link.filled ? 'none' : 'currentColor'"
+                                    :fill="
+                                        link.filled ? 'currentColor' : 'none'
+                                    "
+                                    :stroke="
+                                        link.filled ? 'none' : 'currentColor'
+                                    "
                                     viewBox="0 0 24 24"
                                 >
                                     <path
@@ -386,6 +415,37 @@ const isEditing = ref(false);
 const saving = ref(false);
 const errors = ref({});
 const isProfileLoading = ref(!authStore.user?.student_profile);
+const photoInput = ref(null);
+const uploadingPhoto = ref(false);
+
+function triggerPhotoPicker() {
+    photoInput.value?.click();
+}
+
+async function handlePhotoSelect(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (!["image/jpeg", "image/png"].includes(file.type)) {
+        alert("Foto harus berformat JPG atau PNG.");
+        return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+        alert("Ukuran foto maksimal 2MB.");
+        return;
+    }
+
+    uploadingPhoto.value = true;
+    try {
+        const result = await studentProfileService.uploadPhoto(file);
+        profile.photoUrl = result.photo_url;
+    } catch (err) {
+        alert(err.response?.data?.message ?? "Gagal mengunggah foto. Coba lagi.");
+    } finally {
+        uploadingPhoto.value = false;
+        if (photoInput.value) photoInput.value.value = "";
+    }
+}
 
 function applyProfileData(data) {
     if (!data) return;

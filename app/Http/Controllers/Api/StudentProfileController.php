@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\StudentProfile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class StudentProfileController extends Controller
 {
@@ -39,6 +41,36 @@ class StudentProfileController extends Controller
             'message' => 'Profil berhasil diperbarui.',
             'profile' => $profile,
             'is_complete' => $profile->isComplete(),
+        ]);
+    }
+
+    public function uploadPhoto(Request $request)
+    {
+        $request->validate([
+            'photo' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+        ]);
+
+        $profile = $request->user()->studentProfile;
+
+        if (!$profile) {
+            return response()->json([
+                'message' => 'Lengkapi data profil terlebih dahulu sebelum upload foto.',
+            ], 422);
+        }
+
+        if ($profile->photo_path) {
+            Storage::disk('public')->delete($profile->photo_path);
+        }
+
+        $file = $request->file('photo');
+        $fileName = Str::uuid() . '.' . $file->getClientOriginalExtension();
+        $path = $file->storeAs('profile-photos', $fileName, 'public');
+
+        $profile->update(['photo_path' => $path]);
+
+        return response()->json([
+            'message' => 'Foto profil berhasil diperbarui.',
+            'photo_url' => $profile->fresh()->photo_url,
         ]);
     }
 }

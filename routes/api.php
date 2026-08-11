@@ -30,6 +30,7 @@ Route::middleware(['auth:sanctum', 'role:mahasiswa'])
         // Route profil mahasiswa
         Route::get('/profile', [StudentProfileController::class, 'show']);
         Route::put('/profile', [StudentProfileController::class, 'update']);
+        Route::post('/profile/photo', [StudentProfileController::class, 'uploadPhoto']);
 
         // CV & Analysis (memerlukan profil lengkap)
         Route::middleware('profile.complete')->group(function () {

@@ -16,7 +16,16 @@ class StudentProfile extends Model
         'github_url',
         'linkedin_url',
         'portfolio_url',
+        'photo_path',
     ];
+
+    protected $appends = ['photo_url'];
+
+    public function getPhotoUrlAttribute()
+    {
+        return $this->photo_path ? asset('storage/' . $this->photo_path)
+            : null;
+    }
 
     public function user(): BelongsTo
     {
