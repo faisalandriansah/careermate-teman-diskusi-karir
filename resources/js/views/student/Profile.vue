@@ -386,6 +386,14 @@
                 </div>
             </PageCard>
         </div>
+
+        <PhotoCropModal
+            :open="photoCropOpen"
+            :image-url="photoPreviewUrl"
+            :saving="uploadingPhoto"
+            @close="closeCropper"
+            @save="handleCropSave"
+        />
     </div>
 </template>
 
@@ -395,6 +403,8 @@ import studentProfileService from "@/services/student/studentProfileService";
 import { useAuthStore } from "@/stores/auth";
 import StudentHero from "@/components/student/StudentHero.vue";
 import PageCard from "@/components/student/PageCard.vue";
+import PhotoCropModal from "@/components/student/PhotoCropModal.vue";
+import { notify } from "@/utils/toast";
 
 const authStore = useAuthStore();
 
@@ -417,38 +427,66 @@ const errors = ref({});
 const isProfileLoading = ref(!authStore.user?.student_profile);
 const photoInput = ref(null);
 const uploadingPhoto = ref(false);
+const photoCropOpen = ref(false);
+const photoPreviewUrl = ref("");
 
 function triggerPhotoPicker() {
     photoInput.value?.click();
 }
 
-async function handlePhotoSelect(e) {
+function handlePhotoSelect(e) {
     const file = e.target.files[0];
     if (!file) return;
 
     if (!["image/jpeg", "image/png"].includes(file.type)) {
-        alert("Foto harus berformat JPG atau PNG.");
+        notify.warning("Foto harus berformat JPG atau PNG.");
+        if (photoInput.value) photoInput.value.value = "";
         return;
     }
-    if (file.size > 2 * 1024 * 1024) {
-        alert("Ukuran foto maksimal 2MB.");
+    if (file.size > 5 * 1024 * 1024) {
+        notify.warning("Ukuran foto maksimal 5MB.");
+        if (photoInput.value) photoInput.value.value = "";
         return;
     }
 
+    photoPreviewUrl.value = URL.createObjectURL(file);
+    photoCropOpen.value = true;
+    if (photoInput.value) photoInput.value.value = "";
+}
+
+function closeCropper() {
+    photoCropOpen.value = false;
+    if (photoPreviewUrl.value) {
+        URL.revokeObjectURL(photoPreviewUrl.value);
+        photoPreviewUrl.value = "";
+    }
+}
+
+async function handleCropSave(blob) {
+    if (!blob) return;
+
     uploadingPhoto.value = true;
+    photoCropOpen.value = false;
     try {
+        const file = new File([blob], "photo.jpg", { type: blob.type || "image/jpeg" });
         const result = await studentProfileService.uploadPhoto(file);
         profile.photoUrl = result.photo_url;
+        await authStore.fetchMe();
+        notify.success("Foto profil berhasil diperbarui.");
     } catch (err) {
-        alert(err.response?.data?.message ?? "Gagal mengunggah foto. Coba lagi.");
+        notify.error(err.response?.data?.message ?? "Gagal mengunggah foto. Coba lagi.");
     } finally {
         uploadingPhoto.value = false;
-        if (photoInput.value) photoInput.value.value = "";
+        if (photoPreviewUrl.value) {
+            URL.revokeObjectURL(photoPreviewUrl.value);
+            photoPreviewUrl.value = "";
+        }
     }
 }
 
 function applyProfileData(data) {
     if (!data) return;
+    profile.photoUrl = data.photo_url ?? "";
     profile.university = data.university ?? "";
     profile.major = data.major ?? "";
     profile.semester = data.semester ?? "";

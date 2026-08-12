@@ -117,6 +117,7 @@ const displayEmail = computed(() => (auth.user && auth.user.email) ? auth.user.e
 const displayRole = computed(() => (auth.user && auth.user.role) ? auth.user.role : 'Member');
 const avatarUrl = computed(() => {
   if (auth.user && auth.user.avatar) return auth.user.avatar;
+  if (auth.user?.student_profile?.photo_url) return auth.user.student_profile.photo_url;
   const name = encodeURIComponent(displayName.value);
   return `https://ui-avatars.com/api/?name=${name}&background=0D8ABC&color=fff`;
 });

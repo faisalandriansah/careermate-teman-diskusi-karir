@@ -1,11 +1,21 @@
 <template>
     <div
-        v-if="loading"
+        v-if="loading || isProfileLoading"
         class="flex flex-col items-center justify-center py-24 gap-4"
     >
         <div class="loading-ring"></div>
         <p class="text-sm text-slate-400">Memuat riwayat analisis...</p>
     </div>
+
+    <EmptyState
+        v-else-if="!isProfileComplete"
+        icon="lock"
+        title="Lengkapi Profil Dulu, Yuk!"
+        description="Riwayat analisis CV-mu akan muncul setelah profil kamu lengkap. Lengkapi profil dulu supaya kamu bisa mulai menganalisis CV dan memantau perkembangannya."
+        :steps="['Lengkapi biodata & detail profil', 'Upload CV kamu', 'Pantau perkembanganmu']"
+        primary-label="Lengkapi Profil"
+        :primary-to="{ name: 'StudentProfile' }"
+    />
 
     <div
         v-else-if="errorMessage"
@@ -439,12 +449,16 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
 import StudentHero from "@/components/student/StudentHero.vue";
 import EmptyState from "@/components/student/EmptyState.vue";
 import analysisService from "@/services/student/analysisService";
 
 const router = useRouter();
+const authStore = useAuthStore();
 const loading = ref(true);
+const isProfileLoading = ref(true);
+const isProfileComplete = computed(() => authStore.isProfileComplete);
 const errorMessage = ref("");
 const rawHistory = ref([]);
 
@@ -476,9 +490,23 @@ function handleClickOutside(e) {
 
 onMounted(async () => {
     document.addEventListener("click", handleClickOutside);
-    await loadHistory();
+    await Promise.all([loadProfile(), loadHistory()]);
 });
 onUnmounted(() => document.removeEventListener("click", handleClickOutside));
+
+async function loadProfile() {
+    if (!authStore.token) {
+        isProfileLoading.value = false;
+        return;
+    }
+    try {
+        await authStore.fetchMe();
+    } catch (e) {
+        console.log("Auth me gagal", e);
+    } finally {
+        isProfileLoading.value = false;
+    }
+}
 
 async function loadHistory() {
     loading.value = true;

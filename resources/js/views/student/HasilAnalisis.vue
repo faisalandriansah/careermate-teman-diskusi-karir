@@ -1,8 +1,21 @@
 <template>
-    <div v-if="loading" class="flex flex-col items-center justify-center py-24 gap-4">
+    <div
+        v-if="loading || isProfileLoading"
+        class="flex flex-col items-center justify-center py-24 gap-4"
+    >
         <div class="loading-ring"></div>
         <p class="text-sm text-slate-400">Memuat hasil analisis...</p>
     </div>
+
+    <EmptyState
+        v-else-if="!isProfileComplete"
+        icon="lock"
+        title="Lengkapi Profil Dulu, Yuk!"
+        description="Fitur hasil analisis akan terbuka setelah profil kamu lengkap. Lengkapi profil dulu supaya AI bisa menganalisis CV-mu dengan hasil yang akurat."
+        :steps="['Lengkapi biodata & detail profil', 'Upload CV kamu', 'Terima rekomendasi karier']"
+        primary-label="Lengkapi Profil"
+        :primary-to="{ name: 'StudentProfile' }"
+    />
 
     <EmptyState
         v-else-if="isEmpty"
@@ -428,6 +441,7 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
 import StudentHero from "@/components/student/StudentHero.vue";
 import EmptyState from "@/components/student/EmptyState.vue";
 import analysisService from "@/services/student/analysisService";
@@ -435,9 +449,12 @@ import apiClient from "@/services/api";
 
 const route = useRoute();
 const router = useRouter();
+const authStore = useAuthStore();
 const analysisId = route.params.id;
 
 const loading = ref(true);
+const isProfileLoading = ref(true);
+const isProfileComplete = computed(() => authStore.isProfileComplete);
 const errorMessage = ref("");
 const isEmpty = ref(false);
 const analysis = ref(null);
@@ -533,7 +550,23 @@ async function loadAnalysis() {
     }
 }
 
-onMounted(loadAnalysis);
+async function loadProfile() {
+    if (!authStore.token) {
+        isProfileLoading.value = false;
+        return;
+    }
+    try {
+        await authStore.fetchMe();
+    } catch (e) {
+        console.log("Auth me gagal", e);
+    } finally {
+        isProfileLoading.value = false;
+    }
+}
+
+onMounted(async () => {
+    await Promise.all([loadAnalysis(), loadProfile()]);
+});
 
 async function downloadPdf() {
     try {

@@ -20,5 +20,5 @@
 </template>
 
 <script setup>
-import StudentTable from '@/components/student/StudentTable.vue';
+import StudentTable from '@/components/admin/StudentTable.vue';
 </script>

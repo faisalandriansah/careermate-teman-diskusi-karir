@@ -234,9 +234,9 @@
 import { ref, computed, onMounted } from "vue";
 import { studentService } from "@/services/admin/studentService";
 import apiClient from "@/services/api";
-import StudentSearch from "@/components/student/StudentSearch.vue";
-import StudentSkeleton from "@/components/student/StudentSkeleton.vue";
-import StudentDetailModal from "@/components/student/StudentDetailModal.vue";
+import StudentSearch from "@/components/admin/StudentSearch.vue";
+import StudentSkeleton from "@/components/admin/StudentSkeleton.vue";
+import StudentDetailModal from "@/components/admin/StudentDetailModal.vue";
 
 const students = ref([]);
 const searchTerm = ref("");

@@ -33,15 +33,78 @@
             </p>
         </div>
 
+        <!-- ============ ALERT: PROFIL BELUM LENGKAP ============ -->
+        <div
+            v-if="!isProfileLoading && !isProfileComplete"
+            class="mb-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 rounded-2xl border border-amber-500/30 bg-amber-50 px-5 py-4 fade-up"
+            role="alert"
+        >            <div class="flex items-start gap-3">
+                <div
+                    class="h-10 w-10 shrink-0 rounded-xl bg-amber-100 border border-amber-200 flex items-center justify-center"
+                >
+                    <svg
+                        class="h-5 w-5 text-amber-600"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                        />
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-sm font-bold text-amber-800">
+                        Profil Belum Lengkap
+                    </p>
+                    <p class="text-xs text-amber-700/80 mt-0.5 leading-relaxed">
+                        Lengkapi profil kamu terlebih dahulu agar AI bisa
+                        menganalisis CV secara akurat.
+                    </p>
+                </div>
+            </div>
+            <router-link
+                :to="{ name: 'StudentProfile' }"
+                class="shrink-0 inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-amber-500 hover:bg-amber-600 px-4 py-2.5 rounded-xl transition active:scale-95 shadow-sm shadow-amber-500/30"
+            >
+                Lengkapi Profil
+                <svg
+                    class="h-3.5 w-3.5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M13 7l5 5m0 0l-5 5m5-5H6"
+                    />
+                </svg>
+            </router-link>
+        </div>
+
         <!-- ============ STATE: IDLE / SELECTED ============ -->
         <div
             v-if="stage === 'idle' || stage === 'selected'"
-            class="grid grid-cols-1 lg:grid-cols-3 gap-6 fade-up"
+            class="relative"
         >
-            <!-- Area Dropzone (Mengambil 2 Kolom di Desktop) -->
+            <!-- Konten (di-blur saat profil belum lengkap) -->
             <div
-                class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 p-6 md:p-8 flex flex-col justify-between"
+                class="grid grid-cols-1 lg:grid-cols-3 gap-6 fade-up"
+                :class="
+                    isBlocked
+                        ? 'blur-md opacity-70 select-none pointer-events-none'
+                        : ''
+                "
             >
+                <!-- Area Dropzone (Mengambil 2 Kolom di Desktop) -->
+                <div
+                    class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 p-6 md:p-8 flex flex-col justify-between"
+                >
                 <!-- Drop zone -->
                 <div
                     class="relative rounded-2xl border-2 border-dashed transition-all duration-200 px-6 py-10 md:py-12 text-center flex flex-col items-center justify-center cursor-pointer group"
@@ -240,6 +303,132 @@
                     <span>PDF Only</span>
                 </div>
             </div>
+            </div>
+
+            <!-- ============ OVERLAY: PROFIL BELUM LENGKAP ============ -->
+            <div
+                v-if="isBlocked"
+                class="absolute inset-0 z-20 flex items-center justify-center px-4 sm:px-8 py-10 sm:py-12"
+            >
+                <div
+                    class="lock-card relative overflow-hidden max-w-md w-full bg-white/95 backdrop-blur border border-amber-200 rounded-3xl p-6 sm:p-7 text-center shadow-2xl shadow-amber-500/10"
+                >
+                    <div class="lock-blob"></div>
+
+                    <!-- State: sedang memeriksa profil -->
+                    <div v-if="isProfileLoading" class="py-4">
+                        <div
+                            class="relative inline-flex mb-4"
+                        >
+                            <span class="lock-ping"></span>
+                            <div
+                                class="relative h-16 w-16 rounded-3xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center shadow-lg shadow-blue-600/30"
+                            >
+                                <svg
+                                    class="h-7 w-7 text-white animate-spin"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <circle
+                                        class="opacity-25"
+                                        cx="12"
+                                        cy="12"
+                                        r="10"
+                                        stroke="currentColor"
+                                        stroke-width="4"
+                                    ></circle>
+                                    <path
+                                        class="opacity-90"
+                                        fill="currentColor"
+                                        d="M4 12a8 8 0 018-8v3a5 5 0 00-5 5H4z"
+                                    ></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800">
+                            Memeriksa Profil...
+                        </h3>
+                        <p class="mt-2 text-sm text-slate-500 leading-relaxed">
+                            Sebentar, kami memastikan profil kamu sudah lengkap
+                            sebelum membuka fitur upload CV.
+                        </p>
+                    </div>
+
+                    <!-- State: profil belum lengkap -->
+                    <template v-else>
+                    <div class="relative inline-flex mb-4">
+                        <span class="lock-ping"></span>
+                        <div
+                            class="lock-wiggle relative h-16 w-16 rounded-3xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/30"
+                        >
+                            <svg
+                                class="h-7 w-7 text-white"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                                />
+                            </svg>
+                        </div>
+                        <span class="lock-spark lock-spark-a"></span>
+                        <span class="lock-spark lock-spark-b"></span>
+                    </div>
+
+                    <h3
+                        class="text-lg font-bold text-slate-800"
+                    >
+                        Lengkapi Profil Dulu, Yuk!
+                    </h3>
+                    <p
+                        class="mt-2 text-sm text-slate-500 leading-relaxed"
+                    >
+                        Fitur upload CV sementara dikunci. Lengkapi profil kamu
+                        supaya AI bisa menganalisis CV dengan hasil yang akurat.
+                    </p>
+
+                    <ul
+                        class="mt-4 space-y-2 text-left max-w-xs mx-auto"
+                    >
+                        <li
+                            v-for="(hint, i) in lockedHints"
+                            :key="hint"
+                            class="flex items-center gap-2.5 text-xs text-slate-600"
+                        >
+                            <span
+                                class="h-5 w-5 rounded-lg bg-amber-50 border border-amber-200 text-amber-600 font-bold flex items-center justify-center shrink-0"
+                                >{{ i + 1 }}</span
+                            >
+                            {{ hint }}
+                        </li>
+                    </ul>
+
+                    <router-link
+                        :to="{ name: 'StudentProfile' }"
+                        class="mt-5 w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-sm font-semibold transition active:scale-95 shadow-md shadow-amber-500/30"
+                    >
+                        <svg
+                            class="h-4 w-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                            />
+                        </svg>
+                        Lengkapi Profil Sekarang
+                    </router-link>
+                    </template>
+                </div>
+            </div>
         </div>
 
         <!-- ============ STATE: LOADING AI ============ -->
@@ -368,11 +557,13 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
 import cvService from "@/services/student/cvService";
 
 const router = useRouter();
+const authStore = useAuthStore();
 const stage = ref("idle"); // idle | selected | loading | done
 const isDragging = ref(false);
 const fileInput = ref(null);
@@ -382,6 +573,18 @@ const selectedFile = ref(null);
 const errorMessage = ref("");
 const finalAnalysisResult = ref(null); // hasil akhir buat redirect
 // const uploadedCvFile = ref(null); //hasil dari backend ketika sukses
+
+const isProfileLoading = ref(true);
+const isProfileComplete = computed(() => authStore.isProfileComplete);
+const isBlocked = computed(
+    () => isProfileLoading.value || !isProfileComplete.value,
+);
+
+const lockedHints = [
+    "Lengkapi biodata & detail profil kamu",
+    "Kembali ke halaman Upload CV ini",
+    "Upload CV & dapatkan rekomendasi AI",
+];
 
 const MAX_SIZE_MB = 5; // Ukuran maksimal file dalam MB
 
@@ -394,11 +597,24 @@ const steps = [
 ];
 const activeStep = ref(0);
 
+onMounted(async () => {
+    if (authStore.token) {
+        try {
+            await authStore.fetchMe();
+        } catch (e) {
+            console.log("Auth me gagal", e);
+        }
+    }
+    isProfileLoading.value = false;
+});
+
 function triggerPicker() {
+    if (!isProfileComplete.value) return;
     fileInput.value?.click();
 }
 
 function setFile(file) {
+    if (!isProfileComplete.value) return;
     errorMessage.value = "";
     if (!file) return;
 
@@ -437,6 +653,13 @@ function resetFile() {
 
 async function startAnalysis() {
     if (!selectedFile.value) return;
+
+    if (!isProfileComplete.value) {
+        errorMessage.value =
+            "Silakan lengkapi profil terlebih dahulu sebelum upload CV.";
+        router.push({ name: "StudentProfile" });
+        return;
+    }
 
     stage.value = "loading";
     errorMessage.value = "";
@@ -553,5 +776,120 @@ function goToResult() {
     background: #2563eb;
     top: -40px;
     right: -20px;
+}
+
+/* ===== Lock overlay animations ===== */
+.lock-card {
+    animation: lockCardIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    will-change: transform, opacity;
+}
+@keyframes lockCardIn {
+    from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.lock-blob {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 9999px;
+    background: #f59e0b;
+    filter: blur(60px);
+    opacity: 0.12;
+    top: -70px;
+    right: -50px;
+    pointer-events: none;
+}
+
+.lock-wiggle {
+    animation: lockWiggle 3.4s ease-in-out infinite;
+    will-change: transform;
+}
+@keyframes lockWiggle {
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+    92% {
+        transform: rotate(0deg);
+    }
+    94% {
+        transform: rotate(-6deg);
+    }
+    96% {
+        transform: rotate(5deg);
+    }
+    98% {
+        transform: rotate(-3deg);
+    }
+}
+
+.lock-ping {
+    position: absolute;
+    inset: -12px;
+    border-radius: 2rem;
+    background: rgba(245, 158, 11, 0.14);
+    animation: lockPing 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+    will-change: transform, opacity;
+}
+@keyframes lockPing {
+    0% {
+        transform: scale(0.9);
+        opacity: 0.8;
+    }
+    70%,
+    100% {
+        transform: scale(1.3);
+        opacity: 0;
+    }
+}
+
+.lock-spark {
+    position: absolute;
+    border-radius: 9999px;
+    background: #fbbf24;
+    animation: lockTwinkle 2.6s ease-in-out infinite;
+    will-change: transform, opacity;
+}
+.lock-spark-a {
+    width: 9px;
+    height: 9px;
+    top: 0;
+    right: -4px;
+}
+.lock-spark-b {
+    width: 6px;
+    height: 6px;
+    bottom: 4px;
+    left: -6px;
+    background: #f59e0b;
+    animation-delay: 1.2s;
+}
+@keyframes lockTwinkle {
+    0%,
+    100% {
+        opacity: 0.35;
+        transform: scale(0.75);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.15);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lock-card,
+    .lock-wiggle,
+    .lock-ping,
+    .lock-spark {
+        animation: none !important;
+        transition: none !important;
+    }
 }
 </style>
