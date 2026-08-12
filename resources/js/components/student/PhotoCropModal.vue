@@ -45,121 +45,170 @@
             <!-- Body -->
             <div class="p-5 sm:p-6 overflow-y-auto flex-1">
                 <p class="text-sm text-slate-500 mb-4">
-                    Geser dan zoom foto untuk mendapatkan posisi terbaik.
+                    Geser dan atur zoom foto. Isi kotak ini adalah bagian yang akan
+                    dipakai sebagai foto profil.
                 </p>
 
-                <!-- Crop Area (area bulat, foto menutupi penuh) -->
-                <div
-                    ref="cropAreaEl"
-                    class="relative mx-auto w-full max-w-[560px] aspect-square rounded-full overflow-hidden bg-slate-900 select-none touch-none cursor-grab active:cursor-grabbing"
-                    @pointerdown="onPointerDown"
-                    @pointermove="onPointerMove"
-                    @pointerup="onPointerUp"
-                    @pointerleave="onPointerUp"
-                    @wheel.prevent="onWheel"
-                >
-                    <!-- Gambar -->
-                    <img
-                        ref="imgEl"
-                        :src="imageUrl"
-                        alt="Preview foto"
-                        draggable="false"
-                        class="absolute left-1/2 top-1/2 max-w-none will-change-transform"
-                        :class="loaded ? 'opacity-100' : 'opacity-0'"
-                        :style="imgStyle"
-                    />
-
-                    <!-- Overlay dim di luar lingkaran -->
+                <!-- Crop Area (kotak, WYSIWYG) -->
+                <div class="relative mx-auto w-full max-w-[560px]">
                     <div
-                        class="pointer-events-none absolute inset-0 rounded-full"
-                        :style="maskStyle"
-                    ></div>
-
-                    <!-- Indikator loading -->
-                    <div
-                        v-if="!loaded"
-                        class="absolute inset-0 flex items-center justify-center"
+                        ref="cropAreaEl"
+                        class="relative aspect-square rounded-2xl overflow-hidden bg-slate-900 select-none touch-none cursor-grab active:cursor-grabbing shadow-xl ring-1 ring-slate-300"
+                        @pointerdown="onPointerDown"
+                        @pointermove="onPointerMove"
+                        @pointerup="onPointerUp"
+                        @pointercancel="onPointerUp"
+                        @wheel.prevent="onWheel"
                     >
-                        <svg
-                            class="h-8 w-8 text-white/70 animate-spin"
-                            fill="none"
-                            viewBox="0 0 24 24"
+                        <!-- Gambar -->
+                        <img
+                            ref="imgEl"
+                            :src="imageUrl"
+                            alt="Preview foto"
+                            draggable="false"
+                            class="absolute left-1/2 top-1/2 max-w-none will-change-transform"
+                            :class="loaded ? 'opacity-100' : 'opacity-0'"
+                            :style="imgStyle"
+                        />
+
+                        <!-- Bingkai tipis penanda batas krop -->
+                        <div
+                            class="pointer-events-none absolute inset-0 rounded-2xl border-2 border-dashed border-white/60"
+                        ></div>
+
+                        <!-- Hint (muncul sekali saat pertama buka) -->
+                        <transition name="fade">
+                            <div
+                                v-if="showHint && loaded"
+                                class="pointer-events-none absolute inset-0 rounded-2xl flex items-center justify-center"
+                            >
+                                <div
+                                    class="bg-slate-900/65 backdrop-blur-sm text-white text-sm font-medium rounded-full px-5 py-2.5 flex items-center gap-2 shadow-lg"
+                                >
+                                    <svg
+                                        class="h-4 w-4"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M13 5l7 7-7 7M5 5l7 7-7 7"
+                                        />
+                                    </svg>
+                                    Geser foto untuk mengatur posisi
+                                </div>
+                            </div>
+                        </transition>
+
+                        <!-- Indikator loading -->
+                        <div
+                            v-if="!loaded"
+                            class="absolute inset-0 flex items-center justify-center"
                         >
-                            <circle
-                                class="opacity-25"
-                                cx="12"
-                                cy="12"
-                                r="10"
-                                stroke="currentColor"
-                                stroke-width="4"
-                            ></circle>
-                            <path
-                                class="opacity-75"
-                                fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                            ></path>
-                        </svg>
+                            <svg
+                                class="h-8 w-8 text-white/70 animate-spin"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                            >
+                                <circle
+                                    class="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    stroke-width="4"
+                                ></circle>
+                                <path
+                                    class="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                                ></path>
+                            </svg>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Zoom Controls -->
-                <div class="mt-5 max-w-[560px] mx-auto flex items-center gap-4">
-                    <button
-                        type="button"
-                        class="shrink-0 h-11 w-11 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition disabled:opacity-40"
-                        @click="zoomBy(-0.05)"
-                        :disabled="saving"
-                        title="Perkecil"
-                    >
-                        <svg
-                            class="h-5 w-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
+                <div class="mt-6 max-w-[560px] mx-auto">
+                    <div class="flex items-center justify-between mb-2">
+                        <span
+                            class="text-xs font-semibold text-slate-400 uppercase tracking-wider"
+                            >Zoom</span
                         >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M20 12H4"
-                            />
-                        </svg>
-                    </button>
-                    <input
-                        type="range"
-                        :min="minZoom"
-                        :max="maxZoom"
-                        step="0.01"
-                        v-model.number="zoom"
-                        class="flex-1 h-2 accent-blue-600"
-                        @input="setZoom(zoom)"
-                        :disabled="saving"
-                    />
-                    <button
-                        type="button"
-                        class="shrink-0 h-11 w-11 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition disabled:opacity-40"
-                        @click="zoomBy(0.05)"
-                        :disabled="saving"
-                        title="Perbesar"
-                    >
-                        <svg
-                            class="h-5 w-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
+                        <button
+                            type="button"
+                            class="text-xs font-semibold text-blue-600 hover:text-blue-700 transition"
+                            @click="resetView"
+                            :disabled="saving || !loaded"
                         >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M12 4v16m8-8H4"
-                            />
-                        </svg>
-                    </button>
-                    <span
-                        class="shrink-0 w-14 text-center text-xs font-semibold text-slate-500 tabular-nums"
-                        >{{ zoomPercent }}%</span
-                    >
+                            ↺ Reset
+                        </button>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <button
+                            type="button"
+                            class="shrink-0 h-12 w-12 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition disabled:opacity-40"
+                            @click="zoomBy(-0.1)"
+                            :disabled="saving"
+                            title="Perkecil"
+                        >
+                            <svg
+                                class="h-5 w-5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M20 12H4"
+                                />
+                            </svg>
+                        </button>
+                        <input
+                            type="range"
+                            :min="minZoom"
+                            :max="maxZoom"
+                            step="0.01"
+                            v-model.number="zoom"
+                            class="flex-1 h-2 accent-blue-600"
+                            @input="setZoom(zoom)"
+                            :disabled="saving"
+                        />
+                        <button
+                            type="button"
+                            class="shrink-0 h-12 w-12 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition disabled:opacity-40"
+                            @click="zoomBy(0.1)"
+                            :disabled="saving"
+                            title="Perbesar"
+                        >
+                            <svg
+                                class="h-5 w-5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M12 4v16m8-8H4"
+                                />
+                            </svg>
+                        </button>
+                        <span
+                            class="shrink-0 w-14 text-center text-xs font-semibold text-slate-500 tabular-nums"
+                            >{{ zoomPercent }}%</span
+                        >
+                    </div>
+                    <p class="mt-2 text-center text-xs text-slate-400">
+                        Geser lingkaran untuk memindah • tebak gulir (scroll) untuk
+                        memperbesar
+                    </p>
                 </div>
             </div>
 
@@ -247,6 +296,9 @@ let startX = 0;
 let startY = 0;
 let startPanX = 0;
 let startPanY = 0;
+let hintTimer = null;
+
+const showHint = ref(false);
 
 const zoomPercent = computed(() =>
     minZoom.value > 0 ? Math.round((zoom.value / minZoom.value) * 100) : 100,
@@ -256,12 +308,6 @@ const imgStyle = computed(() => ({
     transform: `translate(calc(-50% + ${panX.value}px), calc(-50% + ${panY.value}px)) scale(${zoom.value})`,
 }));
 
-const maskStyle = computed(() => ({
-    background:
-        "radial-gradient(circle, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.12) 49.5%, rgba(0,0,0,0.6) 50.5%, rgba(0,0,0,0.6) 100%)",
-    boxShadow: "inset 0 0 0 2px rgba(255,255,255,0.35)",
-}));
-
 function reset() {
     loaded.value = false;
     naturalW.value = 0;
@@ -269,6 +315,11 @@ function reset() {
     panX.value = 0;
     panY.value = 0;
     zoom.value = 1;
+    showHint.value = false;
+    if (hintTimer) {
+        clearTimeout(hintTimer);
+        hintTimer = null;
+    }
 }
 
 function measureArea() {
@@ -288,6 +339,12 @@ function computeBase() {
     panX.value = 0;
     panY.value = 0;
     loaded.value = true;
+
+    // Tampilkan hint panduan beberapa detik (hanya sekali per buka modal)
+    showHint.value = true;
+    hintTimer = setTimeout(() => {
+        showHint.value = false;
+    }, 2000);
 }
 
 function onImgLoad() {
@@ -306,19 +363,41 @@ function clampPan() {
     panY.value = Math.min(limY, Math.max(-limY, panY.value));
 }
 
-function setZoom(value) {
-    const v = Math.min(maxZoom.value, Math.max(minZoom.value, Number(value)));
-    zoom.value = v;
+// Zoom terhadap suatu titik pada container (px,py). Titik kursor tetap di tempat,
+// sehingga perbesaran terasa natural & tidak melompat.
+function zoomAroundPoint(px, py, z) {
+    const z1 = Math.min(maxZoom.value, Math.max(minZoom.value, Number(z)));
+    const imgX = (px - areaW / 2 - panX.value) / zoom.value + naturalW.value / 2;
+    const imgY = (py - areaH / 2 - panY.value) / zoom.value + naturalH.value / 2;
+
+    zoom.value = z1;
+    panX.value = px - areaW / 2 - (imgX - naturalW.value / 2) * z1;
+    panY.value = py - areaH / 2 - (imgY - naturalH.value / 2) * z1;
     clampPan();
+}
+
+function setZoom(value) {
+    zoomAroundPoint(areaW / 2, areaH / 2, value);
 }
 
 function zoomBy(step) {
     setZoom(zoom.value + step);
 }
 
+function resetView() {
+    zoom.value = minZoom.value;
+    panX.value = 0;
+    panY.value = 0;
+    clampPan();
+}
+
 function onWheel(e) {
+    const rect = cropAreaEl.value?.getBoundingClientRect();
+    if (!rect) return;
+    const px = e.clientX - rect.left;
+    const py = e.clientY - rect.top;
     const delta = e.deltaY < 0 ? 0.1 : -0.1;
-    setZoom(zoom.value + delta);
+    zoomAroundPoint(px, py, zoom.value + delta);
 }
 
 function onPointerDown(e) {
@@ -403,3 +482,14 @@ function handleClose() {
 
 onBeforeUnmount(reset);
 </script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.3s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+</style>

@@ -203,14 +203,25 @@
                             <button
                                 @click="stdOpen = !stdOpen"
                                 title="Menu akun"
-                                :class="[
-                                    'h-9 w-9 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-semibold transition-all duration-200',
+                                class="h-9 w-9 rounded-full overflow-hidden transition-all duration-200"
+                                :class="
                                     stdOpen
                                         ? 'ring-2 ring-blue-200'
-                                        : 'hover:ring-2 hover:ring-blue-100',
-                                ]"
+                                        : 'hover:ring-2 hover:ring-blue-100'
+                                "
                             >
-                                {{ shortInitial }}
+                                <img
+                                    v-if="accountAvatar"
+                                    :src="accountAvatar"
+                                    alt="Foto profil"
+                                    class="h-full w-full object-cover"
+                                />
+                                <div
+                                    v-else
+                                    class="h-full w-full bg-blue-600 flex items-center justify-center text-white text-sm font-semibold"
+                                >
+                                    {{ shortInitial }}
+                                </div>
                             </button>
 
                             <!-- Dropdown Panel -->
@@ -225,9 +236,17 @@
                                     >
                                         <div class="flex items-center gap-3">
                                             <div
-                                                class="h-10 w-10 shrink-0 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-semibold"
+                                                class="h-10 w-10 shrink-0 rounded-full overflow-hidden bg-blue-600 flex items-center justify-center text-white text-sm font-semibold"
                                             >
-                                                {{ shortInitial }}
+                                                <img
+                                                    v-if="accountAvatar"
+                                                    :src="accountAvatar"
+                                                    alt="Foto profil"
+                                                    class="h-full w-full object-cover"
+                                                />
+                                                <template v-else>
+                                                    {{ shortInitial }}
+                                                </template>
                                             </div>
                                             <div class="min-w-0 flex-1">
                                                 <p
@@ -524,6 +543,9 @@ function onKeydown(e) {
 const displayName = computed(() => auth.user?.name || "Student User");
 const displayEmail = computed(() => auth.user?.email || "");
 const displayRole = computed(() => auth.user?.role ?? "Mahasiswa");
+const accountAvatar = computed(
+    () => auth.user?.student_profile?.photo_url || null,
+);
 const shortInitial = computed(() => {
     if (!auth.user?.name) return "S";
 
