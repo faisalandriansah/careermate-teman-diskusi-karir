@@ -598,6 +598,18 @@ const steps = [
 const activeStep = ref(0);
 
 onMounted(async () => {
+    // Jika profil sudah diketahui lengkap dari cache, buka langsung tanpa loading.
+    // fetchMe tetap dipanggil di background untuk menyegarkan data dari server.
+    if (authStore.token && isProfileComplete.value) {
+        isProfileLoading.value = false;
+        try {
+            await authStore.fetchMe();
+        } catch (e) {
+            console.log("Auth me gagal", e);
+        }
+        return;
+    }
+
     if (authStore.token) {
         try {
             await authStore.fetchMe();
