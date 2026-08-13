@@ -73,9 +73,25 @@
                         <div class="flex items-start justify-between gap-2">
                             <div class="flex min-w-0 items-center gap-3">
                                 <div
-                                    class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-blue-600 text-sm font-semibold text-white"
+                                    class="relative h-11 w-11 shrink-0 overflow-hidden rounded-full bg-gradient-to-br from-indigo-500 to-blue-600 text-sm font-semibold text-white"
                                 >
-                                    {{ student.name.charAt(0).toUpperCase() }}
+                                    <img
+                                        v-if="student.photo_url"
+                                        :src="student.photo_url"
+                                        alt=""
+                                        class="h-full w-full object-cover"
+                                        @error="
+                                            $event.target.style.display = 'none'
+                                        "
+                                    />
+                                    <span
+                                        v-if="!student.photo_url"
+                                        class="flex h-full w-full items-center justify-center"
+                                    >
+                                        {{
+                                            student.name.charAt(0).toUpperCase()
+                                        }}
+                                    </span>
                                 </div>
                                 <div class="min-w-0">
                                     <p
@@ -117,7 +133,11 @@
                             </p>
                             <p class="text-slate-500">
                                 Match:
-                                {{ Math.round(student.last_analysis.match_percentage) }}%
+                                {{
+                                    Math.round(
+                                        student.last_analysis.match_percentage,
+                                    )
+                                }}%
                             </p>
                         </div>
                     </div>
@@ -153,27 +173,32 @@
         <!-- Pagination -->
         <div
             v-if="!loading && !errorMessage && filteredStudents.length > 0"
-            class="flex flex-col items-center justify-between gap-3 border-t border-slate-100 px-4 py-3 sm:flex-row"
+            class="flex flex-col items-center justify-between gap-3 border-t border-slate-100 px-4 py-4 sm:flex-row sm:gap-4"
         >
-            <div class="text-sm text-slate-600">
+            <!-- Info jumlah data (kiri di desktop, di atas di mobile) -->
+            <div class="text-center text-sm text-slate-600 sm:text-left">
                 Menampilkan
-                <span class="font-medium text-slate-900">{{
+                <span class="font-semibold text-slate-900">{{
                     Math.min(
                         currentPage * itemsPerPage,
                         filteredStudents.length,
                     )
                 }}</span>
                 dari
-                <span class="font-medium text-slate-900">{{
+                <span class="font-semibold text-slate-900">{{
                     filteredStudents.length
                 }}</span>
                 data
             </div>
-            <div class="flex items-center gap-2">
+
+            <!-- Kontrol navigasi: 3 kolom sejajar di mobile, satu group di desktop -->
+            <div
+                class="grid w-full grid-cols-3 items-stretch overflow-hidden rounded-xl border border-slate-300 bg-white shadow-sm sm:w-auto sm:inline-flex"
+            >
                 <button
                     @click="prevPage"
                     :disabled="currentPage === 1"
-                    class="inline-flex items-center gap-1 rounded-xl border border-slate-300 bg-white px-3 py-1.5 text-sm font-semibold text-slate-600 shadow-sm transition hover:bg-slate-50 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+                    class="inline-flex items-center justify-center gap-1 border-r border-slate-200 px-3 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                     <svg
                         class="h-4 w-4"
@@ -188,21 +213,22 @@
                             d="M15 19l-7-7 7-7"
                         ></path>
                     </svg>
-                    Sebelumnya
+                    <span class="sm:inline">Sebelumnya</span>
                 </button>
 
                 <span
-                    class="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-slate-700 shadow-sm"
+                    class="flex items-center justify-center border-r border-slate-200 bg-slate-50 px-1 py-2.5 text-sm font-semibold text-slate-700"
                 >
-                    {{ currentPage }} dari {{ totalPages }}
+                    {{ currentPage }}
+                    <span class="text-slate-400">/ {{ totalPages }}</span>
                 </span>
 
                 <button
                     @click="nextPage"
                     :disabled="currentPage === totalPages"
-                    class="inline-flex items-center gap-1 rounded-xl border border-slate-300 bg-white px-3 py-1.5 text-sm font-semibold text-slate-600 shadow-sm transition hover:bg-slate-50 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+                    class="inline-flex items-center justify-center gap-1 px-3 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
                 >
-                    Berikutnya
+                    <span class="sm:inline">Berikutnya</span>
                     <svg
                         class="h-4 w-4"
                         fill="none"
@@ -265,6 +291,7 @@ const mapStudent = (raw) => {
         github: raw.student_profile?.github_url ?? null,
         linkedin: raw.student_profile?.linkedin_url ?? null,
         portfolio: raw.student_profile?.portfolio_url ?? null,
+        photo_url: raw.student_profile?.photo_url ?? null,
         registration_date: raw.created_at,
         cv_file: latestCv?.file_name ?? null,
         cv_file_id: latestCv?.id ?? null,

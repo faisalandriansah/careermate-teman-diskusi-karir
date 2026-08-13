@@ -164,7 +164,7 @@
             Next
         </button>
     </div>
-    <ConfirmModal
+    <DeleteConfirmModal
         v-model="showConfirm"
         title="Hapus Career Ini?"
         description="Career yang sudah dihapus tidak bisa dikembalikan lagi."
@@ -176,8 +176,8 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { getCareers, deleteCareer } from "@/services/admin/careerService";
-import ConfirmModal from "@/components/ConfirmModal.vue";
-import PageSkeleton from "@/components/PageSkeleton.vue";
+import DeleteConfirmModal from "@/components/admin/DeleteConfirmModal.vue";
+import PageSkeleton from "@/components/admin/PageSkeleton.vue";
 import { notify } from "@/utils/toast";
 
 const careers = ref([]);

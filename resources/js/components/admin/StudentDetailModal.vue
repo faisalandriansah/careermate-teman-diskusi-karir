@@ -35,9 +35,21 @@
 
                 <div class="flex items-center gap-4">
                     <div
-                        class="flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white/15 border-2 border-white/30 text-white text-lg sm:text-xl font-semibold shrink-0"
+                        class="relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white/15 border-2 border-white/30 text-white text-lg sm:h-16 sm:w-16 sm:text-xl font-semibold"
                     >
-                        {{ initials }}
+                        <img
+                            v-if="student.photo_url"
+                            :src="student.photo_url"
+                            alt=""
+                            class="h-full w-full object-cover"
+                            @error="$event.target.style.display = 'none'"
+                        />
+                        <span
+                            v-if="!student.photo_url"
+                            class="flex h-full w-full items-center justify-center"
+                        >
+                            {{ initials }}
+                        </span>
                     </div>
                     <div class="min-w-0">
                         <h3
@@ -55,9 +67,11 @@
                             <span
                                 class="w-1.5 h-1.5 rounded-full bg-emerald-400"
                             ></span>
-                            {{ scoreDisplay }} cocok
-                            dengan
-                            {{ student.last_analysis.recommended_career }}
+                            {{
+                                student.last_analysis.recommended_career
+                                    ? `${scoreDisplay} cocok dengan ${student.last_analysis.recommended_career}`
+                                    : `${scoreDisplay} analisis selesai`
+                            }}
                         </div>
                     </div>
                 </div>
@@ -65,7 +79,7 @@
 
             <!-- Body (scrollable) -->
             <div class="overflow-y-auto px-5 py-5 sm:px-6 sm:py-6 space-y-6">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Informasi Pribadi -->
                     <div>
                         <div class="flex items-center gap-2 mb-4">
@@ -232,6 +246,7 @@
 
                         <!-- CV -->
                         <div
+                            v-if="student.cv_file"
                             class="flex items-center justify-between gap-3 rounded-xl border border-gray-200 px-4 py-3 mb-4"
                         >
                             <div class="flex items-center gap-2.5 min-w-0">
@@ -279,12 +294,48 @@
                             </button>
                         </div>
 
+                        <!-- CV belum ada -->
+                        <div
+                            v-else
+                            class="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-gray-200 bg-gray-50/60 px-4 py-6 mb-4 text-center"
+                        >
+                            <div
+                                class="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100"
+                            >
+                                <svg
+                                    class="w-5 h-5 text-gray-400"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                    />
+                                </svg>
+                            </div>
+                            <p class="text-sm font-medium text-gray-600">
+                                Belum ada CV
+                            </p>
+                            <p class="text-xs text-gray-400">
+                                Mahasiswa ini belum mengunggah CV.
+                            </p>
+                        </div>
+
                         <!-- Skill -->
                         <div class="mb-4">
                             <div class="text-xs font-medium text-gray-500 mb-2">
                                 Skill Terdeteksi
                             </div>
-                            <div class="flex flex-wrap gap-1.5">
+                            <div
+                                v-if="
+                                    student.detected_skills &&
+                                    student.detected_skills.length > 0
+                                "
+                                class="flex flex-wrap gap-1.5"
+                            >
                                 <span
                                     v-for="(
                                         skill, index
@@ -295,14 +346,14 @@
                                 >
                                     {{ skill }}
                                 </span>
-                                <span
-                                    v-if="
-                                        !student.detected_skills ||
-                                        student.detected_skills.length === 0
-                                    "
-                                    class="text-sm text-gray-400 italic"
-                                    >Tidak ada skill terdeteksi</span
-                                >
+                            </div>
+                            <div
+                                v-else
+                                class="flex items-center justify-center gap-2 rounded-xl border border-dashed border-gray-200 bg-gray-50/60 px-4 py-4 text-center"
+                            >
+                                <p class="text-xs text-gray-400">
+                                    Tidak ada skill terdeteksi
+                                </p>
                             </div>
                         </div>
 
@@ -367,6 +418,36 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- Analisis belum ada -->
+                        <div
+                            v-else
+                            class="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-gray-200 bg-gray-50/60 px-4 py-6 text-center"
+                        >
+                            <div
+                                class="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-50"
+                            >
+                                <svg
+                                    class="w-5 h-5 text-indigo-400"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                                    />
+                                </svg>
+                            </div>
+                            <p class="text-sm font-medium text-gray-600">
+                                Belum ada analisis
+                            </p>
+                            <p class="text-xs text-gray-400">
+                                Mahasiswa ini belum menjalankan analisis CV.
+                            </p>
                         </div>
                     </div>
                 </div>

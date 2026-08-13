@@ -164,7 +164,7 @@
             Next
         </button>
     </div>
-    <ConfirmModal
+    <DeleteConfirmModal
         v-model="showConfirm"
         title="Hapus Internship Ini?"
         description="Internship yang sudah dihapus tidak bisa dikembalikan lagi."
@@ -176,8 +176,8 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { getInternships, deleteInternship } from "@/services/admin/internshipService";
-import ConfirmModal from "@/components/ConfirmModal.vue";
-import PageSkeleton from "@/components/PageSkeleton.vue";
+import DeleteConfirmModal from "@/components/admin/DeleteConfirmModal.vue";
+import PageSkeleton from "@/components/admin/PageSkeleton.vue";
 import { notify } from "@/utils/toast";
 
 const internships = ref([]);

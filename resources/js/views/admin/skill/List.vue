@@ -170,7 +170,7 @@
             Next
         </button>
     </div>
-    <ConfirmModal
+    <DeleteConfirmModal
         v-model="showConfirm"
         title="Hapus Skill Ini?"
         description="Skill yang sudah dihapus tidak bisa dikembalikan lagi."
@@ -182,8 +182,8 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { getSkills, deleteSkill } from "@/services/admin/skillService";
-import ConfirmModal from "@/components/ConfirmModal.vue";
-import PageSkeleton from "@/components/PageSkeleton.vue";
+import DeleteConfirmModal from "@/components/admin/DeleteConfirmModal.vue";
+import PageSkeleton from "@/components/admin/PageSkeleton.vue";
 import { notify } from "@/utils/toast";
 
 const skills = ref([]);

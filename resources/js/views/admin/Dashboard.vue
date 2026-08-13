@@ -350,7 +350,7 @@
 <script setup>
 import { computed, ref, onMounted } from "vue";
 import dashboardService from "@/services/admin/dashboardService";
-import PageSkeleton from "@/components/PageSkeleton.vue";
+import PageSkeleton from "@/components/admin/PageSkeleton.vue";
 
 // ---- Greeting dinamis ----
 const greeting = computed(() => {
