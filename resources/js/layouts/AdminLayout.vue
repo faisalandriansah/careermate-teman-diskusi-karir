@@ -967,7 +967,10 @@
                                                 <span
                                                     v-if="unreadCount > 0"
                                                     class="rounded-full bg-blue-50 px-1.5 py-0.5 text-xs font-medium text-blue-700"
-                                                    >{{ unreadCount }} baru</span
+                                                    >{{
+                                                        unreadCount
+                                                    }}
+                                                    baru</span
                                                 >
                                             </div>
                                         </div>
@@ -988,7 +991,9 @@
                                                 @click="markAsRead(n)"
                                                 class="cursor-pointer border-b border-slate-50 px-4 py-3 text-sm transition-colors last:border-b-0 hover:bg-slate-50"
                                             >
-                                                <div class="flex items-start gap-2">
+                                                <div
+                                                    class="flex items-start gap-2"
+                                                >
                                                     <span
                                                         :class="
                                                             n.read
@@ -996,9 +1001,7 @@
                                                                 : 'mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-500'
                                                         "
                                                     ></span>
-                                                    <div
-                                                        class="min-w-0 flex-1"
-                                                    >
+                                                    <div class="min-w-0 flex-1">
                                                         <p
                                                             class="font-medium text-slate-800"
                                                         >

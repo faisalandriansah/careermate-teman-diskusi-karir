@@ -529,15 +529,15 @@
                 Analisis AI Selesai!
             </h2>
             <p class="text-xs text-slate-500 mt-1 mb-6">
-                Model AI berhasil memproses CV Anda dan menyusun rekomendasi
-                karir.
+                Model AI berhasil memproses CV Anda. Lihat rekomendasi karir
+                terbaik dan pilih target impian untuk menyusun roadmap.
             </p>
 
             <button
                 @click="goToResult"
                 class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm shadow-md transition active:scale-95"
             >
-                Lihat Hasil Analisis & Roadmap
+                Lihat Hasil Analisis
                 <svg
                     class="h-4 w-4"
                     fill="none"
@@ -593,7 +593,6 @@ const steps = [
     "AI Parsing & Ekstraksi Teks",
     "AI Deteksi Skill & Pengalaman",
     "Menghitung Match Score Karir",
-    "Menyusun Rekomendasi Roadmap",
 ];
 const activeStep = ref(0);
 
@@ -693,14 +692,10 @@ async function startAnalysis() {
         activeStep.value = 3;
 
         // Step 4: Career matching
-        await cvService.matchCareer(analysisResultId);
+        const matchResult = await cvService.matchCareer(analysisResultId);
         activeStep.value = 4;
 
-        // Step 5: Generate roadmap
-        const roadmapResult = await cvService.generateRoadmap(analysisResultId);
-        activeStep.value = 5;
-
-        finalAnalysisResult.value = roadmapResult.data;
+        finalAnalysisResult.value = matchResult.data;
 
         setTimeout(() => {
             stage.value = "done";

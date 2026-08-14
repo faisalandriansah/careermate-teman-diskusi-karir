@@ -15,12 +15,21 @@ export default {
         return data;
     },
 
-    async getResult(analysisId) {
-        const { data } = await apiClient.get(`student/analysis/${analysisId}`); // khusus download pdf
+    getPdfUrl(analysisId) {
+        return `${apiClient.defaults.baseURL}/student/analysis/${analysisId}/pdf`;
+    },
+
+    async getCareerMatches(analysisId) {
+        const { data } = await apiClient.get(
+            `student/analysis/${analysisId}/careers`,
+        );
         return data;
     },
 
-    getPdfUrl(analysisId) {
-        return `${apiClient.defaults.baseURL}/student/analysis/${analysisId}/pdf`; 
+    async getTargetAnalysis(analysisId, careerId) {
+        const { data } = await apiClient.get(
+            `student/analysis/${analysisId}/careers/${careerId}`,
+        );
+        return data;
     },
 };

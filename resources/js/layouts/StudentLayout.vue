@@ -438,14 +438,14 @@
                             >Upload CV</router-link
                         >
                         <router-link
-                            to="/student/HasilAnalisis"
+                            to="/student/hasilAnalisis"
                             @click="mobileOpen = false"
                             class="block px-3 py-2.5 text-sm font-medium text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
                             active-class="text-blue-600 font-semibold bg-blue-50"
                             >Hasil Analisis</router-link
                         >
                         <router-link
-                            to="/student/RiwayatAnalisis"
+                            to="/student/riwayatAnalisis"
                             @click="mobileOpen = false"
                             class="block px-3 py-2.5 text-sm font-medium text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
                             active-class="text-blue-600 font-semibold bg-blue-50"
@@ -500,13 +500,13 @@ const navItems = [
     { to: "/student/dashboard", label: "Dashboard" },
     { to: "/student/profile", label: "Profile" },
     { to: "/student/cv", label: "Upload CV" },
-    { to: "/student/HasilAnalisis", label: "Hasil Analisis" },
-    { to: "/student/RiwayatAnalisis", label: "Riwayat Analisis" },
+    { to: "/student/hasilAnalisis", label: "Hasil Analisis" },
+    { to: "/student/riwayatAnalisis", label: "Riwayat Analisis" },
     { to: "/student/support", label: "Support" },
 ];
 
 function isActive(path) {
-    return route.path === path;
+    return route.path === path || route.path.startsWith(path + "/");
 }
 
 const searchResults = computed(() => {
@@ -575,7 +575,7 @@ function gotoProfile() {
 }
 function gotoRiwayat() {
     stdOpen.value = false;
-    router.push("/student/RiwayatAnalisis");
+    router.push("/student/riwayatAnalisis");
 }
 function gotoSupport() {
     stdOpen.value = false;

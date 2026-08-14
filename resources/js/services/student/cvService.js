@@ -32,9 +32,9 @@ export default {
         return data;
     },
 
-    async generateRoadmap(analysisResultId) {
+    async generateRoadmap(analysisResultId, careerId) {
         const { data } = await apiClient.post(
-            `student/analysis/${analysisResultId}/generate-roadmap`,
+            `student/analysis/${analysisResultId}/careers/${careerId}/generate-roadmap`,
         );
         return data;
     },

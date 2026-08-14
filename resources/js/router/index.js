@@ -12,6 +12,7 @@ import AdminDashboard from "@/views/admin/Dashboard.vue";
 import StudentDashboard from "@/views/student/Dashboard.vue";
 import StudentProfile from "@/views/student/Profile.vue";
 import StudentHasilAnalisis from "@/views/student/HasilAnalisis.vue";
+import StudentTargetDetail from "@/views/student/TargetDetail.vue";
 import StudentCV from "@/views/student/CV.vue";
 import StudentRiwayatAnalisis from "@/views/student/RiwayatAnalisis.vue";
 import StudentSupport from "@/views/student/Support.vue";
@@ -219,6 +220,15 @@ const routes = [
                 path: "hasilAnalisis/:id?",
                 name: "StudentHasilAnalisis",
                 component: StudentHasilAnalisis,
+                meta: {
+                    requiresAuth: true,
+                    role: "mahasiswa",
+                },
+            },
+            {
+                path: "hasilAnalisis/:id/target/:careerId",
+                name: "StudentTargetDetail",
+                component: StudentTargetDetail,
                 meta: {
                     requiresAuth: true,
                     role: "mahasiswa",
