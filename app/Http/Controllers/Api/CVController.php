@@ -109,47 +109,68 @@ class CVController extends Controller
             ], 422);
         }
 
-        $result = $matcher->match($analysisResult->skills_json);
+        $allResults = $matcher->matchAll($analysisResult->skills_json);
 
-        if (!$result['career']) {
+        if (empty($allResults)) {
             return response()->json([
                 'message' => 'Tidak ditemukan career yang cocok. Pastikan data career_skills sudah diisi.',
             ], 404);
         }
 
+        $analysisResult->careerMatches()->delete();
+
+        foreach ($allResults as $index => $result) {
+            \App\Models\CareerMatchResult::create([
+                'analysis_result_id' => $analysisResult->id,
+                'career_id' => $result['career']->id,
+                'match_score' => $result['match_score'],
+                'matched_skills_json' => $result['matched_skills'],
+                'skill_gap_json' => $result['skill_gap'],
+                'is_best_match' => $index === 0,
+            ]);
+        }
+
+        $best = $allResults[0];
+
         $analysisResult->update([
-            'career_id' => $result['career']->id,
-            'match_score' => $result['match_score'],
-            'skill_gap_json' => $result['skill_gap'],
+            'career_id' => $best['career']->id,
+            'match_score' => $best['match_score'],
+            'skill_gap_json' => $best['skill_gap'],
         ]);
 
         $notifications->send(
             'analisis',
             'Analisis CV selesai',
-            "{$analysisResult->user->name} selesai dianalisis, skor kecocokan {$result['match_score']}% dengan karir \"{$result['career']->title}\".",
+            "{$analysisResult->user->name} selesai dianalisis, skor kecocokan {$best['match_score']}% dengan karir \"{$best['career']->title}\".",
             ['analysis_result_id' => $analysisResult->id],
         );
 
         return response()->json([
             'message' => 'Career matching berhasil.',
-            'data' => $analysisResult->fresh('career'),
+            'data' => $analysisResult->fresh(['career', 'careerMatches.career']),
         ]);
     }
 
-    public function generateRoadmap(AnalysisResult $analysisResult, RoadmapGeneratorService $generator)
+
+    public function generateRoadmap(AnalysisResult $analysisResult, \App\Models\Career $career, RoadmapGeneratorService $generator)
     {
-        if (empty($analysisResult->career_id)) {
+        abort_if($analysisResult->user_id !== auth()->id(), 403, 'Anda tidak berhak mengakses data ini.');
+
+        $careerMatch = $analysisResult->careerMatches()
+            ->where('career_id', $career->id)
+            ->first();
+
+        if (!$careerMatch) {
             return response()->json([
-                'message' => 'Analysis result ini belum memiliki career. Jalankan proses match-career terlebih dahulu.',
+                'message' => 'Data kecocokan untuk career ini tidak ditemukan. Jalankan proses match-career terlebih dahulu.',
             ], 422);
         }
-        $analysisResult->load('career');
 
         try {
             $result = $generator->generate(
                 $analysisResult->skills_json ?? [],
-                $analysisResult->skill_gap_json ?? [],
-                $analysisResult->career->title
+                $careerMatch->skill_gap_json ?? [],
+                $career->title
             );
         } catch (\Exception $e) {
             return response()->json([
@@ -157,14 +178,55 @@ class CVController extends Controller
             ], 500);
         }
 
-        $analysisResult->update([
+        $careerMatch->update([
             'ai_summary' => $result['summary'],
             'roadmap_json' => $result['roadmap'],
         ]);
 
+        if ($careerMatch->is_best_match) {
+            $analysisResult->update([
+                'ai_summary' => $result['summary'],
+                'roadmap_json' => $result['roadmap'],
+            ]);
+        }
+
         return response()->json([
             'message' => 'Roadmap berhasil digenerate.',
-            'data' => $analysisResult->fresh('career'),
+            'data' => $careerMatch->fresh('career'),
+        ]);
+    }
+
+    public function careerMatches(AnalysisResult $analysisResult)
+    {
+        abort_if($analysisResult->user_id !== auth()->id(), 403, 'Anda tidak berhak mengakses data ini.');
+
+        $matches = $analysisResult->careerMatches()
+            ->with('career')
+            ->orderByDesc('match_score')
+            ->get();
+
+        return response()->json([
+            'data' => $matches,
+        ]);
+    }
+
+    public function targetAnalysis(AnalysisResult $analysisResult, \App\Models\Career $career)
+    {
+        abort_if($analysisResult->user_id !== auth()->id(), 403, 'Anda tidak berhak mengakses data ini.');
+
+        $match = $analysisResult->careerMatches()
+            ->where('career_id', $career->id)
+            ->with('career')
+            ->first();
+
+        if (!$match) {
+            return response()->json([
+                'message' => 'Data kecocokan untuk career ini tidak ditemukan.',
+            ], 404);
+        }
+
+        return response()->json([
+            'data' => $match,
         ]);
     }
 

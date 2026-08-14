@@ -37,4 +37,14 @@ class AnalysisResult extends Model
     {
         return $this->belongsTo(Career::class);
     }
+
+    public function careerMatches()
+    {
+        return $this->hasMany(CareerMatchResult::class);
+    }
+
+    public function bestCareerMatch()
+    {
+        return $this->hasOne(CareerMatchResult::class)->where('is_best_match', true);
+    }
 }

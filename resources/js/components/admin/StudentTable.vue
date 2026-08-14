@@ -254,6 +254,7 @@
             @viewCV="openCV"
         />
     </div>
+    
 </template>
 
 <script setup>

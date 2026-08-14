@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\CVFile;
+use App\Models\AnalysisResult;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -42,6 +43,47 @@ class StudentController extends Controller
             ->paginate($request->get('per_page', 1000));
 
         return response()->json($mahasiswa);
+    }
+
+    /**
+     * Riwayat analisis seluruh mahasiswa (untuk menu admin).
+     * GET /admin/analysis/history
+     */
+    public function analysisHistory(Request $request)
+    {
+        $query = AnalysisResult::query()
+            ->with([
+                'user:id,name,email,created_at',
+                'user.studentProfile:id,user_id,photo_path',
+                'career:id,title',
+            ]);
+
+        // Pencarian by nama/email mahasiswa
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('name', 'like', "%$search%")
+                    ->orWhere('email', 'like', "%$search%");
+            });
+        }
+
+        $items = $query->orderByDesc('created_at')
+            ->paginate($request->get('per_page', 12));
+
+        // Sertakan foto profil (photo_url) pada tiap item via user.studentProfile
+        $items->getCollection()->transform(function (AnalysisResult $item) {
+            $item->user->student_profile_photo_url = $item->user->studentProfile?->photo_url;
+            return $item;
+        });
+
+        return response()->json([
+            'data' => $items,
+            'summary' => [
+                'total_analysis' => AnalysisResult::count(),
+                'active_students' => AnalysisResult::distinct('user_id')->count('user_id'),
+                'avg_score' => round(AnalysisResult::avg('match_score') ?? 0, 1),
+            ],
+        ]);
     }
 
     /**

@@ -37,6 +37,9 @@ import CareerSkillMapping from "@/views/admin/mapping/CareerSkillMapping.vue";
 // Import student components
 import StudentManagement from "@/views/admin/student/StudentManagement.vue";
 
+// Import analysis history component
+import AnalysisHistory from "@/views/admin/analysis/Riwayat.vue";
+
 const routes = [
     {
         path: "/",
@@ -171,6 +174,16 @@ const routes = [
                 path: "mapping",
                 name: "CareerSkillMapping",
                 component: CareerSkillMapping,
+                meta: {
+                    requiresAuth: true,
+                    role: "admin",
+                },
+            },
+            // Riwayat Analisis route
+            {
+                path: "riwayat-analisis",
+                name: "AnalysisHistory",
+                component: AnalysisHistory,
                 meta: {
                     requiresAuth: true,
                     role: "admin",

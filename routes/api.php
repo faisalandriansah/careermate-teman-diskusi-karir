@@ -38,7 +38,9 @@ Route::middleware(['auth:sanctum', 'role:mahasiswa'])
             Route::post('/cv/{cvFile}/extract', [CVController::class, 'extract']);
             Route::post('/cv/{cvFile}/detect-skills', [CVController::class, 'detectSkills']);
             Route::post('/analysis/{analysisResult}/match-career', [CVController::class, 'matchCareer']);
-            Route::post('/analysis/{analysisResult}/generate-roadmap', [CVController::class, 'generateRoadmap']);
+            Route::get('/analysis/{analysisResult}/careers', [CVController::class, 'careerMatches']);
+            Route::get('/analysis/{analysisResult}/careers/{career}', [CVController::class, 'targetAnalysis']);
+            Route::post('/analysis/{analysisResult}/careers/{career}/generate-roadmap', [CVController::class, 'generateRoadmap']);
             Route::get('/analysis/history', [CVController::class, 'history']);
             Route::get('/analysis/latest', [CVController::class, 'latestResult']);
             Route::get('/analysis/{analysisResult}', [CVController::class, 'showResult']);
@@ -64,6 +66,8 @@ Route::middleware(['auth:sanctum', 'role:admin'])
 
         Route::apiResource('students', StudentController::class)
             ->only(['index', 'show', 'destroy']);
+
+        Route::get('analysis/history', [StudentController::class, 'analysisHistory']);
 
         Route::get('students/{student}/cv/{cvFile}', [StudentController::class, 'showCV']);
 

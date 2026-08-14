@@ -366,6 +366,49 @@
                                     </svg>
                                 </router-link>
                             </li>
+                            <li>
+                                <router-link
+                                    to="/admin/riwayat-analisis"
+                                    class="group relative flex items-center justify-between rounded-lg px-4 py-3 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
+                                    active-class="bg-blue-50 text-blue-700"
+                                    v-slot="{ isActive }"
+                                >
+                                    <div class="flex items-center gap-3">
+                                        <svg
+                                            class="h-5 w-5"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                                            />
+                                        </svg>
+                                        Riwayat Analisis
+                                    </div>
+                                    <svg
+                                        :class="[
+                                            'h-4 w-4 text-slate-400 transition-transform duration-200 group-hover:text-slate-600',
+                                            isActive
+                                                ? 'rotate-90 text-blue-600'
+                                                : '',
+                                        ]"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M9 5l7 7-7 7"
+                                        ></path>
+                                    </svg>
+                                </router-link>
+                            </li>
                         </ul>
                     </div>
                 </div>
