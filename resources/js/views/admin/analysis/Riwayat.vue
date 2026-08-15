@@ -310,11 +310,19 @@
                             >
                                 Karier Rekomendasi
                             </p>
-                            <p
-                                class="truncate text-sm font-semibold text-slate-800"
-                            >
-                                {{ item.career?.title ?? "-" }}
-                            </p>
+                            <div class="flex min-w-0 items-center gap-1.5">
+                                <p
+                                    class="truncate text-sm font-semibold text-slate-800"
+                                >
+                                    {{ item.career?.title ?? "-" }}
+                                </p>
+                                <span
+                                    v-if="(item.career_matches_count ?? 0) > 0"
+                                    class="inline-flex shrink-0 items-center rounded-full border border-indigo-100 bg-indigo-50 px-2 py-0.5 text-[10px] font-semibold text-indigo-600"
+                                >
+                                    +{{ item.career_matches_count }} karir
+                                </span>
+                            </div>
                         </div>
 
                         <div class="hidden sm:block h-9 w-px bg-slate-200"></div>

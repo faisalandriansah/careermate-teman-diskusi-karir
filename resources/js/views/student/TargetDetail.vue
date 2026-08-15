@@ -325,7 +325,7 @@ const analysisId = route.params.id;
 const careerId = route.params.careerId;
 
 const loading = ref(true);
-const isProfileLoading = ref(true);
+const isProfileLoading = ref(false);
 const isProfileComplete = computed(() => authStore.isProfileComplete);
 const errorMessage = ref("");
 const target = ref(null);
@@ -382,22 +382,9 @@ async function load() {
     }
 }
 
-async function loadProfile() {
-    if (!authStore.token) {
-        isProfileLoading.value = false;
-        return;
-    }
-    try {
-        await authStore.fetchMe();
-    } catch (e) {
-        console.log("Auth me gagal", e);
-    } finally {
-        isProfileLoading.value = false;
-    }
-}
-
 onMounted(async () => {
-    await Promise.all([loadProfile(), load()]);
+    // Profil sudah disegarkan oleh StudentLayout (fetchMe), cukup muat data target.
+    await load();
 });
 </script>
 

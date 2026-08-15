@@ -124,9 +124,31 @@
                 </div>
                 <button
                     @click="downloadPdf"
-                    class="shrink-0 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 backdrop-blur-md text-white text-xs font-semibold transition active:scale-95"
+                    :disabled="downloading"
+                    class="shrink-0 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 backdrop-blur-md text-white text-xs font-semibold transition active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                     <svg
+                        v-if="downloading"
+                        class="h-4 w-4 animate-spin text-blue-100"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                    >
+                        <circle
+                            class="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            stroke-width="4"
+                        ></circle>
+                        <path
+                            class="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                        ></path>
+                    </svg>
+                    <svg
+                        v-else
                         class="h-4 w-4 text-blue-100"
                         fill="none"
                         stroke="currentColor"
@@ -139,7 +161,11 @@
                             d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"
                         />
                     </svg>
-                    Download Laporan
+                    {{
+                        downloading
+                            ? "Menyiapkan Laporan..."
+                            : "Download Laporan"
+                    }}
                 </button>
             </div>
         </StudentHero>
@@ -512,7 +538,7 @@ const analysisId = route.params.id;
 const resolvedId = computed(() => analysis.value?.id ?? analysisId);
 
 const loading = ref(true);
-const isProfileLoading = ref(true);
+const isProfileLoading = ref(false);
 const isProfileComplete = computed(() => authStore.isProfileComplete);
 const errorMessage = ref("");
 const isEmpty = ref(false);
@@ -622,21 +648,34 @@ async function loadAnalysis() {
     errorMessage.value = "";
     isEmpty.value = false;
     try {
-        const id = route.params.id;
-        const result = id
-            ? await analysisService.getResult(id)
-            : await analysisService.getLatest();
+        const routeId = route.params.id;
+
+        // Jalankan ambil data analisis & daftar karir secara paralel
+        // (dulu berurutan → 2x lambat karena server mesti balas 2 request).
+        const analysisPromise = routeId
+            ? analysisService.getResult(routeId)
+            : analysisService.getLatest();
+        const matchesPromise = routeId
+            ? analysisService.getCareerMatches(routeId).catch(() => ({}))
+            : null;
+
+        const result = await analysisPromise;
         analysis.value = result.data;
 
-        const resolvedId = analysis.value?.id;
-        if (resolvedId) {
-            try {
-                const matches = await analysisService.getCareerMatches(
-                    resolvedId,
-                );
-                careerMatches.value = matches.data ?? [];
-            } catch (e) {
-                careerMatches.value = [];
+        if (matchesPromise) {
+            const matches = await matchesPromise;
+            careerMatches.value = matches.data ?? [];
+        } else {
+            const resolvedId = analysis.value?.id;
+            if (resolvedId) {
+                try {
+                    const matches = await analysisService.getCareerMatches(
+                        resolvedId,
+                    );
+                    careerMatches.value = matches.data ?? [];
+                } catch (e) {
+                    careerMatches.value = [];
+                }
             }
         }
     } catch (err) {
@@ -652,32 +691,23 @@ async function loadAnalysis() {
     }
 }
 
-async function loadProfile() {
-    if (!authStore.token) {
-        isProfileLoading.value = false;
-        return;
-    }
-    try {
-        await authStore.fetchMe();
-    } catch (e) {
-        console.log("Auth me gagal", e);
-    } finally {
-        isProfileLoading.value = false;
-    }
-}
-
 onMounted(async () => {
-    await Promise.all([loadAnalysis(), loadProfile()]);
+    // Profil sudah disegarkan oleh StudentLayout (fetchMe), jadi cukup muat data analisis.
+    await loadAnalysis();
 });
 
-async function downloadPdf() {
-    try {
-        const id = analysis.value?.id;
-        if (!id) {
-            alert("Data analisis belum tersedia.");
-            return;
-        }
+const downloading = ref(false);
 
+async function downloadPdf() {
+    if (downloading.value) return;
+    const id = analysis.value?.id;
+    if (!id) {
+        alert("Data analisis belum tersedia.");
+        return;
+    }
+
+    downloading.value = true;
+    try {
         const response = await apiClient.get(`student/analysis/${id}/pdf`, {
             responseType: "blob",
         });
@@ -692,6 +722,8 @@ async function downloadPdf() {
         window.URL.revokeObjectURL(url);
     } catch (err) {
         alert("Gagal mengunduh PDF. Silakan coba lagi.");
+    } finally {
+        downloading.value = false;
     }
 }
 

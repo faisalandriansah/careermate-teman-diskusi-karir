@@ -281,6 +281,12 @@
                                 >
                                     Terbaru
                                 </span>
+                                <span
+                                    v-if="item.careerCount > 0"
+                                    class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-100 shrink-0"
+                                >
+                                    +{{ item.careerCount }} karir lain
+                                </span>
                             </div>
                             <p class="text-xs text-slate-400 truncate mt-0.5">
                                 {{ item.dateShort }} ·
@@ -388,6 +394,12 @@
                             >
                                 Terbaru
                             </span>
+                            <span
+                                v-if="item.careerCount > 0"
+                                class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-100 shrink-0"
+                            >
+                                +{{ item.careerCount }} karir lain
+                            </span>
                         </div>
                         <p class="text-xs text-slate-400 truncate mt-0.5">
                             {{ item.skills }}
@@ -457,7 +469,7 @@ import analysisService from "@/services/student/analysisService";
 const router = useRouter();
 const authStore = useAuthStore();
 const loading = ref(true);
-const isProfileLoading = ref(true);
+const isProfileLoading = ref(false);
 const isProfileComplete = computed(() => authStore.isProfileComplete);
 const errorMessage = ref("");
 const rawHistory = ref([]);
@@ -490,23 +502,10 @@ function handleClickOutside(e) {
 
 onMounted(async () => {
     document.addEventListener("click", handleClickOutside);
-    await Promise.all([loadProfile(), loadHistory()]);
+    // Profil sudah disegarkan oleh StudentLayout (fetchMe), cukup muat riwayat saja.
+    await loadHistory();
 });
 onUnmounted(() => document.removeEventListener("click", handleClickOutside));
-
-async function loadProfile() {
-    if (!authStore.token) {
-        isProfileLoading.value = false;
-        return;
-    }
-    try {
-        await authStore.fetchMe();
-    } catch (e) {
-        console.log("Auth me gagal", e);
-    } finally {
-        isProfileLoading.value = false;
-    }
-}
 
 async function loadHistory() {
     loading.value = true;
@@ -536,6 +535,7 @@ function mapHistory(items) {
             role: item.career?.title ?? "Belum ada rekomendasi",
             skills: skillNames || "Belum ada skill terdeteksi",
             score: item.match_score ?? 0,
+            careerCount: item.career_matches_count ?? 0,
             iconBg: "bg-blue-50",
             iconColor: "text-blue-600",
             iconPath:

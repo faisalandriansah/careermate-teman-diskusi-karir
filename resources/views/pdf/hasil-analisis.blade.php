@@ -7,7 +7,7 @@
     <style>
         @page {
             size: A4;
-            margin: 14mm 15mm 16mm 15mm;
+            margin: 16mm 16mm 18mm 16mm;
         }
 
         *,
@@ -20,355 +20,492 @@
 
         body {
             font-family: 'Inter', 'DejaVu Sans', sans-serif;
-            font-size: 10pt;
+            font-size: 9.5pt;
             color: #1f2937;
             line-height: 1.55;
         }
 
-        strong {
-            font-weight: 700;
-        }
-
-        /* ============ HEADER (letterhead brand band) ============ */
-        .header-wrap {
+        /* ============ MASTHEAD ============ */
+        .masthead {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
         }
 
-        .header-wrap td {
-            vertical-align: top;
-            padding: 0;
-        }
-
-        .header-band-cell {
-            width: 74%;
-        }
-
-        .header-band {
-            background: #2b3a8f;
-            border-bottom-right-radius: 40px;
-            padding: 18px 22px;
-        }
-
-        .header-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .header-logo-cell {
-            width: 46px;
+        .masthead td {
             vertical-align: middle;
         }
 
-        .logo-icon-box {
-            width: 40px;
-            height: 40px;
-            background: #ffffff;
-            border-radius: 6px;
-            text-align: center;
-            line-height: 40px;
+        .mh-logo {
+            width: 46px;
         }
 
-        .logo-icon-box img {
-            height: 26px;
+        .logo-box {
+            width: 40px;
+            height: 40px;
+            border: 1.5px solid #1e293b;
+            border-radius: 6px;
+            text-align: center;
+            line-height: 38px;
+        }
+
+        .logo-box img {
+            height: 24px;
             width: auto;
             vertical-align: middle;
         }
 
         .logo-fallback {
             font-weight: 700;
-            color: #2b3a8f;
+            color: #1e293b;
+            font-size: 12pt;
+        }
+
+        .brand-name {
             font-size: 13pt;
-        }
-
-        .header-text-cell {
-            vertical-align: middle;
-            padding-left: 14px;
-        }
-
-        .header-title {
-            font-size: 15pt;
             font-weight: 700;
-            color: #ffffff;
-            line-height: 1.2;
-            letter-spacing: -0.2px;
+            color: #0f172a;
+            letter-spacing: .2px;
         }
 
-        .header-subtitle {
-            font-size: 8pt;
-            color: #c3c9ec;
-            letter-spacing: 1.5px;
+        .brand-sub {
+            font-size: 7pt;
+            color: #64748b;
+            letter-spacing: 1.4px;
             text-transform: uppercase;
-            margin-top: 4px;
+            margin-top: 2px;
         }
 
-        .header-meta-cell {
-            width: 26%;
+        .mh-meta {
+            width: 44%;
             text-align: right;
-            vertical-align: top;
-            padding: 6px 2px 0 14px;
-            font-size: 8.5pt;
-            color: #4b5563;
-            line-height: 1.8;
-            white-space: nowrap;
         }
 
-        .header-meta-label {
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            color: #6b7280;
-            font-weight: 600;
-            font-size: 7.5pt;
+        .meta-line {
+            font-size: 8pt;
+            margin-bottom: 3px;
         }
 
-        .header-meta-value {
-            font-size: 10pt;
-            font-weight: 600;
-            color: #2b3a8f;
-            white-space: nowrap;
+        .meta-line .k {
+            color: #64748b;
         }
 
-        /* ============ SCORE CARD ============ */
-        .score-card {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-left: 5px solid #2b3a8f;
-            border-radius: 8px;
-            padding: 16px 20px;
-            margin-bottom: 20px;
+        .meta-line .v {
+            color: #0f172a;
+            font-weight: 700;
+            padding-left: 6px;
+        }
+
+        /* ============ DOCUMENT TITLE ============ */
+        .doc-title {
+            text-align: center;
+            border-top: 2px solid #1e293b;
+            border-bottom: 1px solid #cbd5e1;
+            padding: 12px 0 10px;
+            margin-bottom: 16px;
+        }
+
+        .doc-title h1 {
+            font-size: 14pt;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: 2px;
+        }
+
+        .doc-title p {
+            font-size: 8pt;
+            color: #475569;
+            margin-top: 4px;
+            letter-spacing: .3px;
+        }
+
+        /* ============ SECTION ============ */
+        .section {
+            margin-bottom: 15px;
             page-break-inside: avoid;
         }
 
-        .score-table {
+        .sec-head {
+            border-bottom: 1.2px solid #94a3b8;
+            padding-bottom: 5px;
+            margin-bottom: 9px;
+        }
+
+        .sec-no {
+            display: inline-block;
+            background: #1e293b;
+            color: #ffffff;
+            font-size: 8pt;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 3px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .sec-title {
+            font-size: 10pt;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: .4px;
+            text-transform: uppercase;
+            vertical-align: middle;
+        }
+
+        /* ============ INFO TABLE ============ */
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #e2e8f0;
+        }
+
+        .info-table td {
+            padding: 6px 12px;
+            font-size: 9pt;
+            border-bottom: 1px solid #eef2f7;
+        }
+
+        .info-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .info-table .k {
+            width: 28%;
+            color: #64748b;
+            font-weight: 600;
+            background: #f8fafc;
+        }
+
+        .info-table .v {
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        /* ============ RESULT CARD ============ */
+        .result-card {
+            border: 1px solid #e2e8f0;
+            border-top: 4px solid #1e293b;
+            border-radius: 6px;
+            background: #fcfcfd;
+        }
+
+        .result-table {
             width: 100%;
             border-collapse: collapse;
         }
 
-        .score-value-cell {
-            width: 150px;
+        .score-cell {
+            width: 160px;
+            text-align: center;
             vertical-align: middle;
+            padding: 14px 16px;
         }
 
-        .score-number {
+        .score-num {
             font-size: 32pt;
             font-weight: 700;
-            color: #2b3a8f;
+            color: #1e293b;
             line-height: 1;
         }
 
-        .score-label {
-            font-size: 7.5pt;
+        .score-cap {
+            font-size: 7pt;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            font-weight: 600;
-            color: #4b5563;
+            letter-spacing: 1.3px;
+            color: #64748b;
             margin-top: 6px;
         }
 
-        .score-details-cell {
-            padding-left: 26px;
+        .career-cell {
+            padding: 14px 18px 14px 20px;
             vertical-align: middle;
+            border-left: 1px solid #e2e8f0;
         }
 
-        .career-title {
-            font-size: 13pt;
+        .career-role {
+            font-size: 7.5pt;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .career-name {
+            font-size: 12.5pt;
             font-weight: 700;
-            color: #111827;
-            margin-bottom: 2px;
+            color: #0f172a;
         }
 
         .career-desc {
-            font-size: 9pt;
-            color: #4b5563;
-            margin-bottom: 14px;
+            font-size: 8.5pt;
+            color: #475569;
+            margin: 4px 0 10px;
         }
 
         .progress-track {
-            background: #e5e7eb;
-            height: 7px;
-            width: 100%;
-            border-radius: 4px;
+            background: #e2e8f0;
+            height: 6px;
+            border-radius: 3px;
         }
 
         .progress-fill {
-            background: #2b3a8f;
-            height: 7px;
-            border-radius: 4px;
+            background: #1e293b;
+            height: 6px;
+            border-radius: 3px;
         }
 
-        .progress-caption {
+        .progress-cap {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 6px;
+            margin-top: 5px;
         }
 
-        .progress-caption td {
+        .progress-cap td {
             font-size: 7.5pt;
-            color: #6b7280;
-            font-weight: 600;
-            letter-spacing: 0.5px;
+            color: #64748b;
         }
 
-        .progress-caption .caption-end {
+        .progress-cap .r {
             text-align: right;
         }
 
-        /* ============ SECTION HEADERS ============ */
-        .section {
-            margin-bottom: 18px;
-            page-break-inside: avoid;
-        }
-
-        .section-head {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 12px;
-        }
-
-        .section-head td {
-            padding: 0;
-            vertical-align: bottom;
-        }
-
-        .section-title {
-            font-size: 10pt;
-            font-weight: 700;
-            color: #2b3a8f;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            white-space: nowrap;
-            padding-right: 12px;
-        }
-
-        .section-rule {
-            border-bottom: 1.5px solid #cbd5e1;
-            width: 100%;
-        }
-
-        /* ============ SKILL CHIPS ============ */
+        /* ============ CHIPS ============ */
         .chip-box {
-            line-height: 2.4;
+            line-height: 2.3;
         }
 
         .chip {
             display: inline-block;
-            padding: 4px 12px;
-            border-radius: 6px;
-            font-size: 9pt;
+            padding: 3px 11px;
+            border-radius: 4px;
+            font-size: 8.5pt;
             font-weight: 500;
-            margin-right: 6px;
-            margin-bottom: 5px;
+            margin-right: 5px;
+            margin-bottom: 4px;
         }
 
-        .chip-skill {
-            background: #f3f4f6;
-            border: 1px solid #e5e7eb;
-            color: #374151;
+        .chip-own {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            color: #334155;
         }
 
         .chip-gap {
-            background: #eef2ff;
-            border: 1px solid #c7d2fe;
-            color: #2b3a8f;
+            background: #ffffff;
+            border: 1px solid #94a3b8;
+            color: #0f172a;
         }
 
-        .empty-text {
-            font-size: 9pt;
-            color: #6b7280;
+        .empty {
+            font-size: 8.5pt;
+            color: #64748b;
             font-style: italic;
-            margin: 0;
+        }
+
+        /* ============ RANK TABLE ============ */
+        .rank-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #dbe3ee;
+        }
+
+        .rank-table th {
+            background: #1e293b;
+            color: #ffffff;
+            font-size: 8pt;
+            font-weight: 600;
+            letter-spacing: .4px;
+            padding: 7px 10px;
+            text-align: left;
+        }
+
+        .rank-table td {
+            padding: 7px 10px;
+            border-bottom: 1px solid #eef2f7;
+            font-size: 9pt;
+            color: #1f2937;
+        }
+
+        .rank-table tr:nth-child(even) td {
+            background: #f8fafc;
+        }
+
+        .rank-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .rank-no {
+            width: 34px;
+            color: #64748b;
+        }
+
+        .rank-name {
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .best-tag {
+            display: inline-block;
+            font-size: 6.5pt;
+            font-weight: 700;
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+            border-radius: 3px;
+            padding: 1px 6px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        .rank-score {
+            width: 80px;
+            text-align: right;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .rank-level {
+            width: 130px;
+            text-align: right;
+            font-weight: 600;
+        }
+
+        .lv-hi {
+            color: #166534;
+        }
+
+        .lv-mid {
+            color: #b45309;
+        }
+
+        .lv-low {
+            color: #b91c1c;
+        }
+
+        /* ============ ALTERNATIVE CAREER ============ */
+        .alt-card {
+            border: 1px solid #e2e8f0;
+            border-left: 3px solid #64748b;
+            border-radius: 5px;
+            padding: 10px 14px;
+            margin-bottom: 8px;
+        }
+
+        .alt-head {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 4px;
+        }
+
+        .alt-head td {
+            padding: 0;
+            vertical-align: middle;
+        }
+
+        .alt-name {
+            font-size: 10pt;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .alt-score {
+            text-align: right;
+            font-size: 9pt;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .alt-sub {
+            font-size: 7pt;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: .8px;
+            margin: 6px 0 2px;
         }
 
         /* ============ ROADMAP TABLE ============ */
         .roadmap-table {
             width: 100%;
             border-collapse: collapse;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            overflow: hidden;
+            border: 1px solid #dbe3ee;
         }
 
         .roadmap-table th {
-            background: #2b3a8f;
+            background: #1e293b;
             color: #ffffff;
-            font-size: 8.5pt;
+            font-size: 8pt;
             font-weight: 600;
-            letter-spacing: 0.5px;
-            padding: 9px 14px;
+            letter-spacing: .4px;
+            padding: 7px 12px;
             text-align: left;
         }
 
         .roadmap-table td {
-            padding: 9px 14px;
-            border-bottom: 1px solid #e5e7eb;
-            font-size: 9.5pt;
+            padding: 7px 12px;
+            border-bottom: 1px solid #eef2f7;
+            font-size: 9pt;
             color: #1f2937;
-            vertical-align: middle;
         }
 
-        .roadmap-table tbody tr:nth-child(even) td {
+        .roadmap-table tr:nth-child(even) td {
             background: #f8fafc;
         }
 
-        .roadmap-table tbody tr:last-child td {
+        .roadmap-table tr:last-child td {
             border-bottom: none;
         }
 
         .week-label {
-            font-weight: 600;
-            color: #2b3a8f;
+            font-weight: 700;
+            color: #1e293b;
             white-space: nowrap;
         }
 
         .roadmap-empty {
             text-align: center;
-            padding: 18px;
+            padding: 12px;
         }
 
-        /* ============ AI SUMMARY ============ */
-        .summary-card {
-            background: #f8fafc;
+        /* ============ CONCLUSION ============ */
+        .conclusion {
             border: 1px solid #e2e8f0;
-            border-left: 4px solid #2b3a8f;
-            border-radius: 6px;
-            padding: 14px 18px;
-            font-size: 9.5pt;
-            line-height: 1.7;
-            color: #374151;
+            border-left: 4px solid #1e293b;
+            border-radius: 4px;
+            padding: 11px 16px;
+            font-size: 9pt;
+            line-height: 1.65;
+            color: #334155;
+            background: #fcfcfd;
         }
 
-        /* ============ SIGNATURE (letterhead touch) ============ */
-        .signature-block {
-            margin-top: 26px;
+        /* ============ SIGNATURE & FOOTER ============ */
+        .signature {
+            margin-top: 24px;
             page-break-inside: avoid;
         }
 
-        .signature-name {
+        .sig-name {
             font-size: 10.5pt;
             font-weight: 700;
-            letter-spacing: 0.5px;
-            color: #111827;
+            color: #0f172a;
         }
 
-        .signature-role {
-            font-size: 8.5pt;
-            color: #6b7280;
-        }
-
-        /* ============ FOOTER (letterhead bar) ============ */
-        .footer-note {
-            margin-top: 18px;
-            padding-top: 10px;
-            border-top: 1px solid #d1d5db;
+        .sig-role {
             font-size: 8pt;
-            color: #6b7280;
+            color: #64748b;
+        }
+
+        .footer-note {
+            margin-top: 14px;
+            padding-top: 9px;
+            border-top: 1px solid #cbd5e1;
+            font-size: 7.5pt;
+            color: #64748b;
             text-align: center;
         }
 
-        .footer-note strong {
-            color: #374151;
-            font-weight: 600;
+        .footer-note b {
+            color: #334155;
         }
     </style>
 </head>
@@ -379,112 +516,192 @@
         $logoData = file_exists($logoPath) ? base64_encode(file_get_contents($logoPath)) : null;
         $updatedAt = $analysis->updated_at?->locale('id')->translatedFormat('d F Y');
         $score = (int) round($analysis->match_score ?? 0);
-        $skills = collect($analysis->skills_json ?? [])->map(fn($s) => is_array($s) ? $s['name'] : $s);
+        $skills = collect($analysis->skills_json ?? [])->map(fn ($s) => is_array($s) ? $s['name'] : $s);
+        $user = $analysis->user;
+        $matches = $analysis->careerMatches;
+        $best = $analysis->career;
+        $reportNo = 'RPT-CM-' . str_pad($analysis->id, 4, '0', STR_PAD_LEFT) . '/' . ($analysis->created_at?->year ?? date('Y'));
+
+        $levelOf = function ($s) {
+            if ($s >= 80) {
+                return 'Sangat Tinggi';
+            }
+            if ($s >= 60) {
+                return 'Tinggi';
+            }
+            if ($s >= 40) {
+                return 'Sedang';
+            }
+            return 'Perlu Ditingkatkan';
+        };
+        $levelClass = function ($s) {
+            if ($s >= 60) {
+                return 'lv-hi';
+            }
+            if ($s >= 40) {
+                return 'lv-mid';
+            }
+            return 'lv-low';
+        };
     @endphp
 
-    <!-- Header -->
-    <table class="header-wrap">
+    <!-- Masthead -->
+    <table class="masthead">
         <tr>
-            <td class="header-band-cell">
-                <div class="header-band">
-                    <table class="header-table">
-                        <tr>
-                            <td class="header-logo-cell">
-                                <div class="logo-icon-box">
-                                    @if ($logoData)
-                                        <img src="data:image/png;base64,{{ $logoData }}" alt="CareerMate AI">
-                                    @else
-                                        <span class="logo-fallback">CM</span>
-                                    @endif
-                                </div>
-                            </td>
-                            <td class="header-text-cell">
-                                <div class="header-title">Laporan Hasil Analisis CV</div>
-                                <div class="header-subtitle">CareerMate AI &middot; Career Matching Report</div>
-                            </td>
-                        </tr>
-                    </table>
+            <td class="mh-logo">
+                <div class="logo-box">
+                    @if ($logoData)
+                        <img src="data:image/png;base64,{{ $logoData }}" alt="CareerMate">
+                    @else
+                        <span class="logo-fallback">CM</span>
+                    @endif
                 </div>
             </td>
-            <td class="header-meta-cell">
-                <div class="header-meta-label">Diperbarui</div>
-                <div class="header-meta-value">{{ $updatedAt ?? '—' }}</div>
+            <td>
+                <div class="brand-name">CareerMate</div>
+                <div class="brand-sub">Pusat Pengembangan Karir Mahasiswa</div>
+            </td>
+            <td class="mh-meta">
+                <div class="meta-line"><span class="k">No. Laporan</span><span class="v">{{ $reportNo }}</span></div>
+                <div class="meta-line"><span class="k">Tanggal Terbit</span><span class="v">{{ $updatedAt ?? '—' }}</span></div>
+                <div class="meta-line"><span class="k">Status</span><span class="v">Final</span></div>
             </td>
         </tr>
     </table>
 
-    <!-- Score -->
-    <div class="score-card">
-        <table class="score-table">
+    <!-- Document title -->
+    <div class="doc-title">
+        <h1>LAPORAN HASIL ANALISIS CV</h1>
+        <p>Dokumen ini merupakan hasil pemetaan kualifikasi, keterampilan, dan kesesuaian karir berdasarkan berkas CV.</p>
+    </div>
+
+    <!-- I. Data Analisis -->
+    <div class="section">
+        <div class="sec-head"><span class="sec-no">I</span><span class="sec-title">Data Analisis</span></div>
+        <table class="info-table">
             <tr>
-                <td class="score-value-cell">
-                    <div class="score-number">{{ $score }}%</div>
-                    <div class="score-label">Match Score</div>
-                </td>
-                <td class="score-details-cell">
-                    <div class="career-title">{{ $analysis->career->title ?? 'Belum ada rekomendasi' }}</div>
-                    <p class="career-desc">Peran kerja yang paling direkomendasikan berdasarkan pemetaan
-                        kualifikasi dan pengalaman pada CV Anda.</p>
-                    <div class="progress-track">
-                        <div class="progress-fill" style="width: {{ $score }}%;"></div>
-                    </div>
-                    <table class="progress-caption">
-                        <tr>
-                            <td>Skor Kecocokan</td>
-                            <td class="caption-end">{{ $score }}%</td>
-                        </tr>
-                    </table>
-                </td>
+                <td class="k">Nama Mahasiswa</td>
+                <td class="v">{{ $user->name ?? '—' }}</td>
+            </tr>
+            <tr>
+                <td class="k">Email</td>
+                <td class="v">{{ $user->email ?? '—' }}</td>
+            </tr>
+            <tr>
+                <td class="k">Berkas CV</td>
+                <td class="v">{{ $analysis->cvFile->file_name ?? '—' }}</td>
+            </tr>
+            <tr>
+                <td class="k">Tanggal Analisis</td>
+                <td class="v">{{ $analysis->created_at?->locale('id')->translatedFormat('d F Y H:i') ?? '—' }}</td>
             </tr>
         </table>
     </div>
 
-    <!-- Skills Detected -->
+    <!-- II. Hasil Rekomendasi Utama -->
     <div class="section">
-        <table class="section-head">
-            <tr>
-                <td class="section-title">Skill Terdeteksi</td>
-                <td class="section-rule"></td>
-            </tr>
-        </table>
+        <div class="sec-head"><span class="sec-no">II</span><span class="sec-title">Hasil Rekomendasi Utama</span></div>
+        <div class="result-card">
+            <table class="result-table">
+                <tr>
+                    <td class="score-cell">
+                        <div class="score-num">{{ $score }}%</div>
+                        <div class="score-cap">Skor Kecocokan</div>
+                    </td>
+                    <td class="career-cell">
+                        <div class="career-role">Rekomendasi Karir Utama</div>
+                        <div class="career-name">{{ $best->title ?? 'Belum ada rekomendasi' }}</div>
+                        @if (!empty($best->description))
+                            <div class="career-desc">{{ $best->description }}</div>
+                        @endif
+                        <div class="progress-track">
+                            <div class="progress-fill" style="width: {{ $score }}%;"></div>
+                        </div>
+                        <table class="progress-cap">
+                            <tr>
+                                <td>Tingkat Kecocokan: {{ $levelOf($score) }}</td>
+                                <td class="r">{{ $score }}%</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- III. Keterampilan Terdeteksi -->
+    <div class="section">
+        <div class="sec-head"><span class="sec-no">III</span><span class="sec-title">Keterampilan Terdeteksi</span></div>
         <div class="chip-box">
             @forelse ($skills as $skill)
-                <span class="chip chip-skill">{{ $skill }}</span>
+                <span class="chip chip-own">{{ $skill }}</span>
             @empty
-                <p class="empty-text">Belum ada skill yang terdeteksi dalam dokumen CV Anda.</p>
+                <p class="empty">Belum ada keterampilan yang terdeteksi dalam berkas CV.</p>
             @endforelse
         </div>
     </div>
 
-    <!-- Skill Gap -->
+    <!-- IV. Daftar Rekomendasi Karir -->
     <div class="section">
-        <table class="section-head">
-            <tr>
-                <td class="section-title">Skill Gap (Perlu Ditingkatkan)</td>
-                <td class="section-rule"></td>
-            </tr>
+        <div class="sec-head"><span class="sec-no">IV</span><span class="sec-title">Daftar Rekomendasi Karir</span></div>
+        <table class="rank-table">
+            <thead>
+                <tr>
+                    <th style="width:34px;">No</th>
+                    <th>Karir</th>
+                    <th style="width:80px; text-align:right;">Skor</th>
+                    <th style="width:130px; text-align:right;">Tingkat Kecocokan</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($matches as $index => $m)
+                    <tr>
+                        <td class="rank-no">{{ $index + 1 }}</td>
+                        <td class="rank-name">
+                            {{ $m->career->title ?? '—' }}
+                            @if ($m->is_best_match)
+                                <span class="best-tag">Rekomendasi Utama</span>
+                            @endif
+                        </td>
+                        <td class="rank-score">{{ (int) round($m->match_score ?? 0) }}%</td>
+                        <td class="rank-level {{ $levelClass($m->match_score ?? 0) }}">
+                            {{ $levelOf($m->match_score ?? 0) }}
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td class="rank-no">1</td>
+                        <td class="rank-name">{{ $best->title ?? '—' }}</td>
+                        <td class="rank-score">{{ $score }}%</td>
+                        <td class="rank-level {{ $levelClass($score) }}">{{ $levelOf($score) }}</td>
+                    </tr>
+                @endforelse
+            </tbody>
         </table>
+    </div>
+
+    <!-- V. Keterampilan yang Perlu Ditingkatkan -->
+    <div class="section">
+        <div class="sec-head"><span class="sec-no">V</span><span class="sec-title">Keterampilan yang Perlu Ditingkatkan</span></div>
+        <p class="empty" style="margin-bottom:6px;">
+            Untuk memenuhi kualifikasi sebagai <strong>{{ $best->title ?? 'karir utama' }}</strong>.
+        </p>
         <div class="chip-box">
             @forelse ($analysis->skill_gap_json ?? [] as $gap)
                 <span class="chip chip-gap">{{ $gap }}</span>
             @empty
-                <p class="empty-text">Selamat! Tidak ada skill gap yang terdeteksi untuk posisi ini.</p>
+                <p class="empty">Selamat, tidak ada keterampilan yang perlu ditingkatkan untuk karir utama.</p>
             @endforelse
         </div>
     </div>
 
-    <!-- Roadmap -->
+    <!-- VI. Roadmap Pengembangan Karir Utama -->
     <div class="section">
-        <table class="section-head">
-            <tr>
-                <td class="section-title">Roadmap Pengembangan Karir</td>
-                <td class="section-rule"></td>
-            </tr>
-        </table>
+        <div class="sec-head"><span class="sec-no">VI</span><span class="sec-title">Roadmap Pengembangan Karir Utama</span></div>
         <table class="roadmap-table">
             <thead>
                 <tr>
-                    <th style="width: 130px;">Jangka Waktu</th>
+                    <th style="width:130px;">Jangka Waktu</th>
                     <th>Fokus Pembelajaran &amp; Target</th>
                 </tr>
             </thead>
@@ -497,7 +714,7 @@
                 @empty
                     <tr>
                         <td colspan="2" class="roadmap-empty">
-                            <p class="empty-text">Belum ada roadmap pengembangan yang tersedia.</p>
+                            <span class="empty">Belum ada roadmap pengembangan yang tersedia.</span>
                         </td>
                     </tr>
                 @endforelse
@@ -505,30 +722,78 @@
         </table>
     </div>
 
-    <!-- AI Summary -->
+    <!-- VII. Rekomendasi Karir Alternatif -->
+    @if ($matches->count() > 1)
+        <div class="section">
+            <div class="sec-head"><span class="sec-no">VII</span><span class="sec-title">Rekomendasi Karir Alternatif</span></div>
+            @foreach ($matches->skip(1)->take(4) as $m)
+                <div class="alt-card">
+                    <table class="alt-head">
+                        <tr>
+                            <td class="alt-name">{{ $m->career->title ?? '—' }}</td>
+                            <td class="alt-score">{{ (int) round($m->match_score ?? 0) }}%</td>
+                        </tr>
+                    </table>
+                    @if (($m->matched_skills_json ?? []) && is_array($m->matched_skills_json))
+                        <div class="alt-sub">Keterampilan yang Dimiliki</div>
+                        <div class="chip-box">
+                            @foreach ($m->matched_skills_json as $skill)
+                                <span class="chip chip-own">{{ $skill }}</span>
+                            @endforeach
+                        </div>
+                    @endif
+                    @if (($m->skill_gap_json ?? []) && is_array($m->skill_gap_json))
+                        <div class="alt-sub">Keterampilan yang Perlu Ditingkatkan</div>
+                        <div class="chip-box">
+                            @foreach ($m->skill_gap_json as $gap)
+                                <span class="chip chip-gap">{{ $gap }}</span>
+                            @endforeach
+                        </div>
+                    @endif
+                    @if (($m->roadmap_json ?? []) && is_array($m->roadmap_json))
+                        <div class="alt-sub">Roadmap Pengembangan</div>
+                        <table class="roadmap-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:130px;">Jangka Waktu</th>
+                                    <th>Fokus Pembelajaran &amp; Target</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($m->roadmap_json as $step)
+                                    <tr>
+                                        <td><span class="week-label">Minggu {{ $step['week'] ?? '-' }}</span></td>
+                                        <td>{{ $step['topic'] ?? '-' }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @endif
+                </div>
+            @endforeach
+        </div>
+    @endif
+
+    <!-- VIII. Kesimpulan -->
     @if ($analysis->ai_summary)
         <div class="section">
-            <table class="section-head">
-                <tr>
-                    <td class="section-title">Ringkasan &amp; Evaluasi AI</td>
-                    <td class="section-rule"></td>
-                </tr>
-            </table>
-            <div class="summary-card">
+            <div class="sec-head"><span class="sec-no">VIII</span><span class="sec-title">Kesimpulan &amp; Rekomendasi</span></div>
+            <div class="conclusion">
                 {{ $analysis->ai_summary }}
             </div>
         </div>
     @endif
 
-    <!-- Signature (letterhead touch) -->
-    <div class="signature-block">
-        <div class="signature-name">CareerMate AI</div>
-        <div class="signature-role">Automated Career Analysis System</div>
+    <!-- Signature -->
+    <div class="signature">
+        <div class="sig-name">CareerMate</div>
+        <div class="sig-role">Pusat Pengembangan Karir Mahasiswa</div>
     </div>
 
     <!-- Footer -->
     <div class="footer-note">
-        Dokumen ini dihasilkan secara otomatis oleh platform <strong>CareerMate AI</strong>.
+        Dokumen ini dihasilkan secara otomatis oleh sistem <b>CareerMate</b>. Nomor laporan
+        <b>{{ $reportNo }}</b> digunakan sebagai referensi penelusuran arsip.
     </div>
 
 </body>

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use App\Models\CVFile;
 use App\Models\AnalysisResult;
+use App\Models\CVFile;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -52,6 +52,7 @@ class StudentController extends Controller
     public function analysisHistory(Request $request)
     {
         $query = AnalysisResult::query()
+            ->withCount('careerMatches')
             ->with([
                 'user:id,name,email,created_at',
                 'user.studentProfile:id,user_id,photo_path',
@@ -73,6 +74,7 @@ class StudentController extends Controller
         // Sertakan foto profil (photo_url) pada tiap item via user.studentProfile
         $items->getCollection()->transform(function (AnalysisResult $item) {
             $item->user->student_profile_photo_url = $item->user->studentProfile?->photo_url;
+
             return $item;
         });
 
@@ -148,7 +150,7 @@ class StudentController extends Controller
         $mahasiswa->delete();
 
         return response()->json([
-            'message' => 'mahasiswa berhasil dihapus'
+            'message' => 'mahasiswa berhasil dihapus',
         ]);
     }
 
@@ -162,7 +164,7 @@ class StudentController extends Controller
 
         $fullPath = Storage::disk('public')->path($cvFile->file_path);
 
-        abort_if(!file_exists($fullPath), 404, 'File CV tidak ditemukan.');
+        abort_if(! file_exists($fullPath), 404, 'File CV tidak ditemukan.');
 
         return response()->file($fullPath);
     }

@@ -6,6 +6,10 @@ use App\Models\Career;
 
 class CareerMatchingService
 {
+    private const MIN_SCORE = 30;
+
+    private const MIN_SKILL_COUNT_FOR_BEST = 3;
+
     public function matchAll(array $detectedSkills): array
     {
         $careers = Career::with('skills')->get();
@@ -13,7 +17,7 @@ class CareerMatchingService
 
         foreach ($careers as $career) {
             $requiredSkills = $career->skills;
-            $totalWeight = $requiredSkills->sum(fn($skill) => $skill->pivot->weight);
+            $totalWeight = $requiredSkills->sum(fn ($skill) => $skill->pivot->weight);
 
             if ($totalWeight == 0) {
                 continue;
@@ -25,7 +29,7 @@ class CareerMatchingService
 
             foreach ($requiredSkills as $skill) {
                 $isOwned = collect($detectedSkills)
-                    ->contains(fn($s) => strtolower($s['name']) === strtolower($skill->name));
+                    ->contains(fn ($s) => strtolower($s['name']) === strtolower($skill->name));
 
                 if ($isOwned) {
                     $matchedWeight += $skill->pivot->weight;
@@ -35,7 +39,17 @@ class CareerMatchingService
                 }
             }
 
-            $score = round(($matchedWeight / $totalWeight) * 100, 2);
+            $totalCount = count($requiredSkills);
+            $matchedCount = count($matched);
+            $weightRatio = $matchedWeight / $totalWeight;
+            $countRatio = $matchedCount / $totalCount;
+            $countFactor = min($totalCount, self::MIN_SKILL_COUNT_FOR_BEST) / self::MIN_SKILL_COUNT_FOR_BEST;
+
+            $score = round($weightRatio * $countRatio * $countFactor * 100, 2);
+
+            if ($score < self::MIN_SCORE) {
+                continue;
+            }
 
             $results[] = [
                 'career' => $career,
@@ -45,7 +59,7 @@ class CareerMatchingService
             ];
         }
 
-        usort($results, fn($a, $b) => $b['match_score'] <=> $a['match_score']);
+        usort($results, fn ($a, $b) => $b['match_score'] <=> $a['match_score']);
 
         return $results;
     }

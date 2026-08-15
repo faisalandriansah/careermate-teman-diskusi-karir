@@ -4,17 +4,19 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UploadCVRequest;
-use App\Models\CVFile;
 use App\Models\AnalysisResult;
-use App\Services\PDFExtractorService;
-use App\Services\NotificationService;
-use Illuminate\Support\Str;
-use App\Services\SkillDetectionService;
+use App\Models\Career;
+use App\Models\CareerMatchResult;
+use App\Models\CVFile;
 use App\Services\CareerMatchingService;
+use App\Services\NotificationService;
+use App\Services\PDFExtractorService;
 use App\Services\RoadmapGeneratorService;
-use Illuminate\Support\Facades\Storage;
+use App\Services\SkillDetectionService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class CVController extends Controller
 {
@@ -24,7 +26,7 @@ class CVController extends Controller
 
         $file = $request->file('cv');
 
-        $fileName = Str::uuid() . '.' . $file->getClientOriginalExtension();
+        $fileName = Str::uuid().'.'.$file->getClientOriginalExtension();
 
         $filePath = $file->storeAs('cv', $fileName, 'public');
 
@@ -53,7 +55,7 @@ class CVController extends Controller
     {
         $fullPath = Storage::disk('public')->path($cvFile->file_path);
 
-        if (!file_exists($fullPath)) {
+        if (! file_exists($fullPath)) {
             return response()->json([
                 'message' => 'File PDF tidak ditemukan diserver.',
             ], 404);
@@ -120,7 +122,7 @@ class CVController extends Controller
         $analysisResult->careerMatches()->delete();
 
         foreach ($allResults as $index => $result) {
-            \App\Models\CareerMatchResult::create([
+            CareerMatchResult::create([
                 'analysis_result_id' => $analysisResult->id,
                 'career_id' => $result['career']->id,
                 'match_score' => $result['match_score'],
@@ -151,8 +153,7 @@ class CVController extends Controller
         ]);
     }
 
-
-    public function generateRoadmap(AnalysisResult $analysisResult, \App\Models\Career $career, RoadmapGeneratorService $generator)
+    public function generateRoadmap(AnalysisResult $analysisResult, Career $career, RoadmapGeneratorService $generator)
     {
         abort_if($analysisResult->user_id !== auth()->id(), 403, 'Anda tidak berhak mengakses data ini.');
 
@@ -160,7 +161,7 @@ class CVController extends Controller
             ->where('career_id', $career->id)
             ->first();
 
-        if (!$careerMatch) {
+        if (! $careerMatch) {
             return response()->json([
                 'message' => 'Data kecocokan untuk career ini tidak ditemukan. Jalankan proses match-career terlebih dahulu.',
             ], 422);
@@ -210,7 +211,7 @@ class CVController extends Controller
         ]);
     }
 
-    public function targetAnalysis(AnalysisResult $analysisResult, \App\Models\Career $career)
+    public function targetAnalysis(AnalysisResult $analysisResult, Career $career)
     {
         abort_if($analysisResult->user_id !== auth()->id(), 403, 'Anda tidak berhak mengakses data ini.');
 
@@ -219,7 +220,7 @@ class CVController extends Controller
             ->with('career')
             ->first();
 
-        if (!$match) {
+        if (! $match) {
             return response()->json([
                 'message' => 'Data kecocokan untuk career ini tidak ditemukan.',
             ], 404);
@@ -246,7 +247,7 @@ class CVController extends Controller
             ->latest()
             ->first();
 
-        if (!$analysisResult) {
+        if (! $analysisResult) {
             return response()->json([
                 'message' => 'Belum ada hasil analisis CV.',
                 'data' => null,
@@ -262,7 +263,7 @@ class CVController extends Controller
     {
         abort_if($analysisResult->user_id !== auth()->id(), 403, 'Anda tidak berhak mengakses data ini.');
 
-        $analysisResult->load('career');
+        $analysisResult->load(['user', 'cvFile', 'career', 'careerMatches.career']);
 
         $pdf = Pdf::loadView('pdf.hasil-analisis', [
             'analysis' => $analysisResult,
@@ -270,7 +271,7 @@ class CVController extends Controller
 
         $this->registerPdfFonts($pdf);
 
-        return $pdf->download('hasil-analisis-' . $analysisResult->id . '.pdf');
+        return $pdf->download('hasil-analisis-'.$analysisResult->id.'.pdf');
     }
 
     private function registerPdfFonts(\Barryvdh\DomPDF\PDF $pdf): void
@@ -290,13 +291,14 @@ class CVController extends Controller
                 'family' => 'Inter',
                 'weight' => $weight,
                 'style' => 'normal',
-            ], $fontDir . '/Inter/Inter-' . $name . '.ttf');
+            ], $fontDir.'/Inter/Inter-'.$name.'.ttf');
         }
     }
 
     public function history(Request $request)
     {
-        $results = AnalysisResult::with('career', 'cvFile')
+        $results = AnalysisResult::with('career')
+            ->withCount('careerMatches')
             ->where('user_id', $request->user()->id)
             ->orderByDesc('created_at')
             ->get();
