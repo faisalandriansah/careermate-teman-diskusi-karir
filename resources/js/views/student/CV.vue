@@ -518,28 +518,103 @@
         <!-- ============ STATE: DONE ============ -->
         <div
             v-else-if="stage === 'done'"
-            class="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 sm:p-12 fade-up text-center max-w-xl mx-auto pop-in"
+            class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-8 sm:p-12 fade-up text-center max-w-xl mx-auto"
         >
-            <div
-                class="mx-auto h-20 w-20 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4 shadow-sm"
-            >
-                <span class="text-4xl">🎉</span>
+            <!-- Badge sukses -->
+            <div class="relative inline-flex mb-7">
+                <span class="done-ring"></span>
+                <div
+                    class="relative h-16 w-16 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center"
+                >
+                    <svg
+                        class="h-7 w-7 text-blue-600"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            class="done-check"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2.5"
+                            d="M5 13l4 4L19 7"
+                        />
+                    </svg>
+                </div>
             </div>
-            <h2 class="text-xl font-bold text-slate-800">
-                Analisis AI Selesai!
+
+            <h2 class="text-xl sm:text-2xl font-bold text-slate-900">
+                Analisis CV Selesai
             </h2>
-            <p class="text-xs text-slate-500 mt-1 mb-6">
-                Model AI berhasil memproses CV Anda. Lihat rekomendasi karir
-                terbaik dan pilih target impian untuk menyusun roadmap.
+            <p
+                class="text-sm text-slate-500 mt-2 mb-8 max-w-md mx-auto leading-relaxed"
+            >
+                AI berhasil mencocokkan CV kamu dengan peta karir. Berikut
+                karir yang paling sesuai dengan profilmu.
             </p>
 
+            <!-- Panel hasil -->
+            <div
+                v-if="finalAnalysisResult"
+                class="rounded-xl border border-slate-100 bg-slate-50/60 p-5 text-left mb-8"
+            >
+                <div class="flex items-center justify-between gap-4">
+                    <div class="min-w-0">
+                        <p
+                            class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider"
+                        >
+                            Karir Paling Sesuai
+                        </p>
+                        <p
+                            class="mt-1 text-base font-bold text-slate-800 truncate"
+                        >
+                            {{ doneCareerTitle }}
+                        </p>
+                    </div>
+                    <div class="shrink-0 text-right">
+                        <span
+                            class="text-2xl font-extrabold tabular-nums"
+                            :class="doneScoreTextClass"
+                        >
+                            {{ doneMatchScore }}%
+                        </span>
+                        <p
+                            class="text-[11px] font-semibold mt-0.5"
+                            :class="doneScoreTextClass"
+                        >
+                            {{ doneScoreLabel }}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-4 h-1.5 rounded-full bg-slate-200/70 overflow-hidden">
+                    <div
+                        class="h-full rounded-full transition-all duration-700 ease-out"
+                        :class="doneScoreBarClass"
+                        :style="{ width: doneMatchScore + '%' }"
+                    ></div>
+                </div>
+
+                <div
+                    class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between gap-3"
+                >
+                    <span class="text-xs text-slate-500 shrink-0"
+                        >{{ doneSkillCount }} skill terdeteksi</span
+                    >
+                    <span class="text-xs text-slate-400 truncate">{{
+                        fileName
+                    }}</span>
+                </div>
+            </div>
+
+            <!-- Aksi -->
             <button
                 @click="goToResult"
-                class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm shadow-md transition active:scale-95"
+                class="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-sm shadow-blue-600/20 transition active:scale-[0.98] group"
             >
                 Lihat Hasil Analisis
                 <svg
-                    class="h-4 w-4"
+                    class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -551,6 +626,13 @@
                         d="M14 5l7 7m0 0l-7 7m7-7H3"
                     />
                 </svg>
+            </button>
+
+            <button
+                @click="resetFile"
+                class="mt-3 text-xs font-semibold text-slate-400 hover:text-slate-600 transition"
+            >
+                Upload CV yang lain
             </button>
         </div>
     </div>
@@ -573,6 +655,40 @@ const selectedFile = ref(null);
 const errorMessage = ref("");
 const finalAnalysisResult = ref(null); // hasil akhir buat redirect
 // const uploadedCvFile = ref(null); //hasil dari backend ketika sukses
+
+const doneCareerTitle = computed(
+    () => finalAnalysisResult.value?.career?.title ?? "Belum ada rekomendasi",
+);
+const doneMatchScore = computed(() =>
+    Math.round(finalAnalysisResult.value?.match_score ?? 0),
+);
+const doneSkillCount = computed(
+    () => finalAnalysisResult.value?.skills_json?.length ?? 0,
+);
+
+const doneScoreTextClass = computed(() => {
+    const s = doneMatchScore.value;
+    if (s >= 80) return "text-emerald-600";
+    if (s >= 60) return "text-blue-600";
+    if (s >= 40) return "text-amber-600";
+    return "text-rose-600";
+});
+
+const doneScoreBarClass = computed(() => {
+    const s = doneMatchScore.value;
+    if (s >= 80) return "bg-emerald-500";
+    if (s >= 60) return "bg-blue-500";
+    if (s >= 40) return "bg-amber-500";
+    return "bg-rose-500";
+});
+
+const doneScoreLabel = computed(() => {
+    const s = doneMatchScore.value;
+    if (s >= 80) return "Sangat Tinggi";
+    if (s >= 60) return "Tinggi";
+    if (s >= 40) return "Sedang";
+    return "Perlu Ditingkatkan";
+});
 
 const isProfileLoading = ref(true);
 const isProfileComplete = computed(() => authStore.isProfileComplete);
@@ -890,13 +1006,50 @@ function goToResult() {
     }
 }
 
+/* ===== Done success ===== */
+.done-ring {
+    position: absolute;
+    inset: -6px;
+    border-radius: 9999px;
+    border: 1px solid rgba(37, 99, 235, 0.25);
+    animation: doneRingPulse 2.6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+    will-change: transform, opacity;
+}
+@keyframes doneRingPulse {
+    0% {
+        transform: scale(0.92);
+        opacity: 0.9;
+    }
+    70%,
+    100% {
+        transform: scale(1.15);
+        opacity: 0;
+    }
+}
+
+.done-check {
+    stroke-dasharray: 24;
+    stroke-dashoffset: 24;
+    animation: doneDraw 0.5s ease-out 0.15s forwards;
+}
+@keyframes doneDraw {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .lock-card,
     .lock-wiggle,
     .lock-ping,
-    .lock-spark {
+    .lock-spark,
+    .done-ring,
+    .done-check {
         animation: none !important;
         transition: none !important;
+    }
+    .done-check {
+        stroke-dashoffset: 0;
     }
 }
 </style>
