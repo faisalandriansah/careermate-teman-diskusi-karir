@@ -62,7 +62,7 @@
                             <input
                                 ref="searchInput"
                                 v-model="searchQuery"
-                                @focus="searchOpen = true"
+                                @focus="openSearch"
                                 @keydown.enter.prevent="submitSearch"
                                 @keydown.esc="closeSearch"
                                 type="text"
@@ -160,14 +160,12 @@
                         </div> -->
 
                         <!-- Career Match Terakhir -->
-                        <div
-                            ref="careerMatchRef"
-                            class="relative hidden sm:block"
-                        >
+                        <div ref="careerMatchRef" class="relative">
                             <button
-                                @click="careerMatchOpen = !careerMatchOpen"
+                                @click="toggleCareerMatch"
                                 class="flex items-center justify-center h-10 w-10 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors"
                                 title="Career Match Terakhir"
+                                aria-label="Career Match Terakhir"
                             >
                                 <!-- Target Icon -->
                                 <svg
@@ -201,7 +199,7 @@
                             <transition name="dropdown">
                                 <div
                                     v-if="careerMatchOpen"
-                                    class="absolute right-0 z-50 mt-2 w-80 rounded-xl border border-slate-100 bg-white shadow-xl shadow-slate-200/60 p-4"
+                                    class="fixed left-3 right-3 top-[4.5rem] z-50 sm:absolute sm:left-auto sm:right-0 sm:top-full sm:mt-2 sm:w-80 rounded-xl border border-slate-100 bg-white shadow-xl shadow-slate-200/60 p-4"
                                 >
                                     <!-- Header -->
                                     <div class="mb-4">
@@ -319,7 +317,7 @@
                                                 >
                                                     {{
                                                         careerMatchData.career
-                                                            .title
+                                                            ?.title
                                                     }}
                                                 </p>
                                             </div>
@@ -450,8 +448,9 @@
                         <!-- Account Dropdown -->
                         <div ref="stdRef" class="relative">
                             <button
-                                @click="stdOpen = !stdOpen"
+                                @click="toggleAccountDropdown"
                                 title="Menu akun"
+                                aria-label="Menu akun"
                                 class="h-9 w-9 rounded-full overflow-hidden transition-all duration-200"
                                 :class="
                                     stdOpen
@@ -477,7 +476,7 @@
                             <transition name="dropdown">
                                 <div
                                     v-if="stdOpen"
-                                    class="dropdown-panel absolute right-0 z-50 mt-3 w-64 rounded-xl border border-slate-100 bg-white shadow-xl shadow-slate-200/60"
+                                    class="dropdown-panel absolute right-0 z-50 mt-3 w-64 max-w-[calc(100vw-1.5rem)] rounded-xl border border-slate-100 bg-white shadow-xl shadow-slate-200/60"
                                 >
                                     <!-- Profile Summary -->
                                     <div
@@ -663,50 +662,48 @@
                     <nav
                         v-if="mobileOpen"
                         ref="mobRef"
-                        class="lg:hidden pb-3 pt-1 border-t border-slate-100 space-y-0.5"
+                        class="lg:hidden pb-3 pt-2 border-t border-slate-100 space-y-0.5"
                     >
+                        <!-- Mobile Search -->
+                        <div class="relative px-1 pb-2">
+                            <svg
+                                class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M21 21l-4.35-4.35M17 10.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z"
+                                />
+                            </svg>
+                            <input
+                                v-model="mobileSearch"
+                                @keydown.enter.prevent="submitMobileSearch"
+                                type="text"
+                                placeholder="Cari halaman..."
+                                class="w-full h-10 pl-9 pr-3 text-sm rounded-xl border border-slate-200 bg-slate-50/70 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition placeholder:text-slate-400"
+                            />
+                        </div>
+
                         <router-link
-                            to="/student/dashboard"
-                            @click="mobileOpen = false"
+                            v-for="item in mobileNavItems"
+                            :key="item.to"
+                            :to="item.to"
+                            @click="closeMobileNav"
                             class="block px-3 py-2.5 text-sm font-medium text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
                             active-class="text-blue-600 font-semibold bg-blue-50"
-                            >Dashboard</router-link
+                            >{{ item.label }}</router-link
                         >
-                        <router-link
-                            to="/student/profile"
-                            @click="mobileOpen = false"
-                            class="block px-3 py-2.5 text-sm font-medium text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
-                            active-class="text-blue-600 font-semibold bg-blue-50"
-                            >Profile</router-link
+
+                        <p
+                            v-if="mobileSearch && !mobileNavItems.length"
+                            class="px-3 py-2.5 text-sm text-slate-400"
                         >
-                        <router-link
-                            to="/student/cv"
-                            @click="mobileOpen = false"
-                            class="block px-3 py-2.5 text-sm font-medium text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
-                            active-class="text-blue-600 font-semibold bg-blue-50"
-                            >Upload CV</router-link
-                        >
-                        <router-link
-                            to="/student/hasilAnalisis"
-                            @click="mobileOpen = false"
-                            class="block px-3 py-2.5 text-sm font-medium text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
-                            active-class="text-blue-600 font-semibold bg-blue-50"
-                            >Hasil Analisis</router-link
-                        >
-                        <router-link
-                            to="/student/riwayatAnalisis"
-                            @click="mobileOpen = false"
-                            class="block px-3 py-2.5 text-sm font-medium text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
-                            active-class="text-blue-600 font-semibold bg-blue-50"
-                            >Riwayat Analisis</router-link
-                        >
-                        <router-link
-                            to="/student/support"
-                            @click="mobileOpen = false"
-                            class="block px-3 py-2.5 text-sm font-medium text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
-                            active-class="text-blue-600 font-semibold bg-blue-50"
-                            >Support</router-link
-                        >
+                            Tidak ada halaman cocok
+                        </p>
                     </nav>
                 </transition>
             </div>
@@ -722,7 +719,13 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import {
+    ref,
+    computed,
+    onMounted,
+    onBeforeUnmount,
+    watch,
+} from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import apiClient from "@/services/api";
@@ -737,6 +740,7 @@ const mobRef = ref(null);
 const mobBtnRef = ref(null);
 const lastMobileToggle = ref(0);
 const searchQuery = ref("");
+const mobileSearch = ref("");
 const searchOpen = ref(false);
 const searchEl = ref(null);
 const searchInput = ref(null);
@@ -750,9 +754,10 @@ const auth = useAuthStore();
 const careerMatchOpen = ref(false);
 const careerMatchLoading = ref(true);
 const careerMatchData = ref(null);
+const careerMatchRef = ref(null);
 
 async function fetchLatestCareerMatch() {
-    if (!auth.isProfileComplete) {
+    if (!auth.token || !auth.isProfileComplete) {
         careerMatchLoading.value = false;
         return;
     }
@@ -768,17 +773,46 @@ async function fetchLatestCareerMatch() {
     }
 }
 
-const hasCareerMatch = computed(
-    () =>
-        !!careerMatchData.value?.career &&
-        careerMatchData.value?.match_score > 0,
-);
+const hasCareerMatch = computed(() => !!careerMatchData.value?.career);
 
 function gotoHasilAnalisis() {
     careerMatchOpen.value = false;
     router.push("/student/hasilAnalisis");
 }
 // end
+
+watch(
+    () => route.path,
+    () => {
+        fetchLatestCareerMatch();
+    },
+);
+
+function closeAllDropdowns() {
+    careerMatchOpen.value = false;
+    stdOpen.value = false;
+    mobileOpen.value = false;
+    mobileSearch.value = "";
+    searchOpen.value = false;
+    notifOpen.value = false;
+}
+
+function toggleCareerMatch() {
+    const opening = !careerMatchOpen.value;
+    closeAllDropdowns();
+    careerMatchOpen.value = opening;
+}
+
+function toggleAccountDropdown() {
+    const opening = !stdOpen.value;
+    closeAllDropdowns();
+    stdOpen.value = opening;
+}
+
+function openSearch() {
+    closeAllDropdowns();
+    searchOpen.value = true;
+}
 
 const navItems = [
     { to: "/student/dashboard", label: "Dashboard" },
@@ -814,6 +848,25 @@ function submitSearch() {
 function goSearch(to) {
     closeSearch();
     router.push(to);
+}
+
+const mobileNavItems = computed(() => {
+    const q = mobileSearch.value.trim().toLowerCase();
+    if (!q) return navItems;
+    return navItems.filter((i) => i.label.toLowerCase().includes(q));
+});
+
+function submitMobileSearch() {
+    const results = mobileNavItems.value;
+    if (results.length) {
+        closeMobileNav();
+        router.push(results[0].to);
+    }
+}
+
+function closeMobileNav() {
+    mobileOpen.value = false;
+    mobileSearch.value = "";
 }
 function onKeydown(e) {
     if (e.key !== "/") return;
@@ -870,7 +923,9 @@ function toggleMobile() {
     const now = Date.now();
     if (now - lastMobileToggle.value < 400) return;
     lastMobileToggle.value = now;
-    mobileOpen.value = !mobileOpen.value;
+    const opening = !mobileOpen.value;
+    closeAllDropdowns();
+    mobileOpen.value = opening;
 }
 
 function onClickOutside(e) {
@@ -878,11 +933,14 @@ function onClickOutside(e) {
     const mobEl = mobRef.value;
     const searchElRef = searchEl.value;
     const notifEl = notifRef.value;
+    const careerMatchEl = careerMatchRef.value;
     if (stdEl && !stdEl.contains(e.target)) stdOpen.value = false;
     if (mobEl && !mobEl.contains(e.target)) mobileOpen.value = false;
     if (searchElRef && !searchElRef.contains(e.target))
         searchOpen.value = false;
     if (notifEl && !notifEl.contains(e.target)) notifOpen.value = false;
+    if (careerMatchEl && !careerMatchEl.contains(e.target))
+        careerMatchOpen.value = false;
 }
 
 onMounted(async () => {
