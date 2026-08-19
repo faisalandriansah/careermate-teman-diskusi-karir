@@ -24,9 +24,9 @@
                 Kami Siap Membantu Kamu
             </h1>
             <p class="mt-1.5 text-sm text-blue-200/80 max-w-xl leading-relaxed">
-                Pusat bantuan CareerMate. Tim support kami online untuk
-                menjawab kendala teknis, pertanyaan kuota, dan seputar
-                analisis CV berbasis AI.
+                Pusat bantuan CareerMate. Tim support kami online untuk menjawab
+                kendala teknis, pertanyaan kuota, dan seputar analisis CV
+                berbasis AI.
             </p>
         </StudentHero>
 
@@ -35,7 +35,9 @@
             <div
                 class="bg-white rounded-2xl border border-slate-100 shadow-sm px-2 sm:px-3 py-3 sm:py-4 text-center"
             >
-                <p class="text-base sm:text-lg md:text-2xl font-bold text-slate-900">
+                <p
+                    class="text-base sm:text-lg md:text-2xl font-bold text-slate-900"
+                >
                     &lt; 5<span class="text-blue-600">mnt</span>
                 </p>
                 <p class="text-[10px] sm:text-[11px] text-slate-500 mt-1">
@@ -45,7 +47,9 @@
             <div
                 class="bg-white rounded-2xl border border-slate-100 shadow-sm px-2 sm:px-3 py-3 sm:py-4 text-center"
             >
-                <p class="text-base sm:text-lg md:text-2xl font-bold text-slate-900">
+                <p
+                    class="text-base sm:text-lg md:text-2xl font-bold text-slate-900"
+                >
                     24/7
                 </p>
                 <p class="text-[10px] sm:text-[11px] text-slate-500 mt-1">
@@ -55,7 +59,9 @@
             <div
                 class="bg-white rounded-2xl border border-slate-100 shadow-sm px-2 sm:px-3 py-3 sm:py-4 text-center"
             >
-                <p class="text-base sm:text-lg md:text-2xl font-bold text-slate-900">
+                <p
+                    class="text-base sm:text-lg md:text-2xl font-bold text-slate-900"
+                >
                     99%
                 </p>
                 <p class="text-[10px] sm:text-[11px] text-slate-500 mt-1">
@@ -74,13 +80,14 @@
                     class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-100 border-b border-slate-100 relative"
                 >
                     <!-- Email -->
-                    <div
-                        class="tilt-card p-7 relative group/email"
-                    >
+                    <div class="tilt-card p-7 relative group/email">
                         <div
                             class="absolute inset-0 bg-gradient-to-br from-blue-50/0 via-blue-50/0 to-blue-50/80 opacity-0 group-hover/email:opacity-100 transition-all duration-300 pointer-events-none"
                         ></div>
-                        <a href="mailto:support@careermate.example" class="relative block">
+                        <a
+                            href="mailto:support@careermate.example"
+                            class="relative block"
+                        >
                             <div
                                 class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex items-center justify-center mb-4 shadow-lg shadow-blue-600/30 group-hover/email:scale-110 group-hover/email:-rotate-6 transition-transform duration-300"
                             >
@@ -97,7 +104,9 @@
                                     <path
                                         d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
                                     ></path>
-                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                    <polyline
+                                        points="22,6 12,13 2,6"
+                                    ></polyline>
                                 </svg>
                             </div>
                             <p
@@ -119,9 +128,7 @@
                     </div>
 
                     <!-- Phone / WA -->
-                    <div
-                        class="tilt-card p-7 relative group/wa"
-                    >
+                    <div class="tilt-card p-7 relative group/wa">
                         <div
                             class="absolute inset-0 bg-gradient-to-br from-emerald-50/0 via-emerald-50/0 to-emerald-50/80 opacity-0 group-hover/wa:opacity-100 transition-all duration-300 pointer-events-none"
                         ></div>
@@ -163,9 +170,7 @@
                     </div>
 
                     <!-- Working Hours -->
-                    <div
-                        class="tilt-card p-7 relative group/hours"
-                    >
+                    <div class="tilt-card p-7 relative group/hours">
                         <div
                             class="absolute inset-0 bg-gradient-to-br from-amber-50/0 via-amber-50/0 to-amber-50/80 opacity-0 group-hover/hours:opacity-100 transition-all duration-300 pointer-events-none"
                         ></div>
@@ -184,7 +189,9 @@
                                     stroke-linejoin="round"
                                 >
                                     <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                    <polyline
+                                        points="12 6 12 12 16 14"
+                                    ></polyline>
                                 </svg>
                             </div>
                             <p
@@ -197,9 +204,7 @@
                             >
                                 Senin - Jumat (09:00 - 17:00 WIB)
                             </p>
-                            <p
-                                class="text-[11px] text-slate-400 mt-1"
-                            >
+                            <p class="text-[11px] text-slate-400 mt-1">
                                 Live chat 24/7 via WhatsApp
                             </p>
                         </div>
@@ -243,12 +248,16 @@
                                     "
                                 >
                                     <button
-                                        @click="openFaq = openFaq === i ? null : i"
+                                        @click="
+                                            openFaq = openFaq === i ? null : i
+                                        "
                                         class="w-full flex items-center justify-between gap-3 p-4 text-left"
                                     >
                                         <span
                                             class="text-xs sm:text-[13px] font-semibold text-slate-800"
-                                            :class="{ 'text-blue-600': openFaq === i }"
+                                            :class="{
+                                                'text-blue-600': openFaq === i,
+                                            }"
                                         >
                                             {{ faq.q }}
                                         </span>
@@ -269,7 +278,9 @@
                                                 stroke-linecap="round"
                                                 stroke-linejoin="round"
                                             >
-                                                <polyline points="6 9 12 15 18 9"></polyline>
+                                                <polyline
+                                                    points="6 9 12 15 18 9"
+                                                ></polyline>
                                             </svg>
                                         </span>
                                     </button>
@@ -326,7 +337,9 @@
                                         class="absolute -right-6 -top-6 w-20 h-20 rounded-full opacity-10 group-hover/topic:opacity-25 transition group-hover/topic:scale-125"
                                         :style="{ background: topic.color }"
                                     ></div>
-                                    <div class="flex items-center gap-3.5 relative">
+                                    <div
+                                        class="flex items-center gap-3.5 relative"
+                                    >
                                         <span
                                             class="w-10 h-10 rounded-xl flex items-center justify-center text-xl shadow-sm shrink-0"
                                             :style="{
@@ -394,9 +407,7 @@
                 </div>
 
                 <!-- ========== LOCATION & MAP ========== -->
-                <div
-                    class="grid grid-cols-1 md:grid-cols-12 relative"
-                >
+                <div class="grid grid-cols-1 md:grid-cols-12 relative">
                     <!-- Address Side -->
                     <div
                         class="md:col-span-5 p-6 sm:p-8 flex flex-col justify-between bg-white border-b md:border-b-0 md:border-r border-slate-100"
@@ -438,11 +449,15 @@
 
                             <!-- mini info -->
                             <div class="mt-4 space-y-2">
-                                <div class="flex items-center gap-2 text-xs text-slate-500">
+                                <div
+                                    class="flex items-center gap-2 text-xs text-slate-500"
+                                >
                                     <span class="text-emerald-500">●</span>
                                     Kunjungan: Sen–Jum 09.00–16.00
                                 </div>
-                                <div class="flex items-center gap-2 text-xs text-slate-500">
+                                <div
+                                    class="flex items-center gap-2 text-xs text-slate-500"
+                                >
                                     <span class="text-blue-500">●</span>
                                     Parkir tersedia di area Gedung Thamrin
                                 </div>
@@ -457,9 +472,7 @@
                                 class="flex-1 py-2.5 px-3 rounded-xl border border-slate-200 text-slate-700 text-xs font-semibold hover:bg-slate-50 hover:border-slate-300 transition text-center active:scale-[0.98]"
                             >
                                 {{
-                                    isCopied
-                                        ? "✓ Tersalin"
-                                        : "📋 Salin Alamat"
+                                    isCopied ? "✓ Tersalin" : "📋 Salin Alamat"
                                 }}
                             </button>
                             <a
@@ -484,8 +497,10 @@
                         <div
                             class="absolute top-3 left-3 px-3 py-1.5 rounded-xl bg-white/90 backdrop-blur shadow-md text-[10px] font-bold text-slate-600 flex items-center gap-1.5 pointer-events-none"
                         >
-                            <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-                            CareerMate HQ
+                            <span
+                                class="w-2 h-2 rounded-full bg-red-500 animate-pulse"
+                            ></span>
+                            CareerMate AI
                         </div>
                     </div>
                 </div>
@@ -775,8 +790,7 @@ const priorities = [
     {
         label: "Rendah",
         value: "rendah",
-        activeClass:
-            "bg-slate-100 text-slate-700 border-slate-300",
+        activeClass: "bg-slate-100 text-slate-700 border-slate-300",
     },
     {
         label: "Normal",
@@ -927,7 +941,9 @@ async function submitTicket() {
 }
 .modal-enter-active .modal-pop,
 .modal-leave-active .modal-pop {
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+    transition:
+        transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 0.25s ease;
 }
 .modal-enter-from .modal-pop,
 .modal-leave-to .modal-pop {
