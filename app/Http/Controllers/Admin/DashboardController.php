@@ -10,6 +10,7 @@ use App\Models\Internship;
 use App\Models\CVFile;
 use App\Models\CareerSkill;
 use App\Models\AnalysisResult;
+use App\Models\CareerMatchResult;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
@@ -37,7 +38,7 @@ class DashboardController extends Controller
                     'total_analisis' => $totalAnalisis,
                 ],
 
-                'career_distribution' => AnalysisResult::select('career_id', DB::raw('count(*) as total'))
+                'career_distribution' => CareerMatchResult::select('career_id', DB::raw('count(*) as total'))
                     ->with('career:id,title')
                     ->groupBy('career_id')
                     ->orderByDesc('total')

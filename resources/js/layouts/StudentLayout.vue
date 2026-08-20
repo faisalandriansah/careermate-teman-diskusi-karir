@@ -327,7 +327,10 @@
                                                     class="text-xl font-bold text-blue-600"
                                                 >
                                                     {{
-                                                        careerMatchData.match_score
+                                                        Math.round(
+                                                            careerMatchData.match_score ??
+                                                                0,
+                                                        )
                                                     }}%
                                                 </p>
                                                 <p
@@ -719,13 +722,7 @@
 </template>
 
 <script setup>
-import {
-    ref,
-    computed,
-    onMounted,
-    onBeforeUnmount,
-    watch,
-} from "vue";
+import { ref, computed, onMounted, onBeforeUnmount, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import apiClient from "@/services/api";

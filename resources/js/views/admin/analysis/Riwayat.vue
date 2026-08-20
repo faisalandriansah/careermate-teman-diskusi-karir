@@ -317,10 +317,10 @@
                                     {{ item.career?.title ?? "-" }}
                                 </p>
                                 <span
-                                    v-if="(item.career_matches_count ?? 0) > 0"
+                                    v-if="(item.career_matches_count ?? 0) > 1"
                                     class="inline-flex shrink-0 items-center rounded-full border border-indigo-100 bg-indigo-50 px-2 py-0.5 text-[10px] font-semibold text-indigo-600"
                                 >
-                                    +{{ item.career_matches_count }} karir
+                                    +{{ (item.career_matches_count ?? 0) - 1 }} karir lain
                                 </span>
                             </div>
                         </div>
@@ -336,13 +336,39 @@
                     </div>
 
                     <!-- Tanggal & CV -->
-                    <div class="flex items-center justify-between gap-4 sm:shrink-0">
+                    <div
+                        class="flex items-center justify-between gap-4 sm:shrink-0"
+                    >
                         <div class="min-w-0">
                             <p class="text-xs text-slate-500">Tanggal</p>
                             <p class="text-sm text-slate-800">
                                 {{ formatDate(item.created_at) }}
                             </p>
                         </div>
+                        <button
+                            @click="openDetail(item)"
+                            class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-blue-600 transition hover:border-blue-200 hover:bg-blue-50 active:scale-[0.98]"
+                        >
+                            <svg
+                                class="h-3.5 w-3.5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                />
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                                />
+                            </svg>
+                            Detail
+                        </button>
                     </div>
                 </div>
             </div>
@@ -417,16 +443,36 @@
             </div>
         </div>
     </div>
+
+    <AnalysisDetailModal
+        v-if="detailOpen && selectedAnalysis"
+        :analysis="selectedAnalysis"
+        @close="closeDetail"
+    />
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { analysisHistoryService } from "@/services/admin/analysisHistoryService";
+import AnalysisDetailModal from "@/components/admin/AnalysisDetailModal.vue";
 
 const items = ref([]);
 const loading = ref(false);
 const errorMessage = ref("");
 const search = ref("");
+
+const selectedAnalysis = ref(null);
+const detailOpen = ref(false);
+
+function openDetail(item) {
+    selectedAnalysis.value = item;
+    detailOpen.value = true;
+}
+
+function closeDetail() {
+    detailOpen.value = false;
+    selectedAnalysis.value = null;
+}
 
 const summary = ref({});
 const currentPage = ref(1);

@@ -69,6 +69,8 @@ Route::middleware(['auth:sanctum', 'role:admin'])
 
         Route::get('analysis/history', [StudentController::class, 'analysisHistory']);
 
+        Route::get('analysis/{analysis}/careers', [StudentController::class, 'analysisCareers']);
+
         Route::get('students/{student}/cv/{cvFile}', [StudentController::class, 'showCV']);
 
         // Notifikasi admin

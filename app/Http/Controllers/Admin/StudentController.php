@@ -89,6 +89,29 @@ class StudentController extends Controller
     }
 
     /**
+     * Detail seluruh career match milik satu analisis (untuk modal admin).
+     * GET /admin/analysis/{analysis}/careers
+     */
+    public function analysisCareers(AnalysisResult $analysis)
+    {
+        $careers = $analysis->careerMatches()
+            ->with('career:id,title,description,icon')
+            ->orderByDesc('match_score')
+            ->get();
+
+        return response()->json([
+            'data' => [
+                'analysis' => $analysis->load([
+                    'user:id,name,email',
+                    'user.studentProfile:id,user_id,photo_path',
+                    'career:id,title',
+                ]),
+                'careers' => $careers,
+            ],
+        ]);
+    }
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create()

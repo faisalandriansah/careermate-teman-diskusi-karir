@@ -4,4 +4,8 @@ export const analysisHistoryService = {
     getHistory(params = {}) {
         return apiClient.get(`/admin/analysis/history`, { params });
     },
+
+    getAnalysisCareers(analysisId) {
+        return apiClient.get(`/admin/analysis/${analysisId}/careers`);
+    },
 };

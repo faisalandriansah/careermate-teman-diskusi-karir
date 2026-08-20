@@ -282,10 +282,10 @@
                                     Terbaru
                                 </span>
                                 <span
-                                    v-if="item.careerCount > 0"
+                                    v-if="item.careerCount > 1"
                                     class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-100 shrink-0"
                                 >
-                                    +{{ item.careerCount }} karir lain
+                                    +{{ item.careerCount - 1 }} karir lain
                                 </span>
                             </div>
                             <p class="text-xs text-slate-400 truncate mt-0.5">
@@ -395,10 +395,10 @@
                                 Terbaru
                             </span>
                             <span
-                                v-if="item.careerCount > 0"
+                                v-if="item.careerCount > 1"
                                 class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-100 shrink-0"
                             >
-                                +{{ item.careerCount }} karir lain
+                                +{{ item.careerCount - 1 }} karir lain
                             </span>
                         </div>
                         <p class="text-xs text-slate-400 truncate mt-0.5">
