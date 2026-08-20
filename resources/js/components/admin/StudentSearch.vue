@@ -1,27 +1,61 @@
 <template>
-  <div class="relative">
-    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-      <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
-      </svg>
+    <div class="relative w-full">
+        <svg
+            class="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+        >
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21 21l-4.35-4.35M17 10.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z"
+            />
+        </svg>
+        <input
+            type="search"
+            placeholder="Cari mahasiswa berdasarkan nama, email, universitas, atau prodi..."
+            aria-label="Cari mahasiswa"
+            class="block w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-10 pr-10 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden"
+            v-model="searchTerm"
+            @input="emitSearch"
+        />
+        <button
+            v-if="searchTerm"
+            @click="clearSearch"
+            aria-label="Hapus pencarian"
+            class="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-full p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
+        >
+            <svg
+                class="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                />
+            </svg>
+        </button>
     </div>
-    <input
-      type="text"
-      placeholder="Cari mahasiswa berdasarkan nama, email, universitas, atau prodi..."
-      class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-      v-model="searchTerm"
-      @input="emitSearch"
-    />
-  </div>
 </template>
 
 <script setup>
-import { ref, defineEmits } from 'vue';
+import { ref } from "vue";
 
-const emit = defineEmits(['search-changed']);
-const searchTerm = ref('');
+const emit = defineEmits(["search-changed"]);
+const searchTerm = ref("");
 
 const emitSearch = () => {
-  emit('search-changed', searchTerm.value);
+    emit("search-changed", searchTerm.value);
+};
+
+const clearSearch = () => {
+    searchTerm.value = "";
+    emit("search-changed", "");
 };
 </script>

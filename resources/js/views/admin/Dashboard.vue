@@ -2,7 +2,7 @@
     <div class="space-y-6">
         <!-- Header -->
         <div
-            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 p-6 shadow-lg animate-fade-in-up"
+            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 p-5 shadow-lg animate-fade-in-up sm:p-6"
         >
             <!-- dekorasi blur -->
             <div
@@ -19,7 +19,9 @@
                     <p class="text-sm font-medium text-blue-100">
                         CareerMate Admin
                     </p>
-                    <h1 class="mt-1 text-2xl font-semibold text-white">
+                    <h1
+                        class="mt-1 text-xl font-semibold text-white sm:text-2xl"
+                    >
                         {{ greeting }}, Admin
                     </h1>
                     <p class="mt-2 text-sm text-blue-100">
@@ -28,7 +30,7 @@
                     </p>
                 </div>
                 <div
-                    class="flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-sm font-medium text-white backdrop-blur"
+                    class="flex w-fit items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-sm font-medium text-white backdrop-blur"
                 >
                     <span class="relative flex h-2.5 w-2.5">
                         <span
@@ -47,302 +49,321 @@
         <PageSkeleton v-if="loading" variant="cards" :count="8" />
 
         <template v-else>
-        <!-- Ringkasan Sistem -->
-        <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <!-- Ringkasan Sistem -->
             <div
-                v-for="(item, index) in summary"
-                :key="item.title"
-                class="animate-fade-in-up rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_8px_30px_rgba(15,23,42,0.04)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(15,23,42,0.08)]"
-                :style="{ animationDelay: `${index * 80}ms` }"
+                class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4"
             >
-                <div class="flex items-start justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-slate-500">
-                            {{ item.title }}
-                        </p>
-                        <p class="mt-2 text-3xl font-semibold text-slate-900">
-                            {{ item.displayValue }}
-                        </p>
-                        <p
-                            class="mt-1 text-xs font-medium"
-                            :class="
-                                item.trend >= 0
-                                    ? 'text-emerald-600'
-                                    : 'text-red-500'
-                            "
-                        >
-                            {{ item.trend >= 0 ? "+" : "" }}{{ item.trend }}%
-                            bulan ini
-                        </p>
-                    </div>
-                    <div
-                        :class="item.iconBg"
-                        class="rounded-2xl p-3 transition-transform duration-300 hover:scale-105"
-                    >
-                        <svg
-                            class="h-6 w-6"
-                            :class="item.iconColor"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                v-for="path in item.paths"
-                                :key="path"
-                                :d="path"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                            />
-                        </svg>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Statistik Penggunaan + Grafik Career Recommendation -->
-        <div class="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
-            <div
-                class="animate-fade-in-up rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_8px_30px_rgba(15,23,42,0.04)]"
-                style="animation-delay: 150ms"
-            >
-                <div class="mb-4 flex items-center justify-between">
-                    <div>
-                        <h2 class="text-lg font-semibold text-slate-900">
-                            Statistik Penggunaan
-                        </h2>
-                        <p class="text-sm text-slate-500">
-                            Aktivitas upload CV dan analisis mahasiswa.
-                        </p>
-                    </div>
-                    <span
-                        class="rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700"
-                        >This month</span
-                    >
-                </div>
-                <div class="space-y-4">
-                    <div
-                        v-for="item in usageStats"
-                        :key="item.label"
-                        class="rounded-xl border border-slate-100 bg-slate-50 p-4"
-                    >
-                        <div
-                            class="mb-2 flex items-center justify-between text-sm"
-                        >
-                            <span class="font-medium text-slate-700">{{
-                                item.label
-                            }}</span>
-                            <span class="font-semibold text-slate-900"
-                                >{{ item.value }}
-                                <span class="font-normal text-slate-400"
-                                    >({{ item.percent }}%)</span
-                                ></span
-                            >
-                        </div>
-                        <div
-                            class="h-2.5 overflow-hidden rounded-full bg-slate-200"
-                        >
-                            <div
-                                class="h-2.5 w-full origin-left rounded-full bar-fill"
-                                :class="item.color"
-                                :style="{
-                                    transform: barsReady
-                                        ? `scaleX(${item.percent / 100})`
-                                        : 'scaleX(0)',
-                                }"
-                            ></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div
-                class="animate-fade-in-up rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_8px_30px_rgba(15,23,42,0.04)]"
-                style="animation-delay: 200ms"
-            >
-                <div class="mb-4 flex items-center justify-between">
-                    <div>
-                        <h2 class="text-lg font-semibold text-slate-900">
-                            Career Recommendation
-                        </h2>
-                        <p class="text-sm text-slate-500">
-                            Distribusi hasil rekomendasi.
-                        </p>
-                    </div>
-                    <span
-                        class="rounded-full bg-violet-50 px-3 py-1 text-sm font-medium text-violet-700"
-                        >Summary</span
-                    >
-                </div>
-                <div class="flex flex-col items-center gap-6">
-                    <div
-                        class="relative h-40 w-40 animate-scale-in rounded-full"
-                        style="animation-delay: 350ms"
-                        :style="{ background: donutGradient }"
-                    >
-                        <div
-                            class="absolute inset-3 flex flex-col items-center justify-center rounded-full bg-white"
-                        >
-                            <p class="text-2xl font-semibold text-slate-900">
-                                {{ totalRecommendation }}
+                <div
+                    v-for="(item, index) in summary"
+                    :key="item.title"
+                    class="animate-fade-in-up rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_8px_30px_rgba(15,23,42,0.04)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(15,23,42,0.08)] sm:p-5"
+                    :style="{ animationDelay: `${index * 80}ms` }"
+                >
+                    <div class="flex items-start justify-between gap-3">
+                        <div class="min-w-0">
+                            <p class="text-sm font-medium text-slate-500">
+                                {{ item.title }}
                             </p>
-                            <p class="text-xs text-slate-500">Total</p>
-                        </div>
-                    </div>
-                    <div class="w-full space-y-2">
-                        <div
-                            v-for="slice in careerDistribution"
-                            :key="slice.label"
-                            class="flex items-center justify-between text-sm transition-colors duration-200 hover:bg-slate-50 rounded-lg px-1 -mx-1"
-                        >
-                            <div class="flex items-center gap-2">
-                                <span
-                                    class="h-2.5 w-2.5 rounded-full"
-                                    :style="{ backgroundColor: slice.color }"
-                                ></span>
-                                <span class="font-medium text-slate-700">{{
-                                    slice.label
-                                }}</span>
-                            </div>
-                            <span class="text-slate-500"
-                                >{{ slice.value }}%</span
+                            <p
+                                class="mt-2 text-2xl font-semibold text-slate-900 sm:text-3xl"
                             >
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Skill Terpopuler + Aktivitas Terbaru -->
-        <div class="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
-            <div
-                class="animate-fade-in-up rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_8px_30px_rgba(15,23,42,0.04)]"
-                style="animation-delay: 250ms"
-            >
-                <div class="mb-4 flex items-center justify-between">
-                    <h2 class="text-lg font-semibold text-slate-900">
-                        Skill Terpopuler
-                    </h2>
-                    <span
-                        class="rounded-full bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700"
-                        >Top 3</span
-                    >
-                </div>
-                <div class="space-y-4">
-                    <div
-                        v-for="skill in popularSkills"
-                        :key="skill.name"
-                        class="rounded-xl border border-slate-100 bg-slate-50 p-4"
-                    >
-                        <div
-                            class="mb-2 flex items-center justify-between text-sm"
-                        >
-                            <span class="font-medium text-slate-700">{{
-                                skill.name
-                            }}</span>
-                            <span class="text-slate-500"
-                                >{{ skill.count }} mahasiswa</span
-                            >
-                        </div>
-                        <div
-                            class="h-2.5 overflow-hidden rounded-full bg-slate-200"
-                        >
-                            <div
-                                class="h-2.5 w-full origin-left rounded-full bg-blue-500 bar-fill"
-                                :style="{
-                                    transform: barsReady
-                                        ? `scaleX(${skill.percent / 100})`
-                                        : 'scaleX(0)',
-                                }"
-                            ></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div
-                class="animate-fade-in-up rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_8px_30px_rgba(15,23,42,0.04)]"
-                style="animation-delay: 300ms"
-            >
-                <div class="mb-4 flex items-center justify-between">
-                    <h2 class="text-lg font-semibold text-slate-900">
-                        Aktivitas Terbaru
-                    </h2>
-                    <span
-                        class="rounded-full bg-amber-50 px-3 py-1 text-sm font-medium text-amber-700"
-                        >Fresh</span
-                    >
-                </div>
-                <div class="space-y-3">
-                    <div
-                        v-for="(activity, index) in recentActivities"
-                        :key="activity.title"
-                        class="animate-fade-in-up rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 transition-colors duration-200 hover:bg-slate-100"
-                        :style="{ animationDelay: `${350 + index * 80}ms` }"
-                    >
-                        <div class="flex items-center justify-between">
-                            <p class="text-sm font-medium text-slate-800">
-                                {{ activity.title }}
+                                {{ item.displayValue }}
                             </p>
-                            <span class="text-xs text-slate-400">{{
-                                activity.time
-                            }}</span>
+                            <p
+                                class="mt-1 text-xs font-medium"
+                                :class="
+                                    item.trend >= 0
+                                        ? 'text-emerald-600'
+                                        : 'text-red-500'
+                                "
+                            >
+                                {{ item.trend >= 0 ? "+" : ""
+                                }}{{ item.trend }}% bulan ini
+                            </p>
                         </div>
-                        <p class="mt-1 text-sm text-slate-500">
-                            {{ activity.detail }}
-                        </p>
+                        <div
+                            :class="item.iconBg"
+                            class="shrink-0 rounded-2xl p-2.5 transition-transform duration-300 hover:scale-105 sm:p-3"
+                        >
+                            <svg
+                                class="h-5 w-5 sm:h-6 sm:w-6"
+                                :class="item.iconColor"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    v-for="path in item.paths"
+                                    :key="path"
+                                    :d="path"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                />
+                            </svg>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Akses Cepat -->
-        <div
-            class="animate-fade-in-up rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_8px_30px_rgba(15,23,42,0.04)]"
-            style="animation-delay: 400ms"
-        >
-            <div class="mb-4">
-                <h2 class="text-lg font-semibold text-slate-900">
-                    Akses Cepat
-                </h2>
-                <p class="text-sm text-slate-500">
-                    Tindakan yang sering digunakan.
-                </p>
-            </div>
-            <div class="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-                <button
-                    v-for="action in quickActions"
-                    :key="action.title"
-                    @click="$router.push(action.to)"
-                    class="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-4 text-left transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-[0_8px_30px_rgba(15,23,42,0.06)] active:scale-[0.98]"
+            <!-- Statistik Penggunaan + Grafik Career Recommendation -->
+            <div class="grid gap-4 sm:gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+                <div
+                    class="min-w-0 animate-fade-in-up rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_8px_30px_rgba(15,23,42,0.04)] sm:p-6"
+                    style="animation-delay: 200ms"
                 >
                     <div
-                        :class="action.iconBg"
-                        class="rounded-xl p-2.5 transition-transform duration-300"
+                        class="mb-4 flex flex-wrap items-center justify-between gap-2"
                     >
-                        <svg
-                            class="h-5 w-5"
-                            :class="action.iconColor"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
+                        <div>
+                            <h2 class="text-lg font-semibold text-slate-900">
+                                Statistik Penggunaan
+                            </h2>
+                            <p class="text-sm text-slate-500">
+                                Aktivitas upload CV dan analisis mahasiswa.
+                            </p>
+                        </div>
+                        <span
+                            class="rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700"
+                            >This month</span
                         >
-                            <path
-                                v-for="path in action.paths"
-                                :key="path"
-                                :d="path"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                            />
-                        </svg>
                     </div>
-                    <span class="text-sm font-semibold text-slate-800">{{
-                        action.title
-                    }}</span>
-                </button>
+                    <div class="space-y-4">
+                        <div
+                            v-for="item in usageStats"
+                            :key="item.label"
+                            class="rounded-xl border border-slate-100 bg-slate-50 p-4"
+                        >
+                            <div
+                                class="mb-2 flex items-center justify-between text-sm"
+                            >
+                                <span class="font-medium text-slate-700">{{
+                                    item.label
+                                }}</span>
+                                <span class="font-semibold text-slate-900"
+                                    >{{ item.value }}
+                                    <span class="font-normal text-slate-400"
+                                        >({{ item.percent }}%)</span
+                                    ></span
+                                >
+                            </div>
+                            <div
+                                class="h-2.5 overflow-hidden rounded-full bg-slate-200"
+                            >
+                                <div
+                                    class="h-2.5 w-full origin-left rounded-full bar-fill"
+                                    :class="item.color"
+                                    :style="{
+                                        transform: barsReady
+                                            ? `scaleX(${item.percent / 100})`
+                                            : 'scaleX(0)',
+                                    }"
+                                ></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="min-w-0 animate-fade-in-up rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_8px_30px_rgba(15,23,42,0.04)] sm:p-6"
+                    style="animation-delay: 200ms"
+                >
+                    <div
+                        class="mb-4 flex flex-wrap items-center justify-between gap-2"
+                    >
+                        <div>
+                            <h2 class="text-lg font-semibold text-slate-900">
+                                Career Recommendation
+                            </h2>
+                            <p class="text-sm text-slate-500">
+                                Distribusi hasil rekomendasi.
+                            </p>
+                        </div>
+                        <span
+                            class="rounded-full bg-violet-50 px-3 py-1 text-sm font-medium text-violet-700"
+                            >Summary</span
+                        >
+                    </div>
+                    <div class="flex flex-col items-center gap-6">
+                        <div
+                            class="relative h-36 w-36 animate-scale-in rounded-full sm:h-40 sm:w-40"
+                            style="animation-delay: 350ms"
+                            :style="{ background: donutGradient }"
+                        >
+                            <div
+                                class="absolute inset-3 flex flex-col items-center justify-center rounded-full bg-white"
+                            >
+                                <p
+                                    class="text-xl font-semibold text-slate-900 sm:text-2xl"
+                                >
+                                    {{ totalRecommendation }}
+                                </p>
+                                <p class="text-xs text-slate-500">Total</p>
+                            </div>
+                        </div>
+                        <div class="w-full space-y-2">
+                            <div
+                                v-for="slice in careerDistribution"
+                                :key="slice.label"
+                                class="flex items-center justify-between text-sm transition-colors duration-200 hover:bg-slate-50 rounded-lg px-1 -mx-1"
+                            >
+                                <div class="flex items-center gap-2">
+                                    <span
+                                        class="h-2.5 w-2.5 rounded-full"
+                                        :style="{
+                                            backgroundColor: slice.color,
+                                        }"
+                                    ></span>
+                                    <span class="font-medium text-slate-700">{{
+                                        slice.label
+                                    }}</span>
+                                </div>
+                                <span class="text-slate-500"
+                                    >{{ slice.value }}%</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+
+            <!-- Skill Terpopuler + Aktivitas Terbaru -->
+            <div class="grid gap-4 sm:gap-6 md:grid-cols-[0.9fr_1.1fr]">
+                <div
+                    class="min-w-0 animate-fade-in-up rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_8px_30px_rgba(15,23,42,0.04)] sm:p-6"
+                    style="animation-delay: 300ms"
+                >
+                    <div class="mb-4 flex items-center justify-between">
+                        <h2 class="text-lg font-semibold text-slate-900">
+                            Skill Terpopuler
+                        </h2>
+                        <span
+                            class="rounded-full bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700"
+                            >Top 3</span
+                        >
+                    </div>
+                    <div class="space-y-3 sm:space-y-4">
+                        <div
+                            v-for="skill in popularSkills"
+                            :key="skill.name"
+                            class="rounded-xl border border-slate-100 bg-slate-50 p-3.5 sm:p-4"
+                        >
+                            <div
+                                class="mb-2 flex items-center justify-between gap-3 text-sm"
+                            >
+                                <span
+                                    class="min-w-0 flex-1 break-all font-medium text-slate-700"
+                                    >{{ skill.name }}</span
+                                >
+                                <span
+                                    class="shrink-0 whitespace-nowrap text-xs text-slate-500 sm:text-sm"
+                                    >{{ skill.count }} mahasiswa</span
+                                >
+                            </div>
+                            <div
+                                class="h-2.5 overflow-hidden rounded-full bg-slate-200"
+                            >
+                                <div
+                                    class="h-2.5 w-full origin-left rounded-full bg-blue-500 bar-fill"
+                                    :style="{
+                                        transform: barsReady
+                                            ? `scaleX(${skill.percent / 100})`
+                                            : 'scaleX(0)',
+                                    }"
+                                ></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="animate-fade-in-up rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_8px_30px_rgba(15,23,42,0.04)] sm:p-6"
+                    style="animation-delay: 300ms"
+                >
+                    <div class="mb-4 flex items-center justify-between">
+                        <h2 class="text-lg font-semibold text-slate-900">
+                            Aktivitas Terbaru
+                        </h2>
+                        <span
+                            class="rounded-full bg-amber-50 px-3 py-1 text-sm font-medium text-amber-700"
+                            >Fresh</span
+                        >
+                    </div>
+                    <div class="space-y-3">
+                        <div
+                            v-for="(activity, index) in recentActivities"
+                            :key="activity.title"
+                            class="animate-fade-in-up rounded-xl border border-slate-100 bg-slate-50 px-3.5 py-3 transition-colors duration-200 hover:bg-slate-100 sm:px-4"
+                            :style="{ animationDelay: `${350 + index * 80}ms` }"
+                        >
+                            <div class="flex items-start justify-between gap-2">
+                                <p
+                                    class="min-w-0 flex-1 break-all text-sm font-medium text-slate-800"
+                                >
+                                    {{ activity.title }}
+                                </p>
+                                <span
+                                    class="shrink-0 whitespace-nowrap text-xs text-slate-400"
+                                    >{{ activity.time }}</span
+                                >
+                            </div>
+                            <p class="mt-1 break-all text-sm text-slate-500">
+                                {{ activity.detail }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Akses Cepat -->
+            <div
+                class="animate-fade-in-up rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_8px_30px_rgba(15,23,42,0.04)] sm:p-6"
+                style="animation-delay: 400ms"
+            >
+                <div class="mb-4">
+                    <h2 class="text-lg font-semibold text-slate-900">
+                        Akses Cepat
+                    </h2>
+                    <p class="text-sm text-slate-500">
+                        Tindakan yang sering digunakan.
+                    </p>
+                </div>
+                <div
+                    class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4"
+                >
+                    <button
+                        v-for="action in quickActions"
+                        :key="action.title"
+                        @click="$router.push(action.to)"
+                        class="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-4 text-left transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-[0_8px_30px_rgba(15,23,42,0.06)] active:scale-[0.98]"
+                    >
+                        <div
+                            :class="action.iconBg"
+                            class="rounded-xl p-2.5 transition-transform duration-300"
+                        >
+                            <svg
+                                class="h-5 w-5"
+                                :class="action.iconColor"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    v-for="path in action.paths"
+                                    :key="path"
+                                    :d="path"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                />
+                            </svg>
+                        </div>
+                        <span class="text-sm font-semibold text-slate-800">{{
+                            action.title
+                        }}</span>
+                    </button>
+                </div>
+            </div>
         </template>
     </div>
 </template>

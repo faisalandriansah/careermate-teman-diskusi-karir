@@ -1,19 +1,15 @@
 <template>
     <div class="rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <!-- Search and Filter Section -->
+        <!-- Search Section -->
         <div class="border-b border-slate-100 p-4">
-            <div
-                class="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center"
-            >
-                <div class="w-full md:w-auto md:flex-1">
-                    <StudentSearch @search-changed="handleSearchChange" />
-                </div>
+            <div class="w-full">
+                <StudentSearch @search-changed="handleSearchChange" />
             </div>
         </div>
 
         <!-- Loading Skeleton -->
         <div v-if="loading" class="p-4">
-            <StudentSkeleton :rows="5" />
+            <StudentSkeleton :rows="6" />
         </div>
 
         <!-- error State -->
@@ -25,9 +21,9 @@
             <p class="mt-1 text-xs text-slate-500">{{ errorMessage }}</p>
             <button
                 @click="fetchStudents"
-                class="mt-3 rounded-x1 border border-slate-300 bg-white px-3 py-1.5 text-sm fony-semibold text-slate-600 hover:bg-slate-50"
+                class="mt-3 rounded-xl border border-slate-300 bg-white px-3 py-1.5 text-sm font-semibold text-slate-600 hover:bg-slate-50"
             >
-                coba lagi
+                Coba lagi
             </button>
         </div>
 
@@ -57,63 +53,151 @@
                 Data Mahasiswa Tidak Ditemukan
             </h3>
             <p class="mt-1 text-xs text-slate-500">
-                Coba ubah kata kunci pencarian atau filter yang Anda gunakan
+                Coba ubah kata kunci pencarian Anda
             </p>
         </div>
 
         <!-- Card Grid -->
         <div v-else class="p-4">
+            <div class="mb-4 flex flex-wrap items-center justify-between gap-2">
+                <div>
+                    <h3 class="text-sm font-semibold text-slate-900">
+                        Daftar Mahasiswa
+                    </h3>
+                    <p class="text-xs text-slate-500">
+                        Kelola dan pantau aktivitas mahasiswa di platform
+                    </p>
+                </div>
+                <span
+                    class="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-600"
+                >
+                    {{ filteredStudents.length }} mahasiswa
+                </span>
+            </div>
+
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <div
                     v-for="student in paginatedStudents"
                     :key="student.id"
-                    class="group flex flex-col justify-between rounded-xl bg-slate-50 p-4 transition hover:bg-slate-100"
+                    class="group flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md"
                 >
                     <div>
-                        <div class="flex items-start justify-between gap-2">
-                            <div class="flex min-w-0 items-center gap-3">
-                                <div
-                                    class="relative h-11 w-11 shrink-0 overflow-hidden rounded-full bg-gradient-to-br from-indigo-500 to-blue-600 text-sm font-semibold text-white"
+                        <div class="flex items-start gap-3">
+                            <div
+                                class="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-indigo-500 to-blue-600 text-base font-semibold text-white ring-2 ring-blue-50"
+                            >
+                                <img
+                                    v-if="student.photo_url"
+                                    :src="student.photo_url"
+                                    alt=""
+                                    class="h-full w-full object-cover"
+                                    @error="
+                                        $event.target.style.display = 'none'
+                                    "
+                                />
+                                <span
+                                    v-if="!student.photo_url"
+                                    class="flex h-full w-full items-center justify-center"
                                 >
-                                    <img
-                                        v-if="student.photo_url"
-                                        :src="student.photo_url"
-                                        alt=""
-                                        class="h-full w-full object-cover"
-                                        @error="
-                                            $event.target.style.display = 'none'
-                                        "
-                                    />
+                                    {{ student.name.charAt(0).toUpperCase() }}
+                                </span>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <p
+                                    class="truncate text-sm font-semibold text-slate-900"
+                                >
+                                    {{ student.name }}
+                                </p>
+                                <p
+                                    class="truncate text-xs text-slate-500"
+                                    :title="student.email"
+                                >
+                                    {{ student.email }}
+                                </p>
+                                <div class="mt-1.5 flex flex-wrap gap-1.5">
                                     <span
-                                        v-if="!student.photo_url"
-                                        class="flex h-full w-full items-center justify-center"
+                                        v-if="student.cv_file"
+                                        class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-700"
                                     >
-                                        {{
-                                            student.name.charAt(0).toUpperCase()
-                                        }}
+                                        <svg
+                                            class="h-3 w-3"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                            stroke-width="2.5"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="M5 13l4 4L19 7"
+                                            />
+                                        </svg>
+                                        CV Terlampir
                                     </span>
-                                </div>
-                                <div class="min-w-0">
-                                    <p
-                                        class="truncate text-sm font-semibold text-slate-900"
+                                    <span
+                                        v-else
+                                        class="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-500"
                                     >
-                                        {{ student.name }}
-                                    </p>
-                                    <p
-                                        class="truncate text-xs text-slate-500"
-                                        :title="student.email"
-                                    >
-                                        {{ student.email }}
-                                    </p>
+                                        <svg
+                                            class="h-3 w-3"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                            stroke-width="2"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                            />
+                                        </svg>
+                                        Belum CV
+                                    </span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="mt-3 text-xs text-slate-500">
-                            <p v-if="student.university">
+                        <div
+                            class="my-3 border-t border-dashed border-slate-100"
+                        ></div>
+
+                        <div class="space-y-1.5 text-xs text-slate-500">
+                            <p
+                                v-if="student.university"
+                                class="flex items-center gap-1.5 truncate"
+                            >
+                                <svg
+                                    class="h-3.5 w-3.5 shrink-0 text-slate-400"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="2"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M3 21h18M5 21V7l7-4 7 4v14M9 9h.01M9 12h.01M9 15h.01M15 9h.01M15 12h.01M15 15h.01"
+                                    />
+                                </svg>
                                 {{ student.university }}
                             </p>
-                            <p v-if="student.major">
+                            <p
+                                v-if="student.major"
+                                class="flex items-center gap-1.5 truncate"
+                            >
+                                <svg
+                                    class="h-3.5 w-3.5 shrink-0 text-slate-400"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="2"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                                    />
+                                </svg>
                                 {{ student.major }}
                                 <span v-if="student.semester">
                                     · Semester {{ student.semester }}</span
@@ -123,22 +207,86 @@
 
                         <div
                             v-if="student.last_analysis"
-                            class="mt-3 rounded-lg bg-white px-3 py-2 text-xs"
+                            class="mt-3 rounded-xl bg-slate-50 px-3 py-2.5 ring-1 ring-slate-100"
                         >
-                            <p class="font-semibold text-slate-700">
+                            <div
+                                class="flex items-center justify-between gap-2"
+                            >
+                                <p
+                                    class="text-[10px] font-semibold uppercase tracking-wide text-slate-400"
+                                >
+                                    Rekomendasi Karier
+                                </p>
+                                <span
+                                    class="shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold"
+                                    :class="
+                                        scoreClass(
+                                            student.last_analysis
+                                                .match_percentage,
+                                        )
+                                    "
+                                >
+                                    {{
+                                        Math.round(
+                                            student.last_analysis
+                                                .match_percentage,
+                                        )
+                                    }}%
+                                </span>
+                            </div>
+                            <p
+                                class="mt-1 truncate text-sm font-semibold text-slate-800"
+                            >
                                 {{
                                     student.last_analysis.recommended_career ??
                                     "-"
                                 }}
                             </p>
-                            <p class="text-slate-500">
-                                Match:
+                            <p
+                                class="mt-1 flex items-center gap-1 text-[11px] text-slate-400"
+                            >
+                                <svg
+                                    class="h-3 w-3"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="2"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                    />
+                                </svg>
                                 {{
-                                    Math.round(
-                                        student.last_analysis.match_percentage,
+                                    formatDate(
+                                        student.last_analysis.analysis_date,
                                     )
-                                }}%
+                                }}
                             </p>
+                        </div>
+                        <div
+                            v-else
+                            class="mt-3 rounded-xl bg-slate-50 px-3 py-3 ring-1 ring-slate-100"
+                        >
+                            <span
+                                class="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2 py-1 text-[11px] font-semibold text-amber-700"
+                            >
+                                <svg
+                                    class="h-3 w-3"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="2"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    />
+                                </svg>
+                                Belum Analisis
+                            </span>
                         </div>
                     </div>
 
@@ -178,17 +326,15 @@
             <!-- Info jumlah data (kiri di desktop, di atas di mobile) -->
             <div class="text-center text-sm text-slate-600 sm:text-left">
                 Menampilkan
-                <span class="font-semibold text-slate-900">{{
-                    Math.min(
-                        currentPage * itemsPerPage,
-                        filteredStudents.length,
-                    )
+                <span class="font-semibold text-slate-900">{{ shownFrom }}</span
+                >–<span class="font-semibold text-slate-900">{{
+                    shownTo
                 }}</span>
                 dari
                 <span class="font-semibold text-slate-900">{{
                     filteredStudents.length
                 }}</span>
-                data
+                mahasiswa
             </div>
 
             <!-- Kontrol navigasi: 3 kolom sejajar di mobile, satu group di desktop -->
@@ -254,13 +400,13 @@
             @viewCV="openCV"
         />
     </div>
-    
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { studentService } from "@/services/admin/studentService";
 import apiClient from "@/services/api";
+import { push } from "notivue";
 import StudentSearch from "@/components/admin/StudentSearch.vue";
 import StudentSkeleton from "@/components/admin/StudentSkeleton.vue";
 import StudentDetailModal from "@/components/admin/StudentDetailModal.vue";
@@ -346,6 +492,7 @@ const filteredStudents = computed(() => {
                 (student.major && student.major.toLowerCase().includes(term)),
         );
     }
+
     return result;
 });
 
@@ -358,6 +505,16 @@ const paginatedStudents = computed(() => {
     const end = start + itemsPerPage;
     return filteredStudents.value.slice(start, end);
 });
+
+const shownFrom = computed(() =>
+    filteredStudents.value.length === 0
+        ? 0
+        : (currentPage.value - 1) * itemsPerPage + 1,
+);
+
+const shownTo = computed(() =>
+    Math.min(currentPage.value * itemsPerPage, filteredStudents.value.length),
+);
 
 // Methods
 const handleSearchChange = (searchValue) => {
@@ -397,7 +554,23 @@ const openCV = async (student) => {
         const url = window.URL.createObjectURL(response.data);
         window.open(url, "_blank");
     } catch (err) {
-        alert("Gagal membuka CV. File mungkin tidak tersedia.");
+        push.error({
+            title: "Gagal membuka CV",
+            message: "File mungkin tidak tersedia.",
+        });
     }
 };
+
+function formatDate(dateString) {
+    if (!dateString) return "-";
+    const options = { day: "2-digit", month: "short", year: "numeric" };
+    return new Date(dateString).toLocaleDateString("id-ID", options);
+}
+
+function scoreClass(score) {
+    const s = score ?? 0;
+    if (s >= 75) return "bg-emerald-50 text-emerald-700";
+    if (s >= 50) return "bg-blue-50 text-blue-700";
+    return "bg-amber-50 text-amber-700";
+}
 </script>

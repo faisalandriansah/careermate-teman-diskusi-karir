@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen bg-[#f8fafc] text-slate-800">
+    <div class="min-h-screen overflow-x-hidden bg-[#f8fafc] text-slate-800">
         <div class="flex min-h-screen">
             <div
                 v-if="sidebarOpen"
@@ -8,10 +8,10 @@
             ></div>
             <aside
                 :class="[
-                    'fixed inset-y-0 left-0 z-30 border-r border-slate-200 bg-white text-slate-700 shadow-[0_0_30px_rgba(15,23,42,0.06)] transition-all duration-200 ease-in-out flex flex-col',
+                    'fixed inset-y-0 left-0 z-30 w-72 max-w-[85vw] border-r border-slate-200 bg-white text-slate-700 shadow-[0_0_30px_rgba(15,23,42,0.06)] transition-all duration-200 ease-in-out flex flex-col',
                     sidebarOpen
-                        ? 'translate-x-0 w-72'
-                        : '-translate-x-full w-72',
+                        ? 'translate-x-0'
+                        : '-translate-x-full',
                     'lg:translate-x-0',
                     sidebarOpen ? 'lg:w-72' : 'lg:w-20',
                 ]"
@@ -549,7 +549,7 @@
 
             <div
                 :class="[
-                    'flex flex-col flex-1 w-full transition-all duration-200 ease-in-out',
+                    'flex flex-col flex-1 w-full min-w-0 transition-all duration-200 ease-in-out',
                     isMiniSidebar ? 'lg:ml-20' : 'lg:ml-72',
                 ]"
             >
@@ -946,7 +946,7 @@
                                 >
                                     <div
                                         v-if="notifOpen"
-                                        class="absolute right-0 z-50 mt-2 w-72 origin-top-right overflow-hidden rounded-xl border border-slate-100 bg-white py-2 shadow-xl text-slate-900"
+                                        class="absolute right-0 z-50 mt-2 w-72 max-w-[calc(100vw-1.5rem)] origin-top-right overflow-hidden rounded-xl border border-slate-100 bg-white py-2 shadow-xl text-slate-900"
                                     >
                                         <div
                                             class="flex items-center justify-between px-4 py-2"
@@ -1078,7 +1078,7 @@
                                 >
                                     <div
                                         v-if="acctOpen"
-                                        class="absolute right-0 z-50 mt-2 w-64 origin-top-right overflow-hidden rounded-xl border border-slate-100 bg-white shadow-xl text-slate-900"
+                                        class="absolute right-0 z-50 mt-2 w-64 max-w-[calc(100vw-1.5rem)] origin-top-right overflow-hidden rounded-xl border border-slate-100 bg-white shadow-xl text-slate-900"
                                     >
                                         <!-- Header profil -->
                                         <div
@@ -1215,7 +1215,7 @@
                 </header>
 
                 <main
-                    class="flex-1 p-4 transition-all duration-200 sm:p-6 lg:p-8"
+                    class="flex-1 min-w-0 p-4 transition-all duration-200 sm:p-6 lg:p-8"
                 >
                     <router-view />
                 </main>

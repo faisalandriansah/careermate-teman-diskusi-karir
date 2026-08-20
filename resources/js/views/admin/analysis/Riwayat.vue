@@ -29,149 +29,33 @@
             </div>
         </div>
 
-        <!-- Summary Cards -->
-        <div
-            class="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3"
-        >
-            <div
-                class="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+        <!-- Search -->
+        <div class="relative mb-5 w-full">
+            <svg
+                class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                stroke-width="2"
             >
-                <div
-                    class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600"
-                >
-                    <svg
-                        class="h-5 w-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        stroke-width="2"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                        />
-                    </svg>
-                </div>
-                <div>
-                    <p class="text-2xl font-bold text-slate-900">
-                        {{ summary.total_analysis ?? "-" }}
-                    </p>
-                    <p class="text-xs text-slate-500">Total Analisis</p>
-                </div>
-            </div>
-
-            <div
-                class="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
-            >
-                <div
-                    class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600"
-                >
-                    <svg
-                        class="h-5 w-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        stroke-width="2"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4zm6 0a4 4 0 10-4-4"
-                        />
-                    </svg>
-                </div>
-                <div>
-                    <p class="text-2xl font-bold text-slate-900">
-                        {{ summary.active_students ?? "-" }}
-                    </p>
-                    <p class="text-xs text-slate-500">Mahasiswa Aktif</p>
-                </div>
-            </div>
-
-            <div
-                class="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
-            >
-                <div
-                    class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-amber-600"
-                >
-                    <svg
-                        class="h-5 w-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        stroke-width="2"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"
-                        />
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"
-                        />
-                    </svg>
-                </div>
-                <div>
-                    <p class="text-2xl font-bold text-slate-900">
-                        {{ summary.avg_score ?? "-" }}%
-                    </p>
-                    <p class="text-xs text-slate-500">Rata-rata Skor</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Search & Actions -->
-        <div
-            class="mb-4 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center"
-        >
-            <div class="relative w-full sm:w-72">
-                <svg
-                    class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    stroke-width="2"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M21 21l-4.35-4.35M17 10.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z"
-                    />
-                </svg>
-                <input
-                    type="text"
-                    v-model="search"
-                    placeholder="Cari nama atau email mahasiswa..."
-                    @keydown.enter="loadHistory()"
-                    class="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-9 pr-9 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M21 21l-4.35-4.35M17 10.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z"
                 />
-                <button
-                    v-if="search"
-                    @click="clearSearch"
-                    class="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 text-slate-400 hover:text-slate-600"
-                >
-                    <svg
-                        class="h-4 w-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        stroke-width="2"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M6 18L18 6M6 6l12 12"
-                        />
-                    </svg>
-                </button>
-            </div>
-
+            </svg>
+            <input
+                type="search"
+                v-model="search"
+                placeholder="Cari nama atau email mahasiswa..."
+                aria-label="Cari riwayat analisis"
+                class="w-full rounded-xl border border-slate-200 bg-white py-3 pl-10 pr-11 text-sm text-slate-700 shadow-sm outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden"
+            />
             <button
-                @click="loadHistory()"
-                class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 active:scale-[0.98]"
+                v-if="search && !loading"
+                @click="clearSearch"
+                aria-label="Hapus pencarian"
+                class="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-full p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
             >
                 <svg
                     class="h-4 w-4"
@@ -183,11 +67,30 @@
                     <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                        d="M6 18L18 6M6 6l12 12"
                     />
                 </svg>
-                Muat Ulang
             </button>
+            <svg
+                v-if="loading"
+                class="absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-blue-500"
+                fill="none"
+                viewBox="0 0 24 24"
+            >
+                <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                ></circle>
+                <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                ></path>
+            </svg>
         </div>
 
         <!-- Loading Skeleton -->
@@ -259,12 +162,27 @@
         </div>
 
         <!-- Data Table (desktop & mobile-friendly) -->
-        <div v-else class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div
+            v-else
+            class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
+        >
+            <div
+                class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 bg-slate-50/70 px-4 py-3 sm:px-5"
+            >
+                <p class="text-sm font-semibold text-slate-700">
+                    Daftar Riwayat Analisis
+                </p>
+                <span
+                    class="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-600"
+                >
+                    {{ total }} data
+                </span>
+            </div>
             <div class="divide-y divide-slate-100">
                 <div
                     v-for="item in items"
                     :key="item.id"
-                    class="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6"
+                    class="flex flex-col gap-3 p-4 transition-colors hover:bg-slate-50/60 sm:flex-row sm:items-center sm:justify-between sm:gap-6"
                 >
                     <!-- Mahasiswa -->
                     <div class="flex min-w-0 items-center gap-3">
@@ -328,7 +246,7 @@
                         <div class="hidden sm:block h-9 w-px bg-slate-200"></div>
 
                         <span
-                            class="mt-1.5 inline-flex w-fit items-center rounded-full px-2.5 py-1 text-xs font-bold"
+                            class="mt-1.5 inline-flex min-w-[3.25rem] w-fit items-center justify-center rounded-full px-2.5 py-1 text-xs font-bold"
                             :class="scoreClass(item.match_score)"
                         >
                             {{ Math.round(item.match_score ?? 0) }}%
@@ -452,7 +370,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, watch, onMounted } from "vue";
 import { analysisHistoryService } from "@/services/admin/analysisHistoryService";
 import AnalysisDetailModal from "@/components/admin/AnalysisDetailModal.vue";
 
@@ -460,6 +378,7 @@ const items = ref([]);
 const loading = ref(false);
 const errorMessage = ref("");
 const search = ref("");
+let searchTimer = null;
 
 const selectedAnalysis = ref(null);
 const detailOpen = ref(false);
@@ -474,7 +393,6 @@ function closeDetail() {
     selectedAnalysis.value = null;
 }
 
-const summary = ref({});
 const currentPage = ref(1);
 const lastPage = ref(1);
 const total = ref(0);
@@ -497,7 +415,6 @@ async function loadHistory(page = 1) {
             search: search.value || undefined,
         });
         items.value = data.data?.data ?? data.data ?? [];
-        summary.value = data.summary ?? {};
         currentPage.value = data.data?.current_page ?? page;
         lastPage.value = data.data?.last_page ?? 1;
         total.value = data.data?.total ?? 0;
@@ -516,8 +433,15 @@ function changePage(page) {
 
 function clearSearch() {
     search.value = "";
-    loadHistory(1);
 }
+
+// Live search: ketik langsung cari, debounce 400ms
+watch(search, () => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+        loadHistory(1);
+    }, 400);
+});
 
 function initials(name) {
     if (!name) return "?";

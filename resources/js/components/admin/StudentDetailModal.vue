@@ -3,7 +3,7 @@
         class="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
     >
         <!-- Backdrop -->
-        <div class="fixed inset-0 bg-gray-900/50" @click="$emit('close')"></div>
+        <div class="fixed inset-0 bg-slate-900/50" @click="$emit('close')"></div>
 
         <!-- Modal panel -->
         <div
@@ -100,57 +100,57 @@
                                     />
                                 </svg>
                             </div>
-                            <h4 class="text-sm font-semibold text-gray-900">
+                            <h4 class="text-sm font-semibold text-slate-900">
                                 Informasi Pribadi
                             </h4>
                         </div>
 
                         <div
-                            class="rounded-xl border border-gray-200 divide-y divide-gray-100 overflow-hidden"
+                            class="rounded-xl border border-slate-200 divide-y divide-slate-100 overflow-hidden"
                         >
                             <div
                                 class="flex justify-between gap-4 px-4 py-3 text-sm"
                             >
-                                <dt class="text-gray-500 shrink-0">Email</dt>
-                                <dd class="text-gray-900 text-right break-all">
+                                <dt class="text-slate-500 shrink-0">Email</dt>
+                                <dd class="text-slate-900 text-right break-all">
                                     {{ student.email }}
                                 </dd>
                             </div>
                             <div
                                 class="flex justify-between gap-4 px-4 py-3 text-sm"
                             >
-                                <dt class="text-gray-500 shrink-0">
+                                <dt class="text-slate-500 shrink-0">
                                     Universitas
                                 </dt>
-                                <dd class="text-gray-900 text-right">
+                                <dd class="text-slate-900 text-right">
                                     {{ student.university || "-" }}
                                 </dd>
                             </div>
                             <div
                                 class="flex justify-between gap-4 px-4 py-3 text-sm"
                             >
-                                <dt class="text-gray-500 shrink-0">Semester</dt>
-                                <dd class="text-gray-900 text-right">
+                                <dt class="text-slate-500 shrink-0">Semester</dt>
+                                <dd class="text-slate-900 text-right">
                                     {{ student.semester || "-" }}
                                 </dd>
                             </div>
                             <div
                                 class="flex justify-between gap-4 px-4 py-3 text-sm"
                             >
-                                <dt class="text-gray-500 shrink-0">
+                                <dt class="text-slate-500 shrink-0">
                                     Nomor Telepon
                                 </dt>
-                                <dd class="text-gray-900 text-right">
+                                <dd class="text-slate-900 text-right">
                                     {{ student.phone || "-" }}
                                 </dd>
                             </div>
                             <div
                                 class="flex justify-between gap-4 px-4 py-3 text-sm"
                             >
-                                <dt class="text-gray-500 shrink-0">
+                                <dt class="text-slate-500 shrink-0">
                                     Tgl Registrasi
                                 </dt>
-                                <dd class="text-gray-900 text-right">
+                                <dd class="text-slate-900 text-right">
                                     {{ formatDate(student.registration_date) }}
                                 </dd>
                             </div>
@@ -163,7 +163,7 @@
                                 :href="student.github"
                                 target="_blank"
                                 rel="noopener"
-                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 hover:border-gray-300 hover:bg-gray-50"
+                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-medium text-slate-700 hover:border-slate-300 hover:bg-slate-50"
                             >
                                 <svg
                                     class="w-3.5 h-3.5"
@@ -181,7 +181,7 @@
                                 :href="student.linkedin"
                                 target="_blank"
                                 rel="noopener"
-                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 hover:border-gray-300 hover:bg-gray-50"
+                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-medium text-slate-700 hover:border-slate-300 hover:bg-slate-50"
                             >
                                 <svg
                                     class="w-3.5 h-3.5"
@@ -199,7 +199,7 @@
                                 :href="student.portfolio"
                                 target="_blank"
                                 rel="noopener"
-                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 hover:border-gray-300 hover:bg-gray-50"
+                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-medium text-slate-700 hover:border-slate-300 hover:bg-slate-50"
                             >
                                 <svg
                                     class="w-3.5 h-3.5"
@@ -239,7 +239,7 @@
                                     />
                                 </svg>
                             </div>
-                            <h4 class="text-sm font-semibold text-gray-900">
+                            <h4 class="text-sm font-semibold text-slate-900">
                                 CV & Analisis
                             </h4>
                         </div>
@@ -247,7 +247,7 @@
                         <!-- CV -->
                         <div
                             v-if="student.cv_file"
-                            class="flex items-center justify-between gap-3 rounded-xl border border-gray-200 px-4 py-3 mb-4"
+                            class="flex items-center justify-between gap-3 rounded-xl border border-slate-200 px-4 py-3 mb-4"
                         >
                             <div class="flex items-center gap-2.5 min-w-0">
                                 <svg
@@ -263,7 +263,7 @@
                                         d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                                     />
                                 </svg>
-                                <span class="text-sm text-gray-900 truncate">{{
+                                <span class="text-sm text-slate-900 truncate">{{
                                     student.cv_file
                                 }}</span>
                             </div>
@@ -297,13 +297,13 @@
                         <!-- CV belum ada -->
                         <div
                             v-else
-                            class="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-gray-200 bg-gray-50/60 px-4 py-6 mb-4 text-center"
+                            class="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-slate-200 bg-slate-50/60 px-4 py-6 mb-4 text-center"
                         >
                             <div
-                                class="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100"
+                                class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100"
                             >
                                 <svg
-                                    class="w-5 h-5 text-gray-400"
+                                    class="w-5 h-5 text-slate-400"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
@@ -316,17 +316,17 @@
                                     />
                                 </svg>
                             </div>
-                            <p class="text-sm font-medium text-gray-600">
+                            <p class="text-sm font-medium text-slate-600">
                                 Belum ada CV
                             </p>
-                            <p class="text-xs text-gray-400">
+                            <p class="text-xs text-slate-400">
                                 Mahasiswa ini belum mengunggah CV.
                             </p>
                         </div>
 
                         <!-- Skill -->
                         <div class="mb-4">
-                            <div class="text-xs font-medium text-gray-500 mb-2">
+                            <div class="text-xs font-medium text-slate-500 mb-2">
                                 Skill Terdeteksi
                             </div>
                             <div
@@ -349,9 +349,9 @@
                             </div>
                             <div
                                 v-else
-                                class="flex items-center justify-center gap-2 rounded-xl border border-dashed border-gray-200 bg-gray-50/60 px-4 py-4 text-center"
+                                class="flex items-center justify-center gap-2 rounded-xl border border-dashed border-slate-200 bg-slate-50/60 px-4 py-4 text-center"
                             >
-                                <p class="text-xs text-gray-400">
+                                <p class="text-xs text-slate-400">
                                     Tidak ada skill terdeteksi
                                 </p>
                             </div>
@@ -360,7 +360,7 @@
                         <!-- Hasil Analisis -->
                         <div
                             v-if="student.last_analysis"
-                            class="rounded-xl border border-gray-200 px-4 py-4"
+                            class="rounded-xl border border-slate-200 px-4 py-4"
                         >
                             <div class="flex items-center gap-4">
                                 <div class="relative w-16 h-16 shrink-0">
@@ -373,7 +373,7 @@
                                             cy="18"
                                             r="15.5"
                                             fill="none"
-                                            stroke="#e5e7eb"
+                                            stroke="#e2e8f0"
                                             stroke-width="3"
                                         />
                                         <circle
@@ -390,25 +390,25 @@
                                         />
                                     </svg>
                                     <span
-                                        class="absolute inset-0 flex items-center justify-center font-bold text-gray-900"
+                                        class="absolute inset-0 flex items-center justify-center font-bold text-slate-900"
                                         :class="scoreTextClass"
                                     >
                                         {{ scoreDisplay }}
                                     </span>
                                 </div>
                                 <div class="min-w-0">
-                                    <div class="text-xs text-gray-500 mb-0.5">
+                                    <div class="text-xs text-slate-500 mb-0.5">
                                         Karier Direkomendasikan
                                     </div>
                                     <div
-                                        class="text-sm font-semibold text-gray-900 truncate"
+                                        class="text-sm font-semibold text-slate-900 truncate"
                                     >
                                         {{
                                             student.last_analysis
                                                 .recommended_career
                                         }}
                                     </div>
-                                    <div class="text-xs text-gray-400 mt-1">
+                                    <div class="text-xs text-slate-400 mt-1">
                                         {{
                                             formatDate(
                                                 student.last_analysis
@@ -423,7 +423,7 @@
                         <!-- Analisis belum ada -->
                         <div
                             v-else
-                            class="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-gray-200 bg-gray-50/60 px-4 py-6 text-center"
+                            class="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-slate-200 bg-slate-50/60 px-4 py-6 text-center"
                         >
                             <div
                                 class="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-50"
@@ -442,10 +442,10 @@
                                     />
                                 </svg>
                             </div>
-                            <p class="text-sm font-medium text-gray-600">
+                            <p class="text-sm font-medium text-slate-600">
                                 Belum ada analisis
                             </p>
-                            <p class="text-xs text-gray-400">
+                            <p class="text-xs text-slate-400">
                                 Mahasiswa ini belum menjalankan analisis CV.
                             </p>
                         </div>
@@ -455,11 +455,11 @@
 
             <!-- Footer -->
             <div
-                class="px-5 py-3.5 sm:px-6 border-t border-gray-200 flex justify-end shrink-0"
+                class="px-5 py-3.5 sm:px-6 border-t border-slate-200 flex justify-end shrink-0"
             >
                 <button
                     type="button"
-                    class="w-full sm:w-auto px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300"
+                    class="w-full sm:w-auto px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-300"
                     @click="$emit('close')"
                 >
                     Tutup
