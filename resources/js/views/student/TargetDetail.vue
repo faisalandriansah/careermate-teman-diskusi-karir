@@ -12,15 +12,16 @@
         icon="lock"
         title="Lengkapi Profil Dulu, Yuk!"
         description="Fitur target karir akan terbuka setelah profil kamu lengkap."
-        :steps="['Lengkapi biodata & detail profil', 'Upload CV kamu', 'Pilih target karirmu']"
+        :steps="[
+            'Lengkapi biodata & detail profil',
+            'Upload CV kamu',
+            'Pilih target karirmu',
+        ]"
         primary-label="Lengkapi Profil"
         :primary-to="{ name: 'StudentProfile' }"
     />
 
-    <div
-        v-else-if="errorMessage"
-        class="container mx-auto px-4 py-8 max-w-2xl"
-    >
+    <div v-else-if="errorMessage" class="container mx-auto px-4 py-8 max-w-2xl">
         <div
             class="bg-white rounded-2xl border border-slate-100 p-8 text-center shadow-sm"
         >
@@ -41,7 +42,10 @@
                 class="flex items-center gap-2 text-[11px] text-blue-200/80 font-medium mb-2"
             >
                 <router-link
-                    :to="{ name: 'StudentHasilAnalisis', params: { id: analysisId } }"
+                    :to="{
+                        name: 'StudentHasilAnalisis',
+                        params: { id: analysisId },
+                    }"
                     class="inline-flex items-center gap-1 hover:text-white transition"
                 >
                     <svg
@@ -77,7 +81,10 @@
                 <div
                     class="relative shrink-0 h-20 w-20 flex items-center justify-center"
                 >
-                    <svg viewBox="0 0 72 72" class="h-20 w-20 -rotate-90 transform">
+                    <svg
+                        viewBox="0 0 72 72"
+                        class="h-20 w-20 -rotate-90 transform"
+                    >
                         <circle
                             cx="36"
                             cy="36"
@@ -120,7 +127,9 @@
 
         <!-- Skills -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
-            <div class="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm">
+            <div
+                class="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm"
+            >
                 <p
                     class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5 mb-3"
                 >
@@ -153,7 +162,9 @@
                 </p>
             </div>
 
-            <div class="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm">
+            <div
+                class="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm"
+            >
                 <p
                     class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5 mb-3"
                 >
@@ -188,7 +199,9 @@
         </div>
 
         <!-- Roadmap -->
-        <div class="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm mb-5">
+        <div
+            class="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm mb-5"
+        >
             <div class="flex items-center justify-between mb-1">
                 <p
                     class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5"
@@ -293,6 +306,74 @@
             </button>
         </div>
 
+        <!-- Rekomendasi Magang -->
+        <div
+            v-if="internships.length"
+            class="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm mb-6"
+        >
+            <p
+                class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-1"
+            >
+                Rekomendasi Tempat Magang
+            </p>
+            <p class="text-[11px] text-slate-400 mb-3.5">
+                Internship yang relevan dengan
+                <span class="font-semibold text-slate-500">{{
+                    target?.career?.title
+                }}</span
+                >.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div
+                    v-for="job in internships"
+                    :key="job.id"
+                    class="p-4 rounded-xl border border-slate-100 bg-slate-50/50"
+                >
+                    <p class="text-sm font-semibold text-slate-800">
+                        {{ job.position }}
+                    </p>
+                    <p class="text-xs text-slate-500 mt-0.5">
+                        {{ job.company_name }}
+                    </p>
+                    <p
+                        v-if="job.location"
+                        class="text-xs text-slate-400 mt-0.5"
+                    >
+                        {{ job.location }}
+                    </p>
+
+                    <a
+                        v-if="job.application_url"
+                        :href="job.application_url"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="inline-flex items-center gap-1 mt-3 text-xs font-semibold text-blue-600 hover:text-blue-700"
+                    >
+                        Daftar Internship
+                        <svg
+                            class="h-3.5 w-3.5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                            />
+                        </svg>
+                    </a>
+                    <span
+                        v-else
+                        class="inline-block mt-3 text-xs text-slate-400"
+                    >
+                        Info internship
+                    </span>
+                </div>
+            </div>
+        </div>
+
         <!-- AI Summary -->
         <div
             v-if="target?.ai_summary"
@@ -345,6 +426,8 @@ const ringOffset = computed(() => {
 const matchedSkills = computed(() => target.value?.matched_skills_json ?? []);
 const gapSkills = computed(() => target.value?.skill_gap_json ?? []);
 const roadmapSteps = computed(() => target.value?.roadmap_json ?? []);
+
+const internships = computed(() => target.value?.career?.internships ?? []);
 
 async function generateRoadmap() {
     generating.value = true;

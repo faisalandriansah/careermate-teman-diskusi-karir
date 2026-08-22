@@ -26,7 +26,7 @@ class CVController extends Controller
 
         $file = $request->file('cv');
 
-        $fileName = Str::uuid().'.'.$file->getClientOriginalExtension();
+        $fileName = Str::uuid() . '.' . $file->getClientOriginalExtension();
 
         $filePath = $file->storeAs('cv', $fileName, 'public');
 
@@ -193,16 +193,28 @@ class CVController extends Controller
 
         return response()->json([
             'message' => 'Roadmap berhasil digenerate.',
-            'data' => $careerMatch->fresh('career'),
+            'data' => $careerMatch->fresh('career.internships'),
         ]);
     }
 
+    // public function careerMatches(AnalysisResult $analysisResult)
+    // {
+    //     abort_if($analysisResult->user_id !== auth()->id(), 403, 'Anda tidak berhak mengakses data ini.');
+
+    //     $matches = $analysisResult->careerMatches()
+    //         ->with('career')
+    //         ->orderByDesc('match_score')
+    //         ->get();
+
+    //     return response()->json([
+    //         'data' => $matches,
+    //     ]);
+    // }
+
     public function careerMatches(AnalysisResult $analysisResult)
     {
-        abort_if($analysisResult->user_id !== auth()->id(), 403, 'Anda tidak berhak mengakses data ini.');
-
         $matches = $analysisResult->careerMatches()
-            ->with('career')
+            ->with('career.internships')
             ->orderByDesc('match_score')
             ->get();
 
@@ -211,13 +223,34 @@ class CVController extends Controller
         ]);
     }
 
+    // public function targetAnalysis(AnalysisResult $analysisResult, Career $career)
+    // {
+    //     abort_if($analysisResult->user_id !== auth()->id(), 403, 'Anda tidak berhak mengakses data ini.');
+
+    //     $match = $analysisResult->careerMatches()
+    //         ->where('career_id', $career->id)
+    //         ->with('career')
+    //         ->first();
+
+    //     if (! $match) {
+    //         return response()->json([
+    //             'message' => 'Data kecocokan untuk career ini tidak ditemukan.',
+    //         ], 404);
+    //     }
+
+    //     return response()->json([
+    //         'data' => $match,
+    //     ]);
+    // }
+
+
     public function targetAnalysis(AnalysisResult $analysisResult, Career $career)
     {
         abort_if($analysisResult->user_id !== auth()->id(), 403, 'Anda tidak berhak mengakses data ini.');
 
         $match = $analysisResult->careerMatches()
             ->where('career_id', $career->id)
-            ->with('career')
+            ->with('career.internships')
             ->first();
 
         if (! $match) {
@@ -225,18 +258,26 @@ class CVController extends Controller
                 'message' => 'Data kecocokan untuk career ini tidak ditemukan.',
             ], 404);
         }
-
         return response()->json([
             'data' => $match,
         ]);
     }
 
+    // public function showResult(AnalysisResult $analysisResult)
+    // {
+    //     abort_if($analysisResult->user_id !== auth()->id(), 403, 'Anda tidak berhak mengakses data ini.');
+
+    //     return response()->json([
+    //         'data' => $analysisResult->load('career'),
+    //     ]);
+    // }
+
     public function showResult(AnalysisResult $analysisResult)
     {
-        abort_if($analysisResult->user_id !== auth()->id(), 403, 'Anda tidak berhak mengakses data ini.');
+        abort_if($analysisResult->user_id !== auth()->id(), 403, 'Anda tidak berhak mengakses data ini. ');
 
         return response()->json([
-            'data' => $analysisResult->load('career'),
+            'data' => $analysisResult->load('career.internships'),
         ]);
     }
 
@@ -271,7 +312,7 @@ class CVController extends Controller
 
         $this->registerPdfFonts($pdf);
 
-        return $pdf->download('hasil-analisis-'.$analysisResult->id.'.pdf');
+        return $pdf->download('hasil-analisis-' . $analysisResult->id . '.pdf');
     }
 
     private function registerPdfFonts(\Barryvdh\DomPDF\PDF $pdf): void
@@ -291,7 +332,7 @@ class CVController extends Controller
                 'family' => 'Inter',
                 'weight' => $weight,
                 'style' => 'normal',
-            ], $fontDir.'/Inter/Inter-'.$name.'.ttf');
+            ], $fontDir . '/Inter/Inter-' . $name . '.ttf');
         }
     }
 
